@@ -52,10 +52,10 @@ def merge_files():
 
 
 #################################################
-def get_tss_files(data_folder, t, s, RNA_dir=''):
-    '''
+def get_tss_files(data_folder, t, s, tissues_with_RNA, RNA_dir=''):
+    """
     Function to get list of tss,input, and rna tag files. Deals with the annoying naming
-    '''
+    """
     if s == 'GRO':
         tss_tag = glob.glob(
             os.path.join(data_folder, t, s, 'f03_tags/') + '/*5GRO*')

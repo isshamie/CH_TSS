@@ -105,7 +105,7 @@ def merge_peaks(input_files, output_file, dist='given', type_merge=''):
         print(cmd);sys.stdout.flush()
         sarge.run(cmd)
 
-    # Load in mergePeaks and change the column names to
+    # Load in mergePeaks and change the column names.
     peaks = pd.read_csv(output_file, sep='\t')
     col_names = list(peaks.columns.values)
     meta_info = col_names[0] #the parameters are written as the first column name. Want to save it as a separate file
@@ -371,11 +371,11 @@ def createPeakFileFromGFF(annotation_file,output_file,anno_of_interest='mRNA',is
 
 
 ########################################
-def peakFileToPeakFile(desired_peak_file,tag_peak_file,distance=1000,is_save=1,f_save=''):
-    ''' 
+def peakFileToPeakFile(desired_peak_file, tag_peak_file, distance=1000, is_save=1, f_save=None, is_peak=True):
+    """
     Function to filter the peaks in a file to only the ones that are within a certain distance
     of at least one peak in another file. 
-    
+
     Input:
     * desired_peak_file: File which contains the peaks to be filtered
     * tag_peak_file: File that contains peaks to see if nearby the desired peaks
@@ -384,22 +384,33 @@ def peakFileToPeakFile(desired_peak_file,tag_peak_file,distance=1000,is_save=1,f
 
     Output:
     updated_desired_peaks: The filtered peaks.
-    '''
-    desired_peaks = pd.read_csv(desired_peak_file,sep='\t')
-    tag_peaks = pd.read_csv(tag_peak_file,sep='\t')
+    """
+
+    desired_peaks = pd.read_csv(desired_peak_file, sep='\t')
+    if is_peak: #Either peak or merge file
+        tag_peaks = read_peak_file(tag_peak_file)
+    else:
+        tag_peaks = pd.read_csv(tag_peak_file, sep='\t')
+    if not 'actual_start' in tag_peaks.columns.values:
+        tag_peaks['actual_start'] = tag_peaks.apply(lambda x: x['Start'] if x['Strand'] == '+' else x['End'], axis=1)
+    if not 'actual_start' in desired_peaks.columns.values:
+        desired_peaks['actual_start'] = desired_peaks.apply(lambda x: x['Start'] if x['Strand'] == '+' else x['End'],
+                                                            axis=1)
+
     inds_to_keep = []
-    for ind,val in desired_peaks.iterrows():
+    for ind, val in desired_peaks.iterrows():
         curr = tag_peaks[tag_peaks['Chr'] == val['Chr']]
-        diff =  val['Start'] - curr['Start']
-        if np.sum(np.abs(diff)<distance) > 0:
+        diff = val['actual_start'] - curr['actual_start']
+        if np.sum(np.abs(diff) < distance) > 0:
             inds_to_keep.append(ind)
-    
+
     updated_desired_peaks = desired_peaks.loc[inds_to_keep]
+    
     if is_save:
-        if f_save == '':
-            updated_desired_peaks.to_csv(desired_peak_file + 'filt',index=None,sep='\t')
-        else: 
-            updated_desired_peaks.to_csv(f_save + 'filt',index=None,sep='\t')
+        if f_save is None:
+            updated_desired_peaks.to_csv(desired_peak_file + 'filt', index=None, sep='\t')
+        else:
+            updated_desired_peaks.to_csv(f_save + 'filt', index=None, sep='\t')
     return updated_desired_peaks
 
 
@@ -473,12 +484,12 @@ def homer_nucleotide(input_file,output_file, ref_fa,size=1000,only_plot=False):
 
     #cmd = 'annotatePeaks.pl f06_annoPeaks/merge_bg_2.anno_promoter /data/genome/hamster/picr/picr.fa -size 1000 -hist 1 -di > nuc_freq.txt'
     if not only_plot:
-    	cmd = 'annotatePeaks.pl %s %s -size %s -hist 1 -di > %s' % (input_file,ref_fa,size,output_file)
-    	print(cmd)
-    	sarge.run(cmd)
-    	tmp = pd.read_csv(output_file, sep='\t',index_col=0)
+        cmd = 'annotatePeaks.pl %s %s -size %s -hist 1 -di > %s' % (input_file,ref_fa,size,output_file)
+        print(cmd)
+        sarge.run(cmd)
+        tmp = pd.read_csv(output_file, sep='\t',index_col=0)
     else: #Alrady have the frequency plots, just want to plot
-    	tmp = pd.read_csv(input_file,sep='\t',index_col=0)
+        tmp = pd.read_csv(input_file,sep='\t',index_col=0)
     f = plt.figure(dpi=300)
     ax = f.add_subplot(111)
     ax.plot(tmp.index.values,tmp['A frequency'])
@@ -520,7 +531,7 @@ def extract_peak_sequences(bed_file,peak_list,genome,f_save,upstream=1000,downst
     os.system(cmd)    
     
     #Get sequence info for each peak
-    cmd = 'homerTools extract %s %s -fa > %s' % (f_save + 'before_extension.bed', genome,'before_extension_' + f_save  )                                                                                                        
+    cmd = 'homerTools extract %s %s -fa > %s' % (f_save + 'before_extension.bed', genome,'before_extension_' + f_save)
     print(cmd)
     os.system(cmd)   
     return
@@ -528,11 +539,11 @@ def extract_peak_sequences(bed_file,peak_list,genome,f_save,upstream=1000,downst
 
 #######################################
 def query_gene(peak_files,gene):
-    ''' Takes in a list of peak files, looks for peaks near specific gene and rerturns those peaks
+    """Takes in a list of peak files, looks for peaks near specific gene and rerturns those peaks
     Input:
     * peak_files: List of peak tsv files that have been annotated
     * gene: gene name 
-    '''
+    """
 
     gene_peaks = pd.DataFrame()
     count = 0
@@ -550,10 +561,15 @@ def query_gene(peak_files,gene):
         print(len(gene_peaks),f)
     return gene_peaks
 
+
 # if __name__ == '__main__':
 #     in_peak_file = '/data/shangzhong/TSS/fq/f05_annoPeaks/merge.anno'
 #     filter_peak_file = '/data/shangzhong/TSS/fq/f05_annoPeaks/merge_filter.anno'
 #     filter_anno_peak(in_peak_file,filter_peak_file)
                 
-            
-    
+def read_peak_file(peak_f):
+    df = pd.read_csv(peak_f,sep='\t',skiprows=36, index_col=0)
+    cols = df.columns.values
+    cols[:4] = ['Chr','Start','End','Strand']
+    df.columns = cols
+    return df
