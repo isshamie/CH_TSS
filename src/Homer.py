@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore", 'This pattern has match groups')
 #plt.style.use('ggplot')
-
+import helper
 
 #####
 #See Homer.ucsd.edu for more info on all these functions
@@ -229,9 +229,11 @@ def hist(tag_dir,hist_out,ref_fa,anno,mode='peak',peak='',region=2000,res=10,pc=
     sarge.run(cmd3)
 
 ########################################    
-def hist_plot(hist_out):
-    '''Visualize histograms created by hist.'''
-    plt.figure()
+def hist_plot(hist_out,include_norm=True, f=None,to_save=True):
+    """Visualize histograms created by hist."""
+
+    if f is None:
+        plt.figure()
     df = pd.read_csv(hist_out,sep='\t',header=0,names=['Distance from TSS','Coverage','+ Tags','- Tags'])
     plt.plot(df['Distance from TSS'],df['+ Tags'],label='+ Tags')
     plt.plot(df['Distance from TSS'],df['- Tags'],label='- Tags')
@@ -240,38 +242,84 @@ def hist_plot(hist_out):
     plt.ylabel('Reads per bp per TSS')
     plt.axvline(x=0,c='k')
     plt.legend(loc='upper right')
-    
-    plt.savefig(hist_out+'.png')
+    if to_save:
+        plt.savefig(hist_out+'.png')
 
-    plt.figure()
-    df = pd.read_csv(hist_out+'Norm',sep='\t',header=0,names=['Distance from TSS','Coverage','+ Tags','- Tags'])
-    plt.plot(df['Distance from TSS'],df['+ Tags'],label='+ Tags')
-    plt.plot(df['Distance from TSS'],df['- Tags'],label='- Tags')
-    plt.xlim([-500,500])
-    plt.xlabel('Distance from TSS (normalized per read)')
-    plt.ylabel('Reads per bp per TSS')
-    plt.axvline(x=0,c='k')
-    plt.legend(loc='upper right')
-    
-    #plt.savefig(os.path.splitext(hist_out)[0]+'Norm.png')
-    plt.savefig(hist_out+'Norm.png')
+    if include_norm:
+        plt.figure()
+        df = pd.read_csv(hist_out+'Norm',sep='\t',header=0,names=['Distance from TSS','Coverage','+ Tags','- Tags'])
+        plt.plot(df['Distance from TSS'],df['+ Tags'],label='+ Tags')
+        plt.plot(df['Distance from TSS'],df['- Tags'],label='- Tags')
+        plt.xlim([-500,500])
+        plt.xlabel('Distance from TSS (normalized per read)')
+        plt.ylabel('Reads per bp per TSS')
+        plt.axvline(x=0,c='k')
+        plt.legend(loc='upper right')
+
+        #plt.savefig(os.path.splitext(hist_out)[0]+'Norm.png')
+        plt.savefig(hist_out+'Norm.png')
 
 
 ########################################
-def heat_plot(heat_file,sort_bins = [-1,1],num_peaks = 1000,is_norm=True,save_f=''):
-    ''' Creates a heat plot with the input coming from annotatePeaks -ghist ''' 
-    heat_df = pd.read_csv(heat_file,sep='\t',index_col=0)
-    centr = int(np.floor(heat_df.shape[1]/2))
-    #print(np.sum(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1],axis=1))
-    #print(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1])
-    heat_df = heat_df.iloc[:min(num_peaks,heat_df.shape[1])]
-    heat_df = heat_df.iloc[np.argsort(np.sum(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1],axis=1))[::-1]]
-    
+def wrap_hist_plot(hist_outs, hist_save=None, names=None):
+    """
+    Takes multipled histogram files and plots in subplots, keeping
+    the limits the same.
+
+    :param
+    hist_outs: List of histogram files to plot.
+               The basenames will be used for the respective titles.
+    hist_save: File name to save to. If None, will not save figure.
+    :return: None
+    """
+
+    xlim = [np.infty, -np.infty]
+    ylim = [np.infty, -np.infty]
+
+    num_samples = len(hist_outs)
+    nrows,ncols = helper.determine_rows_cols(num_samples)
+    f = plt.figure()
+    axs = []
+    for ind,fname in enumerate(hist_outs):
+        axs.append(plt.subplot(nrows,ncols, ind+1))
+        hist_plot(fname,include_norm=False,f=f,to_save=False)
+        xlim[0] = min(axs[ind].get_xlim()[0], xlim[0])
+        ylim[0] = min(axs[ind].get_ylim()[0], ylim[0])
+        xlim[1] = max(axs[ind].get_xlim()[1], xlim[1])
+        ylim[1] = max(axs[ind].get_ylim()[1], ylim[1])
+        if names is None:
+            curr_label = os.path.basename(fname)
+        else:
+            curr_label = names[ind]
+        axs[ind].set_title(curr_label)
+
+    [ax.set_xlim(xlim) for ax in axs]
+    [ax.set_ylim(ylim) for ax in axs]
+
+    if hist_save is not None:
+        plt.savefig(hist_save)
+    plt.close()
+
+########################################
+def heat_plot(heat_file, sort_bins=(-1, 1), num_peaks=1000, \
+              is_norm=True, save_f=''):
+    """
+    Creates a heat plot with the input coming from annotatePeaks -ghist
+    """
+    heat_df = pd.read_csv(heat_file, sep='\t', index_col=0)
+    centr = int(np.floor(heat_df.shape[1] / 2))
+    # print(np.sum(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1],axis=1))
+    # print(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1])
+    heat_df = heat_df.iloc[:min(num_peaks, heat_df.shape[1])]
+    heat_df = heat_df.iloc[np.argsort(np.sum(
+        heat_df.iloc[:, centr - sort_bins[0]:centr + sort_bins[1] + 1],
+        axis=1))[::-1]]
+
     if is_norm:
-        heat_df = heat_df.divide(np.sum(heat_df,axis=1),axis='index')
-    
+        heat_df = heat_df.divide(np.sum(heat_df, axis=1), axis='index')
+
     plt.figure()
-    sns.heatmap(heat_df,robust=True,xticklabels=4,yticklabels=False)
+    sns.heatmap(heat_df, robust=True, xticklabels=4, yticklabels=False)
     if not save_f == '':
         plt.savefig(save_f)
     return heat_df
@@ -472,31 +520,33 @@ def homer_trim_cmd(input_file,seq='AGATCGGAAGAGCACACGTCT'):
     return
 
 #######################################
-def homer_nucleotide(input_file,output_file, ref_fa,size=1000,only_plot=False):
-    '''
+def homer_nucleotide(input_file, output_file, ref_fa, size=1000,
+                     only_plot=False):
+    """
     Input
     * input_file: peak file
     * output_file where to save the nucleotide frequency plot
     * ref_fa: Reference annotation
 
     Will also plot the nuc freqs and save to {output_file}.png
-    '''
+    """
 
-    #cmd = 'annotatePeaks.pl f06_annoPeaks/merge_bg_2.anno_promoter /data/genome/hamster/picr/picr.fa -size 1000 -hist 1 -di > nuc_freq.txt'
+    # cmd = 'annotatePeaks.pl f06_annoPeaks/merge_bg_2.anno_promoter /data/genome/hamster/picr/picr.fa -size 1000 -hist 1 -di > nuc_freq.txt'
     if not only_plot:
-        cmd = 'annotatePeaks.pl %s %s -size %s -hist 1 -di > %s' % (input_file,ref_fa,size,output_file)
+        cmd = 'annotatePeaks.pl %s %s -size %s -hist 1 -di > %s' % (
+            input_file, ref_fa, size, output_file)
         print(cmd)
         sarge.run(cmd)
-        tmp = pd.read_csv(output_file, sep='\t',index_col=0)
-    else: #Alrady have the frequency plots, just want to plot
-        tmp = pd.read_csv(input_file,sep='\t',index_col=0)
+        tmp = pd.read_csv(output_file, sep='\t', index_col=0)
+    else:  # Alrady have the frequency plots, just want to plot
+        tmp = pd.read_csv(input_file, sep='\t', index_col=0)
     f = plt.figure(dpi=300)
     ax = f.add_subplot(111)
-    ax.plot(tmp.index.values,tmp['A frequency'])
-    ax.plot(tmp.index.values,tmp['C frequency'])
-    ax.plot(tmp.index.values,tmp['T frequency'])
-    ax.plot(tmp.index.values,tmp['G frequency'])
-    ax.vlines(0,ax.get_ylim()[0],ax.get_ylim()[1])
+    ax.plot(tmp.index.values, tmp['A frequency'])
+    ax.plot(tmp.index.values, tmp['C frequency'])
+    ax.plot(tmp.index.values, tmp['T frequency'])
+    ax.plot(tmp.index.values, tmp['G frequency'])
+    ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1])
     ax.legend()
     ax.set_xlabel('bp from TSS')
     ax.set_ylabel('Frequency')

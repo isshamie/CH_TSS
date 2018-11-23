@@ -27,30 +27,6 @@ from cycler import cycler
 mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 
 
-
-def output_of_findPeaks(in_f, type_f , out_f = ''):
-    """Function that takes the output of Homer (tested with v4.10, and 4.10.3, 5-16-2018)
-    from findPeaks or mergePeaks and creates a more standard output and saves it as .tsv file
-
-    Input:
-    1) in_f: Name of the input file
-    2) type_f: 'merge' or 'orig', where merge means the file comes from merged peaks,
-                and orig means it comes from mergePeaks
-    3) out_f: file name to save to. If empty, out_f will be in_f + '_STD', where STD is standard.
-
-    """
-
-    if type_f == 'orig':
-        df = pd.read_csv(in_f,sep='\t',skiprows = 36)
-
-        df = df.rename(columns={'start': 'Start', 'end': 'End', 'strand': 'Strand', 'chr': 'Chr', '#PeakID': 'ID',
-                           'Normalized Tag Count': 'Stat'})
-    return 42
-
-def merge_files():
-    return 42
-
-
 #################################################
 def get_tss_files(data_folder, t, s, tissues_with_RNA, RNA_dir=''):
     """
@@ -90,3 +66,17 @@ def get_tss_files(data_folder, t, s, tissues_with_RNA, RNA_dir=''):
             rna_tag = (np.array(rna_tag)[map(lambda x: os.path.isdir(x), rna_tag)])[0]  # Not the bam but directory
 
     return tss_tag, inp_tag, rna_tag
+
+
+#################################################
+### Plot helpers
+#################################################
+def determine_rows_cols(num_samples):
+    nrows = 2
+    ncols = 2
+    while nrows * ncols <= num_samples:
+        ncols = ncols + 1
+        if nrows * ncols <= num_samples:
+            nrows = nrows + 1
+
+    return nrows,ncols

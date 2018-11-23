@@ -406,7 +406,7 @@ def convert_anno_to_bed(txn_df,tss_annotation,f_save):
 # Gets all the peaks that had a TSS in it
 ###
 def retrieve_all_peaks_from_anno(anno_f, merged_f, output_f,
-                                 col_name=None):
+                                 col_name=None, is_max=False):
     """Will filter the peaks to the ones annotated as TSSs.
 
         Parameters
@@ -417,14 +417,19 @@ def retrieve_all_peaks_from_anno(anno_f, merged_f, output_f,
         output_f: The file to save the output as
         col_name: The column of the list of peaks for each
         gene/transcript
+        is_max: If True, will only take the peaks with the highest
+        avg count (this is in the column maxPeakId)
         """
     anno_df = pickle.load(open(anno_f, 'rb'))
     peaks_df = pd.read_csv(merged_f, sep='\t', index_col=0)
-    if col_name == None:
+    if col_name is None:
         col_name = anno_df.columns.values[
             anno_df.columns.str.contains('sameStrand_bin_')][0]
-    all_peaks = [item for sublist in list(anno_df[col_name].values) for
-                 item in sublist]
+    if is_max:
+        all_peaks = anno_df["maxPeakId"].values
+    else:
+        all_peaks = [item for sublist in list(anno_df[col_name].values) for
+                     item in sublist]
     peaks_df_filt = peaks_df[peaks_df.index.isin(all_peaks)]
     peaks_df_filt.to_csv(output_f, sep='\t')
     return

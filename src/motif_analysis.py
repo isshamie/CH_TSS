@@ -13,8 +13,9 @@ sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
 import parallel_functions as pf
 import time
 
+
 def read_pssm(motif_file ,background={'A' :0.25 ,'C' :0.25 ,'G' :0.25 ,'T' :0.25}):
-    ''' Loads pfm motif file and coverts into pssm '''
+    """Loads pfm motif file and coverts into pssm """
     with open(motif_file) as handle:
         m = mt.read(handle, "pfm")
     pwm = m.counts.normalize(pseudocounts=0.5)
@@ -23,7 +24,7 @@ def read_pssm(motif_file ,background={'A' :0.25 ,'C' :0.25 ,'G' :0.25 ,'T' :0.25
     return pssm
 
 
-def compute_score(pssm ,seq ,norm_len=-1):
+def compute_score(pssm, seq, norm_len=-1):
     ''' Computes the pssm score for each position.
     Params:
     pssm: Bio.motifs.matrix.PositionSpecificScoringMatrix
