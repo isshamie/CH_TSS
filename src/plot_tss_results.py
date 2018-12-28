@@ -10,8 +10,10 @@ from matplotlib import rcParams
 import seaborn as sns
 
 rcParams['figure.figsize'] = 8, 6
-mpl.style.use('fivethirtyeight')
-mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
+#mpl.style.use('fivethirtyeight')
+mpl.style.use('ggplot')
+#mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
+
 
 ############################################################
 ### Plot the peak results
@@ -134,6 +136,8 @@ def plot_tss_across_tissues(f_in, tissues, landmark_name,f_save=None):
         tissues_genes.pop(t, None)
 
     f,ax = plt.subplots(dpi=300)
+    f.patch.set_facecolor("w")
+    ax.set_facecolor("w")
     x = range(len(tissues_genes)+1)
     names = list(tissues_genes.keys()) #Add the total number of genes
     names.append('Cumulative fraction')
@@ -145,11 +149,13 @@ def plot_tss_across_tissues(f_in, tissues, landmark_name,f_save=None):
     ax.spines['bottom'].set_visible(False)
     ax.spines['left'].set_visible(False)
     barlist[-1].set_color('purple')
-    plt.xticks(range(len(tissues_genes)+1), names,rotation=90)
+    plt.xticks(range(len(tissues_genes)+1), names, rotation=90)
     plt.ylabel('Fraction of ' + landmark_name + ' covered by tissue',{'fontsize': 22})
     plt.title('TSS across tissues',{'fontsize': 22})
+    ax.grid("off")
+    ax.yaxis.grid(color="grey")
+
     helper_save(f_save)
-    #plt.savefig('Results/Figures/tissue_genes_collapsed_1kb_1kb.pdf',dpi=300,bbox_inches='tight')
 
 
 def helper_save(f_save):

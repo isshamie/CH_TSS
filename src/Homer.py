@@ -298,7 +298,7 @@ def wrap_hist_plot(hist_outs, hist_save=None, names=None):
 
     if hist_save is not None:
         plt.savefig(hist_save)
-    plt.close()
+    #plt.close()
 
 ########################################
 def heat_plot(heat_file, sort_bins=(-1, 1), num_peaks=1000, \
@@ -310,7 +310,7 @@ def heat_plot(heat_file, sort_bins=(-1, 1), num_peaks=1000, \
     centr = int(np.floor(heat_df.shape[1] / 2))
     # print(np.sum(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1],axis=1))
     # print(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1])
-    heat_df = heat_df.iloc[:min(num_peaks, heat_df.shape[1])]
+    heat_df = heat_df.iloc[:min(num_peaks, heat_df.shape[0])]
     heat_df = heat_df.iloc[np.argsort(np.sum(
         heat_df.iloc[:, centr - sort_bins[0]:centr + sort_bins[1] + 1],
         axis=1))[::-1]]
@@ -419,7 +419,9 @@ def createPeakFileFromGFF(annotation_file,output_file,anno_of_interest='mRNA',is
 
 
 ########################################
-def peakFileToPeakFile(desired_peak_file, tag_peak_file, distance=1000, is_save=1, f_save=None, is_peak=True):
+def peakFileToPeakFile(desired_peak_file, tag_peak_file,
+                       distance=1000, is_save=1, f_save=None,
+                       is_peak=True, is_bed=False):
     """
     Function to filter the peaks in a file to only the ones that are within a certain distance
     of at least one peak in another file. 
@@ -437,6 +439,8 @@ def peakFileToPeakFile(desired_peak_file, tag_peak_file, distance=1000, is_save=
     desired_peaks = pd.read_csv(desired_peak_file, sep='\t')
     if is_peak: #Either peak or merge file
         tag_peaks = read_peak_file(tag_peak_file)
+    elif is_bed:
+        tag_peaks = read_bed_file(tag_peak_file)
     else:
         tag_peaks = pd.read_csv(tag_peak_file, sep='\t')
     if not 'actual_start' in tag_peaks.columns.values:
@@ -623,3 +627,13 @@ def read_peak_file(peak_f):
     cols[:4] = ['Chr','Start','End','Strand']
     df.columns = cols
     return df
+
+
+def read_bed_file(bed_f):
+    df = pd.read_csv(bed_f,sep='\t', header=None)
+    df.columns = ["Chr", "Start","End","ID","Stat","Strand"]
+    df =    df.set_index("ID")
+    df = df[['Chr', 'Start', 'End', 'Strand', 'Stat']]
+    return df
+
+

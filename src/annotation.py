@@ -18,8 +18,6 @@ from cycler import cycler
 sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
 import parallel_functions
 
-# notebook specific configuration ###
-# mpl.style.use('ggplot')
 
 
 def convert_merged_vals_to_expression_matrix(merged_file, peak_folder='.', output_file=None):
@@ -102,7 +100,7 @@ def combine_merge_with_anno(merge_file,anno_file):
 ###
 # Get distances to regions of interest for the peaks
 ###
-def distance_to_landmarks(anno_peaks, landmark_df, main_landmark = 'transcript_id',
+def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id',
                           landmark_cols=('gene','gene_id')):
     """ Funcntion that adds distance to the nearest landmark from the annotation file, regardless if its on the same
         strand or not. It will also note if it is on the same strand by adding that column"""
@@ -131,11 +129,16 @@ def distance_to_landmarks(anno_peaks, landmark_df, main_landmark = 'transcript_i
 
 
 def wrap_distance_to_landmarks(peaks_file, landmark_file='/data/isshamie/genome/start_site_mRNA_updated_final_sort.tsv',
-                          main_landmark = 'transcript_id',landmark_cols=('gene','gene_id'),
-                               output_f=None,is_parallel=False, num_par = 4):
+                          main_landmark = 'transcript_id',
+                               landmark_cols=('gene','gene_id'),
+                               is_bed=False,
+                               output_f=None,is_parallel=False, num_par=4):
     """ Wrapper for distance_to_landmarks"""
     landmark_df = pd.read_csv(landmark_file, sep="\t", index_col=0)
-    anno_peaks = pd.read_csv(peaks_file,sep="\t",index_col=0)
+    if is_bed:
+        anno_peaks = Homer.read_bed_file(peaks_file)
+    else:
+        anno_peaks = pd.read_csv(peaks_file,sep="\t",index_col=0)
 
     # Only keep ID, Chr, Start, End, Strand, Stat, Annotation
     to_keep = ['Chr','Start','End','Strand','Stat']
@@ -268,7 +271,8 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
         try:
             # Get the samples that had the peak
             curr_tissues = peak_tissue_matrix.columns[(peak_tissue_matrix.loc[curr_peaks.index] > 0).any()].values
-            curr_tissues = list(map(lambda x: os.path.basename(x),curr_tissues))
+            curr_tissues = list(map(lambda x: os.path.basename(x),
+                                    curr_tissues))
             df.at[curr_gene, 'samples'] = curr_tissues
             curr_tss_df_peaks = peak_tissue_matrix[peak_tissue_matrix.index.isin(curr_peaks.index)]
             # # If
@@ -398,7 +402,6 @@ def convert_anno_to_bed(txn_df,tss_annotation,f_save):
     tss_peakCenter_bed['chromStart'] = tss_peakCenter_bed['chromStart'].astype(int)
     tss_peakCenter_bed['chromEnd'] = tss_peakCenter_bed['chromEnd'].astype(int)
     tss_peakCenter_bed.to_csv(f_save + '.bed', sep='\t', header=None, index=None)
-
     return
 
 
@@ -439,7 +442,7 @@ def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
                                     sample_name, sample_f=None,
                                     col_name=None,
                                     use_sample_peaks=False):
-    """Will filter peaks ones annotated as TSSs and found in the
+    """Will filter peaks annotated as TSSs and found in the
     sample. Can retrieve the merged peaks or the original samples peaks.
 
         Parameters
@@ -484,3 +487,94 @@ def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
     sample_df_filt.to_csv(output_f, sep='\t')
     return sample_df_filt
 
+
+def add_max_info(merged_df, expr_peaks):
+    """ Add the maximum peak information"""
+    merged_df["max_file"] = ""
+    merged_df["max_file_peak_name"] = ""
+    merged_df["max_Chr"] = ""
+    merged_df["max_Start"] = -1
+    merged_df["max_End"] = -1
+    merged_df["max_Stat"] = 0.0
+    merged_df["cho_file"] = ""
+    merged_df["cho_file_peak_name"] = ""
+    merged_df["cho_Chr"] = ""
+    merged_df["cho_Start"] = -1
+    merged_df["cho_End"] = -1
+    merged_df["cho_Stat"] = 0.0
+
+    cho_cols = merged_df.columns[merged_df.columns.str.contains("CHO")]
+
+    for ind, val in tqdm.tqdm(merged_df.iterrows()):
+        max_f = expr_peaks.loc[ind].idxmax()
+        merged_df.at[ind, "max_file"] = max_f
+        merged_df.at[ind, "max_file_peak_name"] = merged_df.at[
+            ind, max_f]
+
+        # CHO related
+        max_cho = expr_peaks.loc[ind, cho_cols].idxmax()
+        if expr_peaks.loc[ind, max_cho] > 0:
+            merged_df.at[ind, "cho_file"] = max_cho
+            merged_df.at[ind, "cho_file_peak_name"] = merged_df.at[
+                ind, max_cho]
+
+    for sample_f, df in merged_df.groupby("max_file"):
+        # pd.read_csv(f,sep="\t")
+        print(sample_f)
+        sample_df = Homer.read_peak_file(sample_f)
+
+        # Loop through the merged_df in which the max peak was found in sample_f
+        for ind, val in df.iterrows():
+            # For each peak, find the Chr, Start, End from the sample_df.
+            if "," in val[
+                "max_file_peak_name"]:  # Multiple peaks present when merged
+                get_p = \
+                sample_df.loc[val["max_file_peak_name"].split(",")][
+                    "Normalized Tag Count"].idxmax()
+                get_p = sample_df.loc[get_p]
+            else:
+                get_p = sample_df.loc[val["max_file_peak_name"]]
+
+            merged_df.at[ind, "max_Chr"] = get_p["Chr"]
+            merged_df.at[ind, "max_Start"] = get_p["Start"]
+            merged_df.at[ind, "max_End"] = get_p["End"]
+            merged_df.at[ind, "max_Stat"] = get_p[
+                "Normalized Tag Count"]
+
+    # CHO
+    for sample_f, df in merged_df.groupby("cho_file"):
+        print(sample_f)
+        if sample_f == "":
+            continue
+        sample_df = Homer.read_peak_file(sample_f)
+
+        # Loop through the merged_df in which the max peak was found in sample_f
+        for ind, val in df.iterrows():
+            # For each peak, find the Chr, Start, End from the sample_df.
+            if "," in val[
+                "cho_file_peak_name"]:  # Multiple peaks present when merged
+                get_p = \
+                sample_df.loc[val["cho_file_peak_name"].split(",")][
+                    "Normalized Tag Count"].idxmax()
+                get_p = sample_df.loc[get_p]
+            else:
+                get_p = sample_df.loc[val["cho_file_peak_name"]]
+
+            merged_df.at[ind, "cho_Chr"] = get_p["Chr"]
+            merged_df.at[ind, "cho_Start"] = get_p["Start"]
+            merged_df.at[ind, "cho_End"] = get_p["End"]
+            merged_df.at[ind, "cho_Stat"] = get_p[
+                "Normalized Tag Count"]
+
+    return merged_df
+
+
+def wrap_add_max_info(merged_f, expr_peaks_f,out_f=None):
+    #merged_f = "Results/merged/samples.merge"
+    merged_df = pd.read_csv(merged_f, sep="\t", index_col=0)
+    #peak_f = "Results/merged/samples.merge.peaksexpression.log10"
+    expr_peaks = pd.read_csv(expr_peaks_f, index_col=0, sep="\t")
+    merged_df = add_max_info(merged_df, expr_peaks)
+    if out_f is not None:
+        merged_df.to_csv(out_f,sep="\t")
+    return merged_df

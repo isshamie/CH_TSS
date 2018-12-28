@@ -80,3 +80,22 @@ def determine_rows_cols(num_samples):
             nrows = nrows + 1
 
     return nrows,ncols
+
+
+def merge_columns(df, mapping_dict):
+    '''Function that merges columns by taking the mean of them.
+    Merges based on if they have the same element in the meta_samples meta_column.
+    Returns:
+        new_df: Dataframe but with the columns of interest merged. Also column names are now based
+                on the unique meta_samples[meta_column].
+    '''
+
+    vals = mapping_dict.keys()#np.unique(meta_samples[meta_column].values)
+    new_df = pd.DataFrame(index=df.index, columns=vals)
+    for i in vals:
+        if not mapping_dict[i] == []:#(meta_samples[meta_column] == i).any():
+            new_col = (df.loc[:, mapping_dict[i]])
+            new_col = new_col.mean(axis=1)
+            new_df.loc[:, i] = new_col
+    new_df = new_df.loc[:, ~(new_df.isnull().all())]
+    return new_df
