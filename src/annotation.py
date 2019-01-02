@@ -236,14 +236,16 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
 
         ## Filter to only within the distance of peak_bin
         curr_peaks = get_peaks_within_distance(curr_peaks, distance=peak_bin)
-
+        
+        #These contain peaks nearby, but not necessarily TSS (opp strand, intron,..)
         df.at[curr_gene, prom_col1] = list(curr_peaks.index)
 
+        
         ## Filter to only peaks with isSameStrand
         curr_peaks = curr_peaks[curr_peaks['isSameStrand'] == True]
-        df.at[curr_gene, prom_col2] = list(curr_peaks.index)
-
-        ## If allow_intron == False, filter ones with annotation of intron
+        
+        
+        ## Filter ones with annotation of intron if flagged
         if not allow_intron:
             curr_peaks = curr_peaks[~curr_peaks['Annotation'].str.contains('intron')]
 
@@ -252,10 +254,15 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
             print("NOT implemented yet. Please set to True")
             curr_peaks = curr_peaks[curr_peaks['Annotation'].str.contains('exon [2,9]')]
             return
-
+        ###TILL HERE
+        
+        ## This is where the actual TSS peaks are placed
+        df.at[curr_gene, prom_col2] = list(curr_peaks.index)
+        
+        
         ## Check if we still have any peaks left
         if len(curr_peaks) == 0:
-            continue
+            continue 
         if isinstance(curr_peaks, pd.Series):
             print('is a series', curr_peaks)
 
@@ -308,7 +315,7 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
             df.at[curr_gene, 'Strand'] = strand
 
         except KeyError:
-            print curr_peaks.index + ' not in peak expression file. Maybe it was dropped from being a duplicate? Or no peak had a value in it.'
+            print(curr_peaks.index + ' not in peak expression file. Maybe it was dropped from being a duplicate? Or no peak had a value in it.')
 
     df['hasGene'] = df.fillna('')[prom_col2].apply(lambda x: len(x) > 0)
     df['Number of SS'] = df[prom_col2].fillna('').apply(lambda x: len(x))
