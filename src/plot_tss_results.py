@@ -8,6 +8,7 @@ import pickle
 import os
 from matplotlib import rcParams
 import seaborn as sns
+from matplotlib_venn import venn2
 
 rcParams['figure.figsize'] = 8, 6
 #mpl.style.use('fivethirtyeight')
@@ -108,19 +109,21 @@ def collapse_on_experimental_type(f_in,landmark_name, f_save=None,to_close=False
     #plt.savefig('Results/Figures/num_tissues_not_in_cho.pdf', bbox_inches='tight')
     return
 
-
 ###
 # Get the TSS across tissues
 ###
-def plot_tss_across_tissues(f_in, tissues, landmark_name,f_save=None):
+def plot_tss_across_tissues(f_in, tissues, landmark_name,f_save=None,
+                            tissue_list='maxSamples'):
     df = pickle.load(open(f_in,'rb'))
     tissues_genes = dict()
+    tissues_genes_unique = dict() # The number of unique genes- i.e
+                                  # found in only that tissue
     for t in tissues:
         tissues_genes[t] = 0
 
     for ind, val in df.iterrows():
         curr_ts = set()
-        for t in val['maxSamples']:
+        for t in val[tissue_list]:
             curr_ts.add(t.split('_')[0])
         for t in curr_ts:
             tissues_genes[t] += 1
@@ -156,6 +159,93 @@ def plot_tss_across_tissues(f_in, tissues, landmark_name,f_save=None):
     ax.yaxis.grid(color="grey")
 
     helper_save(f_save)
+
+
+def plot_tss_across_tissues_plus_unique(f_in, tissues, landmark_name,
+                                f_save=None, tissue_list='Tissues',
+                                        is_unique=True):
+    df = pickle.load(open(f_in,'rb'))
+    tissues_genes = dict()
+    tissues_genes_unique = dict() # The number of unique genes- i.e
+                                  # found in only that tissue
+    for t in tissues:
+        tissues_genes[t] = 0
+        tissues_genes_unique[t] = 0
+    for ind, val in df.iterrows():
+        curr_ts = val[tissue_list].split(",")
+        if curr_ts[0] == "":
+            continue
+        for t in curr_ts:
+            tissues_genes[t] += 1
+        if len(curr_ts) == 1:
+            tissues_genes_unique[curr_ts[0]] += 1
+
+    no_peak = []
+    for t in tissues_genes:
+        if tissues_genes[t] == 0:
+            no_peak.append(t)
+
+    for t in no_peak:
+        tissues_genes.pop(t, None)
+
+    f,ax = plt.subplots(dpi=300)
+    f.patch.set_facecolor("w")
+    ax.set_facecolor("w")
+
+    ## Plot
+    x = range(len(tissues_genes)+1)
+    names = list(tissues_genes.keys()) #Add the total number of genes
+    names.append('Cumulative fraction')
+    y = 1.0*np.array(tissues_genes.values())/(df.shape[0])
+    y = np.append(y, [1.0 * np.sum(df['hasGene']) / (df.shape[0])])
+    barlist = plt.bar(x, y, align='center')
+
+    ## Unique genes
+    if is_unique:
+        y2 = np.array([1.0*tissues_genes_unique[k] for k in names[
+                                                            :-1]])\
+                / \
+            df.shape[0]
+        #y = 1.0 * np.array(tissues_genes_unique.values()) / (
+        # df.shape[0])
+        y2 = np.append(y2, [1.0 * np.sum(y2) / (df.shape[0])])
+        barlist2 = plt.bar(x, y2, align='center',color='g')
+
+    ## Plot settings
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    barlist[-1].set_color('purple')
+    plt.xticks(range(len(tissues_genes)+1), names, rotation=90)
+    plt.ylabel('Fraction of ' + landmark_name + ' covered by tissue',{'fontsize': 22})
+    plt.title('TSS across tissues',{'fontsize': 22})
+
+
+    ax.grid("off")
+    ax.yaxis.grid(color="grey")
+
+    helper_save(f_save)
+
+
+## Creates a Venn Diagram of genes found in CHO vs other Tissues
+def find_unique_cho(f_in, tissue_list='Tissues', f_save=""):
+    df = pickle.load(open(f_in, 'rb'))
+    tissue_genes = set()
+    cho_genes = set()
+    for ind, val in df.iterrows():
+        curr_ts = val[tissue_list].split(",")
+        if curr_ts[0] == "":
+            continue
+        if "CHO" in curr_ts:
+                cho_genes.add(ind)
+                curr_ts.remove("CHO")
+        for t in curr_ts:
+            tissue_genes.add(ind)
+            break
+    venn2((cho_genes,tissue_genes),set_labels=("CHO", "Other"))
+    helper_save(f_save)
+    return tissue_genes,cho_genes
 
 
 def helper_save(f_save):

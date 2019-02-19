@@ -141,7 +141,7 @@ def wrap_distance_to_landmarks(peaks_file, landmark_file='/data/isshamie/genome/
         anno_peaks = pd.read_csv(peaks_file,sep="\t",index_col=0)
 
     # Only keep ID, Chr, Start, End, Strand, Stat, Annotation
-    to_keep = ['Chr','Start','End','Strand','Stat']
+    to_keep = ['Chr', 'Start', 'End', 'Strand', 'Stat']
     if 'Annotation' in anno_peaks.columns.values:
         to_keep.append('Annotation')
     anno_peaks = anno_peaks[to_keep]
@@ -207,7 +207,9 @@ def tissues_gene_expressed(peaks_gene, peaks_tissue_matrix):
 ###
 def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000, 100), anno_col='Nearest TSS',
                            tss_df_col='transcript_id',
-                           f_save=None, allow_intron = False,allow_downstream_exons=True):
+                           f_save=None, allow_intron = False,
+                           has_gene_id=False,
+                           allow_downstream_exons=True, allow_cds=True):
     gene_list = tss_df[tss_df_col].unique()
 
     prom_col1 = 'bin_%d_%d' % (peak_bin[0], peak_bin[1])  # This column is for + and - strands within the bin range
@@ -217,8 +219,10 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
                                                 'samples', 'minDistance', 'minDistancePeak',
                                                 'maxValue', 'maxPeakId', 'maxSample',
                                                 'Chr', 'Start', 'End', 'Strand',
-                                                'gene_id', 'gene', 'transcript'])
+                                                 'gene', 'transcript'])
 
+    if has_gene_id:
+        df["gene_id"] = np.nan
     df['closest_to_X_numberOfPeaks'] = 0
     df['peaks'] = [[]] * len(df)
     df['minDistance'] = np.infty
@@ -236,24 +240,28 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
 
         ## Filter to only within the distance of peak_bin
         curr_peaks = get_peaks_within_distance(curr_peaks, distance=peak_bin)
-        
+
         #These contain peaks nearby, but not necessarily TSS (opp strand, intron,..)
         df.at[curr_gene, prom_col1] = list(curr_peaks.index)
 
-        
+
         ## Filter to only peaks with isSameStrand
-        curr_peaks = curr_peaks[curr_peaks['isSameStrand'] == True]
+        curr_peaks = curr_peaks[curr_peaks['isSameStrand']]
         
         
         ## Filter ones with annotation of intron if flagged
         if not allow_intron:
             curr_peaks = curr_peaks[~curr_peaks['Annotation'].str.contains('intron')]
-
+            curr_peaks = curr_peaks[
+                ~curr_peaks['Annotation'].str.contains('TTS')]
         ###NOT DONE YET
         if not allow_downstream_exons:
             print("NOT implemented yet. Please set to True")
             curr_peaks = curr_peaks[curr_peaks['Annotation'].str.contains('exon [2,9]')]
             return
+        if not allow_cds:
+            print("NOT implemented yet. Please set to True")
+            #curr_peaks = curr_peaks[curr]
         ###TILL HERE
         
         ## This is where the actual TSS peaks are placed
@@ -293,7 +301,8 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
             df.at[curr_gene, 'maxPeakId'] = max_peak
             ## Samples that had the maxPeak
             max_tissues = peak_tissue_matrix.columns[(peak_tissue_matrix.loc[max_peak] > 0)].values
-            max_tissues = list(map(lambda x: os.path.basename(x),max_tissues))
+            max_tissues = list(map(lambda x: os.path.basename(x),
+                                   max_tissues))
             df.at[curr_gene, 'maxSamples'] = max_tissues
 
             ## Get peak info for max peak
@@ -302,13 +311,15 @@ def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000
             chrom = curr_peaks.loc[max_peak, 'Chr']
             strand = curr_peaks.loc[max_peak, 'Strand']
             gene = curr_peaks.loc[max_peak, 'Nearest gene']
-            gene_id = curr_peaks.loc[max_peak, 'Nearest gene_id']
+            if has_gene_id:
+                gene_id = curr_peaks.loc[max_peak, 'Nearest gene_id']
             mrna = curr_peaks.loc[max_peak, 'Nearest TSS']
 
             ## Assigning values
             df.at[curr_gene, 'transcript'] = mrna
             df.at[curr_gene, 'gene'] = gene
-            df.at[curr_gene, 'gene_id'] = gene_id
+            if has_gene_id:
+                df.at[curr_gene, 'gene_id'] = gene_id
             df.at[curr_gene, 'Start'] = start
             df.at[curr_gene, 'End'] = end
             df.at[curr_gene, 'Chr'] = chrom

@@ -12,6 +12,8 @@ from Bio import SeqIO
 sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
 import parallel_functions as pf
 import time
+from matplotlib import pyplot as plt
+from plot_tss_results import *
 
 
 def read_pssm(motif_file ,background={'A' :0.25 ,'C' :0.25 ,'G' :0.25 ,'T' :0.25}):
@@ -57,44 +59,90 @@ def search_for_instance(pssm,seq):
     # return positions, score
 
 
-def wrap_fa_motif(fa_file ,motif_file,f_save=None):
-    '''Reads in fasta file and motif file and computes the score of the pssm starting at each position in each sequence.
+def wrap_fa_motif(fa_file, motif_file, f_save=None):
+    """Reads in fasta file and motif file and computes the score of the pssm starting at each position in each sequence.
     Saves to f_save as pickle file
     Returns:
     motifs: A dict where each id from the fa_file is a key and the value is a vector of scores where each element
     is the score of the motif starting at that position in the sequence.
-    '''
+    """
     pssm = read_pssm(motif_file)
     motifs = dict()
     t0 = time.time()
-    for record in tqdm.tqdm(SeqIO.parse(fa_file, "fasta" ,alphabet = pssm.alphabet)):
+    for record in tqdm.tqdm(
+            SeqIO.parse(fa_file, "fasta", alphabet=pssm.alphabet)):
         # print(record.seq)
         # seq = Seq(record.seq,pssm.alphabet)
-        score = compute_score(pssm,record.seq)
+        score = compute_score(pssm, record.seq)
         motifs[record.id] = score
     if f_save is not None:
-        pickle.dump(motifs ,open(f_save ,'wb'))
+        pickle.dump(motifs, open(f_save, 'wb'))
     print("Time taken: %d" % (time.time() - t0))
     return motifs
 
 
-def wrap_fa_motif_instance(fa_file ,motif_file ,f_save=None):
-    '''Reads in fasta file and motif file and finds all instances of the motif for each sequence.
+def wrap_fa_motif_instance(fa_file, motif_file, f_save=None):
+    """Reads in fasta file and motif file and finds all instances of the motif for each sequence.
     Saves to f_save as pickle file
     Returns:
     motifs: A dict where each id from the fa_file is a key and the value is the positions list of
     where an instance of the motif occurred.
-    '''
+    """
     t0 = time.time()
     pssm = read_pssm(motif_file)
     motifs = dict()
-    for record in tqdm.tqdm(SeqIO.parse(fa_file, "fasta" ,alphabet = pssm.alphabet)):
-        positions = search_for_instance(pssm ,record.seq)
+    for record in tqdm.tqdm(
+            SeqIO.parse(fa_file, "fasta", alphabet=pssm.alphabet)):
+        positions = search_for_instance(pssm, record.seq)
         motifs[record.id] = positions
     if f_save is not None:
-        pickle.dump(motifs ,open(f_save ,'wb'))
+        pickle.dump(motifs, open(f_save, 'wb'))
     print("Time taken: %d" % (time.time() - t0))
     return motifs
+
+
+def wrap_fa_motif_instance_lowmem(fa_file, motif_file, fa_max=None,
+                                  f_save=None):
+    """1.22.2019 this is a new version of the motif instance designed to save
+        memory"""
+
+    pssm = read_pssm(motif_file)
+    if fa_max is None:
+        max_record = 0
+        inds = []
+        #seqs = []
+        for seq_record in SeqIO.parse(
+                fa_file, "fasta", alphabet=pssm.alphabet):
+            inds.append(seq_record.id)
+            #seqs.append(seq_record)
+            if len(seq_record) > max_record:
+                max_record = len(seq_record)
+        fa_max = max_record
+
+    seqs = list(SeqIO.parse(fa_file, "fasta",alphabet=pssm.alphabet))
+    print("Number of records", len(seqs))
+    print("max length of a sequence: ", fa_max)
+    t0 = time.time()
+
+    motifs = pd.DataFrame(index=inds,
+                          columns=np.arange(-fa_max, fa_max),
+                          dtype=bool)
+    motifs[:] = False
+
+    # for record in tqdm.tqdm(
+    #         SeqIO.parse(fa_file, "fasta", alphabet=pssm.alphabet)):
+    for record in tqdm.tqdm(seqs):
+        # print(record.seq)
+        # print(type(record.seq))
+        # print(type(record))
+        positions = search_for_instance(pssm, record.seq)
+        if len(positions) > 0:
+            motifs.loc[record.id, positions[0]] = True
+    if f_save is not None:
+        motifs.to_csv(f_save, sep="\t")
+        #pickle.dump(motifs, open(f_save, 'wb'))
+    print("Time taken: %d" % (time.time() - t0))
+    return
 
 
 def wrap_both_instance_and_score(fa_file,motif_file,f_save=None):
@@ -103,9 +151,9 @@ def wrap_both_instance_and_score(fa_file,motif_file,f_save=None):
     motifs = dict()
     motifs_instance = dict()
     for record in tqdm.tqdm(SeqIO.parse(fa_file, "fasta" ,alphabet = pssm.alphabet)):
-        positions ,scores = search_for_instance(pssm ,record.seq)
+        positions, scores = search_for_instance(pssm, record.seq)
         motifs_instance[record.id] = positions
-        score = compute_score(pssm ,record.seq)
+        score = compute_score(pssm, record.seq)
         motifs[record.id] = score
 
     if f_save is not None:
@@ -115,12 +163,19 @@ def wrap_both_instance_and_score(fa_file,motif_file,f_save=None):
     return motifs
 
 
-def all_motifs_of_interest_instance(motifs_list,fa_file, motifs_folder, f_save):
+def all_motifs_of_interest_instance(motifs_list,fa_file,
+                                    motifs_folder, f_save,
+                                    lowmem=False):
     for i in motifs_list:
         print(i)
-        f_out = '%s_%s_instance.p' % (f_save,i)
+        #f_out = '%s_%s_instance.p' % (f_save,i)
         motif_f = motifs_folder + i + '.motif.pfm'
-        wrap_fa_motif_instance(fa_file,motif_f,f_save=f_out)
+        if lowmem:
+            f_out = '%s_%s_instance.tsv' % (f_save, i)
+            wrap_fa_motif_instance_lowmem(fa_file, motif_f, f_save=f_out)
+        else:
+            f_out = '%s_%s_instance.p' % (f_save, i)
+            wrap_fa_motif_instance(fa_file, motif_f, f_save=f_out)
     return
 
 
@@ -131,7 +186,6 @@ def all_motifs_of_interest_score(motifs_list, fa_file, motifs_folder, f_save):
         motif_f = motifs_folder + i + '.motif.pfm'
         wrap_fa_motif(fa_file,motif_f,f_save=f_out)
     return
-
 
 
 ################
@@ -190,3 +244,78 @@ def create_peak_by_motif_df(all_motifs, f_anno, f_save=None):
     if f_save is not None:
         peak_motif_counts.to_csv(f_save)
     return peak_motif_counts
+
+
+##########################
+## 1.28.2019
+##########################
+def initialize_motif_df(inds, seq_len=151):
+    motif_df = pd.DataFrame(
+        index=inds,
+        columns=np.arange(0 - int(1.0*seq_len / 2),
+                          np.ceil(seq_len / 2)).astype(int),
+        dtype=bool)
+    motif_df[:] = False
+    return motif_df
+
+
+def fill_motif_df(motifs,
+                  motif_df_pos,
+                  motif_df_neg,
+                  len_dict,
+                  motif_len,
+                  seq_len=151):
+    assert (((motif_df_pos == 0).all().all()) &
+            ((motif_df_neg == 0).all().all()))
+    for key in tqdm.tqdm(motifs):
+        if len(motifs[key]) > 0:
+            #print(motifs[key])
+            for loc in motifs[key][0]:
+                ## Center the location, which is diferent if pos or neg strand:
+                if loc >= 0:
+                    pos = int(loc - np.floor(1.0 * len_dict[key] / 2))
+                    if pos in motif_df_pos.columns:
+                        motif_df_pos.at[key, pos] = True
+                else:
+                    pos = int(
+                        loc + np.ceil(1.0 * len_dict[key] / 2) - 1 +
+                        motif_len)  #Still need to know the length of the motif
+                    if pos in motif_df_neg.columns:
+                        motif_df_neg.at[key, pos] = True
+    return motif_df_pos, motif_df_neg
+
+
+def wrap_one_motif_df(motif_locs, peaks, motif_len, seq_len=151):
+    motif_pos = initialize_motif_df(peaks.keys(), seq_len=151)
+    motif_neg = initialize_motif_df(peaks.keys(), seq_len=151)
+
+    motif_pos, motif_neg = fill_motif_df(motif_locs, motif_pos, motif_neg,
+                                         peaks,
+                                         motif_len,
+                                         seq_len)
+    return [motif_pos, motif_neg]
+
+
+def wrap_motifs(motif_list, names_list, peaks, pfm_list, out_dir=""):
+    # if "Length" not in peaks.columns:
+    #     peaks["Length"] = peaks["End"] - peaks["Start"]
+    #peaks.keys() = peaks.index.astype(str)
+    for ind, i in enumerate(motif_list):
+        curr = pickle.load(open(i, "rb"))
+        motif_len = pd.read_csv(
+            pfm_list[ind],
+            header=None,
+            sep="\t").shape[1]
+
+        binary_mat = wrap_one_motif_df(curr, peaks, motif_len, seq_len=151)
+        plot_count(binary_mat, names_list[ind],out_dir=out_dir)
+        pickle.dump(binary_mat, open(i.strip(".p") + "_binary.p", "wb"))
+
+
+def plot_count(motifs_mat, name, out_dir=""):
+    f, ax = plt.subplots()
+    motifs_mat[0].sum().plot()
+    (-1 * motifs_mat[1].sum()).plot()
+    plt.title(name)
+    if not out_dir == "":
+        helper_save(os.path.join(out_dir,name))

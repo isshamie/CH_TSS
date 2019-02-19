@@ -18,7 +18,6 @@ from cycler import cycler
 mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 
 
-
 def plot_cdf_rna(exon_peaks, tss_peaks, peaks, name, is_save=True):
     f = plt.figure()
     num_bins = 20

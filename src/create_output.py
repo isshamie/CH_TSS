@@ -50,7 +50,6 @@ import tqdm
 
 
 def construct_nonExperimental_peakID(txn_f, tss_f):
-
     tss = pd.read_csv(tss_f, sep="\t", index_col=0)
     txn = pickle.load(open(txn_f, "rb"))
     tss = tss[tss.index.isin(txn[~txn["hasGene"]].index)]
@@ -61,14 +60,15 @@ def construct_nonExperimental_peakID(txn_f, tss_f):
         columns=["Tissues", "cs", "CHO ATAC Region", "ID", "Gene",
                  "Gene ID", "Transcript"])
     for ind, val in tqdm.tqdm(tss.iterrows()):
-        name = "%s_%s_%s" % (
-            val["gene"], val["gene_id"], ind)
+        # name = "%s_%s_%s" % (
+        #     val["gene"], val["gene_id"], ind)
+        name = "%s_%s" % (val["gene"], ind)
         curr_peak = "p0@%s" % name  # p1@SPI1
         bed_df.loc[curr_peak] = [val["Chr"], val["Start"], val["End"],
                                  val["Strand"], 0, curr_peak]
 
         meta_df.at[curr_peak, "Gene"] = val["gene"]
-        meta_df.at[curr_peak, "Gene ID"] = val["gene_id"]
+        #meta_df.at[curr_peak, "Gene ID"] = val["geneID"]
         meta_df.at[curr_peak, "Transcript"] = ind
         meta_df.at[curr_peak, "Is Experimental"] = 0
         non_peaks_map[name] = curr_peak
@@ -80,6 +80,8 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
     txn_anno = pickle.load(open(txn_anno_f, "rb"))
     expr_peaks = pd.read_csv(expr_f, sep="\t", index_col=0)
     anno_df = pd.read_csv(anno_f, sep="\t", index_col=0)
+    #print(anno_df.head())
+    #print(len(anno_df))
     anno_df = anno_df[
         ["Chr", "Start", "End", "Strand", "Stat", "cho_Chr",
          "cho_Start", "cho_End", "cho_Stat", "max_Chr", "max_Start",
@@ -97,15 +99,17 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
             txn_anno.columns.str.contains("sameStrand")][0]
 
     # Loop through transcripts with peaks
-    for ind, val in tqdm.tqdm(txn_anno[txn_anno[
+    for ind, val in (txn_anno[txn_anno[
         "hasGene"]].iterrows()):
         curr_peaks = val[col_name]
         # Create the IDs
         ordered_list = rank_func(curr_peaks, expr_peaks)
         for ind2, p in enumerate(ordered_list):
-            curr_peak = "p%d@%s_%s_%s" % (
-                ind2 + 1, val["gene"], val["gene_id"],
-                val["transcript"])  # p1@SPI1
+            # curr_peak = "p%d@%s_%s_%s" % (
+            #     ind2 + 1, val["gene"], val["gene_id"],
+            #     val["transcript"])  # p1@SPI1
+            curr_peak = "p%d@%s_%s" % (
+                ind2 + 1, val["gene"], val["transcript"])  # p1@SPI1
             peaks_map[p] = curr_peak
 
             # Get their genome coordinates
@@ -122,7 +126,7 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
             meta_df.at[curr_peak, "cs"] = cs_bin
             meta_df.at[curr_peak, "ID"] = p
             meta_df.at[curr_peak, "Gene"] = val["gene"]
-            meta_df.at[curr_peak, "Gene ID"] = val["gene_id"]
+            #meta_df.at[curr_peak, "Gene ID"] = val["gene_id"]
             meta_df.at[curr_peak, "Transcript"] = val["transcript"]
             meta_df.at[curr_peak, "Is Experimental"] = 1
 
@@ -130,16 +134,19 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
             # meta_df.at["CHO ATAC Region"] = atac_region(atac_f,
             #                                         bed_df.loc[curr_peak])
 
-    ## This will make the file 0-based index
+    ## This will make the file 0-based index inclusive
     bed_df["Start"] = bed_df["Start"] - 1
-    bed_df["End"] = bed_df["End"] - 1
+    bed_df["End"] = bed_df["End"]
 
     return bed_df, meta_df
 
 
 def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
                         all_atac=None, out_f=None):
-
+    """ Wrapper for constructing the experimental TSS and the genes
+    that didnt have experimental TSSs"""
+    
+    print("Constructing TSS not observed experimentally")
     bed2_df, meta2_df = construct_nonExperimental_peakID(txn_f, tss_f)
     if out_f is not None:
         bed2_df[["Chr", "Start", "End", "ID", "Stat",
@@ -148,7 +155,7 @@ def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
                                   index=False)
         meta2_df.to_csv(out_f + ".ref.meta", sep="\t")
 
-
+    print("Constructing TSS observed experimentally")
     bed_df, meta_df = construct_peakID(txn_f, expr_f, anno_f, rank_func)
 
     if out_f is not None:
@@ -164,7 +171,7 @@ def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
     meta_df = pd.concat((meta_df, meta2_df), axis=0)
     meta_df = meta_df.loc[bed_df.index]
 
-
+    print("Including ATAC information")
     meta_df = atac_region(meta_df, bed_df, atac_bed=atac_f, all_atac=all_atac, thresh=250)
     meta_df["Is Experimental"] = meta_df["Is Experimental"].astype(int)
 
@@ -209,15 +216,44 @@ def cs_score(peak, peaks, extra=None, on_thresh=0.3):
 
 
 def rank_median_samples(peaks_of_interest, peaks, on_thresh=0):
+    """A ranking function of peaks.
+       Ranks peaks by taking the number of samples it was found in
+       and multiplying it by the median value for all samples in
+       which it passed the threshold"""
     vals = dict()
     for p in peaks_of_interest:
         curr_p = peaks.loc[p]
         num_samples = (curr_p > on_thresh).sum()
-        vals[p] = num_samples * np.median(curr_p[curr_p > 0])
+        vals[p] = num_samples * np.median(curr_p[curr_p > on_thresh])
 
     ordered_list = sorted(vals, key=vals.get, reverse=True)
     return ordered_list
 
+
+def rank_sum_samples(peaks_of_interest, peaks, on_thresh=0):
+    """A ranking function of peaks.
+       Ranks peaks by taking the sum of peak values (log CPM)
+       of samples that passed the threshold"""
+    vals = dict()
+    for p in peaks_of_interest:
+        curr_p = peaks.loc[p]
+        vals[p] = (curr_p[curr_p > on_thresh]).sum()
+
+    ordered_list = sorted(vals, key=vals.get, reverse=True)
+    return ordered_list
+
+
+# def rank_harmonic_samples(peaks_of_interest, peaks, on_thresh=0):
+#     """A ranking function of peaks.
+#        Ranks peaks by taking the sum of peak values (log CPM)
+#        of samples that passed the threshold"""
+#     vals = dict()
+#     for p in peaks_of_interest:
+#         curr_p = peaks.loc[p]
+#         vals[p] = (curr_p[curr_p > on_thresh]).sum()
+#
+#     ordered_list = sorted(vals, key=vals.get, reverse=True)
+#     return ordered_list
 
 def get_peak_info(p, peaks_df, is_cho=True, is_orig=True, to_log=True):
     # print("Before")
@@ -332,6 +368,49 @@ def par_atac_region(all_df, atac_bed=None, all_atac=None,
             if len(curr) > 0:
                 all_df.at[ind, "has ATAC"] = 1
     return all_df
+
+
+#######################################################################
+def exp_bed_to_refseq(bed_f, meta_f, refseq_f, save_f="",
+                      is_unique=False):
+    """Goes back to the actual locations of the transcripts in the
+    output_bed file and creates a bed file of the original locations
+    bed_f: The output bed file
+    meta_f: The output meta file
+    save_f: Where to save the file. If empty string, will return the
+    file.
+    refseq_f: Centered annotation peak
+    unique_only: Boolean to remove duplicate locations
+    sites
+    file for where the original annotation TSSs are. e.g
+    "/data/isshamie/genome/picr_final/mRNA_final
+    .peak"
+    """
+
+    tss = pd.read_csv(refseq_f, sep="\t", index_col=0)
+    tss = tss[~tss.index.duplicated()]
+    meta_df = pd.read_csv(meta_f, sep="\t", index_col=0)
+    bed_df = pd.read_csv(bed_f, sep="\t", header=None)
+
+    out_meta = meta_df[meta_df["Transcript"].isin(tss.index)]
+    out_bed = bed_df[bed_df[3].isin(out_meta.index)]
+
+    out_bed = out_bed.copy()
+    out_bed = out_bed.set_index(3)
+
+    out_bed[0] = np.array(tss.loc[out_meta["Transcript"], "Chr"])
+    out_bed[1] = np.array(tss.loc[out_meta["Transcript"]]["Start"])
+    out_bed[2] = np.array(tss.loc[out_meta["Transcript"]]["End"])
+    out_bed[3] = out_bed.index
+    out_bed = out_bed[[0, 1, 2, 3, 4, 5]]
+
+    if is_unique:
+        out_bed.drop_duplicates(subset=(0, 1, 2),keep='first',
+                                inplace=True)
+    if save_f == "":
+        save_f = bed_f.strip(".bed") + "_refseq_centered.bed"
+    out_bed.to_csv(save_f, sep="\t", header=None, index=False)
+    return out_bed
 
 
 #

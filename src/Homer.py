@@ -10,7 +10,7 @@ import warnings
 warnings.filterwarnings("ignore", 'This pattern has match groups')
 #plt.style.use('ggplot')
 import helper
-
+from plot_tss_results import *
 #####
 #See Homer.ucsd.edu for more info on all these functions
 #####
@@ -272,7 +272,6 @@ def wrap_hist_plot(hist_outs, hist_save=None, names=None):
     hist_save: File name to save to. If None, will not save figure.
     :return: None
     """
-
     xlim = [np.infty, -np.infty]
     ylim = [np.infty, -np.infty]
 
@@ -295,17 +294,55 @@ def wrap_hist_plot(hist_outs, hist_save=None, names=None):
 
     [ax.set_xlim(xlim) for ax in axs]
     [ax.set_ylim(ylim) for ax in axs]
+    helper_save(hist_save)
 
-    if hist_save is not None:
-        plt.savefig(hist_save)
-    #plt.close()
+
+def wrap_heat_plot(heat_outs,heat_save=None, names=None,
+                   num_peaks=1000,is_norm=True):
+    """
+    Takes multipled heat-map files and plots in subplots, keeping
+    the limits the same.
+
+    :param
+    heat_outs: List of heat matrices files to plot.
+               The basenames will be used for the respective titles.
+    hist_save: File name to save to. If None, will not save figure.
+    :return: None
+    """
+    xlim = [np.infty, -np.infty]
+    ylim = [np.infty, -np.infty]
+
+    num_samples = len(heat_outs)
+    nrows,ncols = helper.determine_rows_cols(num_samples)
+    f = plt.figure()
+    axs = []
+    for ind,fname in enumerate(heat_outs):
+        axs.append(plt.subplot(nrows,ncols, ind+1))
+        heat_plot(fname, save_f=heat_save,f=f,curr_ax=axs[ind],
+                  num_peaks=num_peaks, is_norm=is_norm)
+        xlim[0] = min(axs[ind].get_xlim()[0], xlim[0])
+        ylim[0] = min(axs[ind].get_ylim()[0], ylim[0])
+        xlim[1] = max(axs[ind].get_xlim()[1], xlim[1])
+        ylim[1] = max(axs[ind].get_ylim()[1], ylim[1])
+        if names is None:
+            curr_label = os.path.basename(fname)
+        else:
+            curr_label = names[ind]
+        axs[ind].set_title(curr_label)
+
+    [ax.set_xlim(xlim) for ax in axs]
+    [ax.set_ylim(ylim) for ax in axs]
+    helper_save(heat_save)
+
 
 ########################################
 def heat_plot(heat_file, sort_bins=(-1, 1), num_peaks=1000, \
-              is_norm=True, save_f=''):
+              is_norm=True, save_f='', f=None, curr_ax=None):
     """
     Creates a heat plot with the input coming from annotatePeaks -ghist
     """
+    if f is None:
+        plt.figure()
     heat_df = pd.read_csv(heat_file, sep='\t', index_col=0)
     centr = int(np.floor(heat_df.shape[1] / 2))
     # print(np.sum(heat_df.iloc[:,centr-sort_bins[0]:centr+sort_bins[1]+1],axis=1))
@@ -318,8 +355,11 @@ def heat_plot(heat_file, sort_bins=(-1, 1), num_peaks=1000, \
     if is_norm:
         heat_df = heat_df.divide(np.sum(heat_df, axis=1), axis='index')
 
-    plt.figure()
-    sns.heatmap(heat_df, robust=True, xticklabels=4, yticklabels=False)
+    if curr_ax is None:
+        sns.heatmap(heat_df, robust=True, xticklabels=4, yticklabels=False)
+    else:
+        sns.heatmap(heat_df, robust=True, xticklabels=4,
+                    yticklabels=False,ax=curr_ax)
     if not save_f == '':
         plt.savefig(save_f)
     return heat_df
@@ -372,7 +412,9 @@ def filter_anno_peak(in_peak_file,filter_peak_file):
 
 
 ########################################
-def createPeakFileFromGFF(annotation_file,output_file,anno_of_interest='mRNA',is_start = True):
+def createPeakFileFromGFF(annotation_file, output_file,
+                          anno_of_interest='mRNA', is_start=True,
+                          shift=1):
     """
     Function to create a peak file based on GFF and specific annotation of interest
     
@@ -385,37 +427,43 @@ def createPeakFileFromGFF(annotation_file,output_file,anno_of_interest='mRNA',is
     Creates a peak file of the Homer format and saves it to output_file
 
     """
-    #Read in annotation file
-    genome_ann = pd.read_csv(annotation_file,comment='#',sep='\t',header=None)
+    # Read in annotation file
+    genome_ann = pd.read_csv(annotation_file, comment='#', sep='\t',
+                             header=None)
     col_names = list(genome_ann.columns.values)
-    col_names[0]= 'Chr'
+    col_names[0] = 'Chr'
     col_names[1] = 'How'
     col_names[2] = 'Annotation'
-    col_names[3]= 'Start'
+    col_names[3] = 'Start'
     col_names[4] = 'End'
     col_names[6] = 'Strand'
     col_names[8] = 'ID'
 
     genome_ann.columns = col_names
-    genome_ann.sort_values(['Chr','Start','End'],inplace=True)
-    
+    genome_ann.sort_values(['Chr', 'Start', 'End'], inplace=True)
+
     curr = genome_ann[genome_ann['Annotation'] == anno_of_interest]
-    curr = curr[['ID','Chr','Start','End','Strand']]
-     #Make the center of the peak the start site with flanking base pairs
-    if is_start:    
+    curr = curr[['ID', 'Chr', 'Start', 'End', 'Strand']]
+    # Make the center of the peak the start site with flanking base pairs
+    if is_start:
         # curr['End'] = curr['Start'] + 1
         # curr['Start'] -= 1
         curr2 = curr.copy()
 
         ## If the strand is positive, then the end moves to the start, but if its negative, the start moves to the end.
-        curr['End'] = curr2.apply(lambda x: x['Start'] + 1 if x['Strand'] == '+' else x['End']+1,axis=1)
-        curr['Start'] = curr2.apply(lambda x: x['Start'] - 1 if x['Strand'] == '+'  else x['End'] - 1,axis=1)
+        curr['End'] = curr2.apply(
+            lambda x: x['Start'] + shift if x['Strand'] == '+' else x[
+                                                'End'] + shift, axis=1)
+        curr['Start'] = curr2.apply(
+            lambda x: x['Start'] - shift if x['Strand'] == '+' else x[
+                                                'End'] - shift, axis=1)
 
-    curr['actual_start'] = curr.apply( lambda x: x['Start'] if x['Strand'] == '+' else x['End'],axis=1)
+    curr['actual_start'] = curr.apply(
+        lambda x: x['Start'] if x['Strand'] == '+' else x['End'],
+        axis=1)
 
-    curr.to_csv(output_file,index=None,sep='\t')
+    curr.to_csv(output_file, index=None, sep='\t')
     return
-
 
 
 ########################################
@@ -502,7 +550,7 @@ def convert_intersection_HOMER_to_pyupset(df,f_name=''):
     for i in df_out:
         df_out[i] = pd.DataFrame(df_out[i],columns=['Name'])#pd.DataFrame(df_out[i])
    
-    if not f_name=='':
+    if not f_name == '':
         pyu.plot(df_out)
         plt.savefig(f_name)
     return df_out
@@ -570,17 +618,19 @@ def extract_peak_sequences(bed_file,peak_list,genome,f_save,upstream=1000,downst
     for ind,val in peaks.iterrows(): 
         center = int((val[1]+val[2])/2)
         if val[5] == '+':
-            peaks.set_value(ind,1,center - upstream + 1)#-1 for bed index
-            peaks.set_value(ind,2,center + downstream + 1)
+            peaks.set_value(ind, 1, center - upstream + 1)#-1 for bed
+            # index
+            peaks.set_value(ind, 2, center + downstream + 1)
 #             val[1] = val[1] - downstream
 #             val[2] = val[2] + upstream
         else:
-            peaks.set_value(ind,1,center-downstream + 1)
-            peaks.set_value(ind,2,center+upstream + 1)
+            peaks.set_value(ind, 1, center-downstream + 1)
+            peaks.set_value(ind, 2, center+upstream + 1)
 
     peaks.to_csv(f_save + '.bed',sep='\t', index=False, header=None)
     #Get sequence info for each peak
-    cmd = 'homerTools extract %s %s -fa > %s' % (f_save + '.bed', genome,f_save )                                                                                                        
+    cmd = 'homerTools extract %s %s -fa > %s' % (f_save + '.bed',
+                                                 genome, f_save )
     print(cmd)
     os.system(cmd)    
     
