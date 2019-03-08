@@ -1,21 +1,23 @@
-import numpy as np
-import pickle
 import tqdm
 import sys
-import os
-import pandas as pd
 ## Bio import
 from Bio import motifs as mt
 from Bio.Seq import Seq
 from Bio import SeqIO
+from sklearn.decomposition import TruncatedSVD, SparsePCA, PCA
+from scipy import stats
+from sklearn.manifold import TSNE
 
 sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
+
 import parallel_functions as pf
 import time
-from matplotlib import pyplot as plt
 from plot_tss_results import *
 
 
+########################################################################
+# Functions with Bio motifs from BioPython
+########################################################################
 def read_pssm(motif_file ,background={'A' :0.25 ,'C' :0.25 ,'G' :0.25 ,'T' :0.25}):
     """Loads pfm motif file and coverts into pssm """
     with open(motif_file) as handle:
@@ -247,7 +249,9 @@ def create_peak_by_motif_df(all_motifs, f_anno, f_save=None):
 
 
 ##########################
-## 1.28.2019
+# 1.28.2019
+# Uses the output of fimo motif finder, which is a tsv file,
+# to construct motif-by-position matrix or peak-by-motif count matrix
 ##########################
 def initialize_motif_df(inds, seq_len=151):
     motif_df = pd.DataFrame(
@@ -312,10 +316,194 @@ def wrap_motifs(motif_list, names_list, peaks, pfm_list, out_dir=""):
         pickle.dump(binary_mat, open(i.strip(".p") + "_binary.p", "wb"))
 
 
-def plot_count(motifs_mat, name, out_dir=""):
+def plot_count(motifs_mat, name, f_save=""):
     f, ax = plt.subplots()
     motifs_mat[0].sum().plot()
     (-1 * motifs_mat[1].sum()).plot()
     plt.title(name)
-    if not out_dir == "":
-        helper_save(os.path.join(out_dir,name))
+    helper_save(f_save)
+
+
+########################################################################
+# Motif Modeling
+#
+# These functions work with a peak_by_motif count matrix and aims to
+# separate peaks based on the motifs
+########################################################################
+def norm_data(df, norm=None, save_f=None):
+    """
+    :param df: counts dataframe
+    :param norm: how to normalize the data ["None","Standard",
+                                            "Mean-center", "Binary"]
+                                            default: None
+    :param save_f: File to save to as tsv. If None, will not save.
+    :return: the normalized df
+
+    """
+    if norm == "Standard":
+        df = stats.zscore(df)
+        return norm
+    elif norm == "Mean-center":
+        df = df - np.mean(df)
+    elif norm == "Binary":
+        df = df>0
+
+    if save_f is not None:
+        df.to_csv(save_f,sep="\t")
+    return df
+
+
+def peak_outlier(df, df2, count_col, outlier=0,
+                 z_outlier=False,
+                 save_f=None):
+    """
+    :param df: phenotype of the peaks
+    :param df2: dataframe to also reduce
+    :param z_outlier: If True, remove peaks +/- 3SD away from the mean.
+    :param outlier: percentage from 0 to 50 to remove the top/bottom
+    outlier percentage. Only use if z_outlier = False
+    :param count_col: Which column to use for the counts
+    :param save_f: File to save to as tsv. If None, will not save.
+    :return: The df with outliers removed
+    """
+    num_df = df.shape[0]
+    if z_outlier:
+        df["Z"] = stats.zscore(df[count_col])
+        df["Outlier"] = (df["Z"] > 3) | (df["Z"] < -3)
+        df = df[~df["Outlier"]]
+    else:
+        df = df[df[count_col] > np.percentile(df[count_col],outlier)]
+
+    print("Number of peaks before: ", num_df)
+    print("Number of peaks before: ", df.shape[0])
+
+    if save_f is not None:
+        df.to_csv(save_f, sep="\t")
+
+    df2 = df2[df2.index.isin(df.index)]
+    return df, df2
+
+
+####
+#
+####
+def reduce_list(df, dim_red=None, ncomp=10, motif_list=(),
+                save_f=None):
+    """
+    :param df: count dataframe
+    :param dim_red: ["pca", "sparsepca","svd", "tsne"]
+    :param ncomp: number of components from dim reduction
+    :param motif_list: column list to keep
+    :param save_f:
+    :return:
+    """
+    if len(motif_list) > 0:
+        df = df[df.columns.isin(list(motif_list))]
+
+    inds = df.index
+    if dim_red is not None:
+        if dim_red == "tsne":
+            transformer = TSNE(n_components=ncomp)
+            df = transformer.embedding_
+        else:
+            if dim_red == "pca":
+                transformer = PCA(n_components=ncomp)
+
+            elif dim_red == "sparsepca":
+                transformer = SparsePCA()
+            elif dim_red == "svd":
+                transformer = TruncatedSVD(n_components=ncomp)
+
+            transformer.fit(df)
+            df = transformer.transform(df)
+            print("Variance explained for each component (fraction):",
+                  transformer.explained_variance_ratio_)
+            print("Total Variance "
+                  "explained: ",
+                  transformer.explained_variance_ratio_.sum())
+
+    df = pd.DataFrame(df, index=inds)
+    if save_f is not None:
+        df.to_csv(save_f+".reduce", sep="\t")
+        if dim_red is not None:
+            pickle.dump(transformer, open(save_f + ".model","wb"))
+    return df
+
+
+########################################################################
+# Grouping peaks by values
+########################################################################
+def create_groups(peaks_list, labels, save_f):
+    """
+    Function that reads in a list of peaks, a list of labels,
+    and an output file and creates a dictionary of peak
+    IDs where each peak ID of file peaks_list[i] has the label[i].
+    Raise Error:
+        If one peak is seen across multiple files, it will error out
+    """
+    out = dict()
+
+    for i, peak_f in enumerate(peaks_list):
+        peaks = pd.read_csv(peak_f,sep="\t",index_col=0)
+        peaks["Label"] = labels[i]
+        curr_num =  len(peaks) + len(out)
+        out.update(peaks["Label"].to_dict())
+        if len(out) < curr_num:
+            print("There are overlapping peaks in the files")
+            print("File: ", peak_f)
+            print("Ending program")
+            return
+    pickle.dump(out,open(save_f,"wb"))
+    return out
+
+
+####
+# Get peak set labels
+####
+def peak_set(peak_by_motif,anno_df, group_f):
+    """
+    This sets up any a priori grouping in here.
+
+    Parameters
+    ----------
+    :peak_by_motif: pandas DataFrame
+    :anno_df: pandas DataFrame
+    :group_f: string
+        Pickled object is a dictionary where the keys are the
+        peak IDs and the values are the the class label, either a string
+        or an int.
+
+    :return:
+    peak_by_motif: Subset of original data based on the keys listed
+                   in groups
+    anno_df. Subsets of original data based on the keys listed in
+        groups. Additional column, "Clusters" and "Cluster Label" are
+        added that indicate the clusters. "Clusters" is strictly an int
+        indicating the cluster index, and "Cluster Label" is a string,
+        which is based on the values of the groups dictionary
+    """
+
+    groups = pickle.load(open(group_f,"rb"))
+    anno_df = anno_df[anno_df.index.isin(groups.keys())]
+    peak_by_motif = peak_by_motif[peak_by_motif.index.isin(
+        groups.keys())]
+
+    # Create cluster ints
+    label_inds = dict()
+    for ind, val in enumerate(np.unique(groups.values())):
+        label_inds[val] = ind
+
+    anno_df["Cluster_Label"] = pd.Series(groups)
+    anno_df["Cluster"] = anno_df["Cluster_Label"].apply(
+        lambda x: label_inds[x])
+
+    return peak_by_motif,anno_df
+
+
+
+
+####
+##
+####
+def cluster_df(df,clust_alg,save_f=None):
+    return 42

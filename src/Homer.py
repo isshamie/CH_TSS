@@ -1,14 +1,14 @@
 # coding: utf8
 import sarge,sys,os
+
+import matplotlib.pyplot as plt
 import pandas as pd 
 import numpy as np
 import matplotlib as mpl 
 ##mpl.use('Agg')
 import seaborn as sns
-import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore", 'This pattern has match groups')
-#plt.style.use('ggplot')
 import helper
 from plot_tss_results import *
 #####
@@ -228,20 +228,29 @@ def hist(tag_dir,hist_out,ref_fa,anno,mode='peak',peak='',region=2000,res=10,pc=
     print(cmd3)
     sarge.run(cmd3)
 
+
 ########################################    
-def hist_plot(hist_out,include_norm=True, f=None,to_save=True):
+def hist_plot(hist_out,include_norm=True, f=None,to_save=True,
+              to_fwhm=True):
     """Visualize histograms created by hist."""
 
     if f is None:
-        plt.figure()
+        f = plt.figure()
     df = pd.read_csv(hist_out,sep='\t',header=0,names=['Distance from TSS','Coverage','+ Tags','- Tags'])
-    plt.plot(df['Distance from TSS'],df['+ Tags'],label='+ Tags')
-    plt.plot(df['Distance from TSS'],df['- Tags'],label='- Tags')
+    if to_fwhm:
+        max_val = np.max(df['+ Tags'])
+        val = helper.fwhm(df["Distance from TSS"], df['+ Tags'], k=3)
+        print('Max value: {max_val}'.format(max_val=max_val))
+        print("Full-width at half-maximum: {val} (nts)".format(val=val))
+
+    plt.plot(df['Distance from TSS'],df['+ Tags'], label='+ Tags')
+    plt.plot(df['Distance from TSS'],df['- Tags'], label='- Tags')
     plt.xlim([-500,500])
     plt.xlabel('Distance from TSS')
     plt.ylabel('Reads per bp per TSS')
     plt.axvline(x=0,c='k')
     plt.legend(loc='upper right')
+
     if to_save:
         plt.savefig(hist_out+'.png')
 
@@ -255,13 +264,39 @@ def hist_plot(hist_out,include_norm=True, f=None,to_save=True):
         plt.ylabel('Reads per bp per TSS')
         plt.axvline(x=0,c='k')
         plt.legend(loc='upper right')
-
         #plt.savefig(os.path.splitext(hist_out)[0]+'Norm.png')
-        plt.savefig(hist_out+'Norm.png')
+        if to_save:
+            plt.savefig(hist_out+'Norm.png')
+
+
+def hist_plot_norm(hist_out, f=None,to_save=True,
+              to_fwhm=True):
+    df = pd.read_csv(hist_out + 'Norm', sep='\t', header=0,
+                     names=['Distance from TSS', 'Coverage', '+ Tags',
+                            '- Tags'])
+    if to_fwhm:
+        max_val = np.max(df['+ Tags'])
+        val = helper.fwhm(df["Distance from TSS"], df['+ Tags'], k=3)
+        print('Max value: {max_val}'.format(max_val=max_val))
+        print("Full-width at half-maximum: {val} (nts)".format(val=val))
+
+    if f is None:
+        f = plt.figure()
+    plt.plot(df['Distance from TSS'], df['+ Tags'], label='+ Tags')
+    plt.plot(df['Distance from TSS'], df['- Tags'], label='- Tags')
+    plt.xlim([-500, 500])
+    plt.xlabel('Distance from TSS (normalized per read)')
+    plt.ylabel('Reads per bp per TSS')
+    plt.axvline(x=0, c='k')
+    plt.legend(loc='upper right')
+    # plt.savefig(os.path.splitext(hist_out)[0]+'Norm.png')
+    if to_save:
+        plt.savefig(hist_out + 'Norm.png')
 
 
 ########################################
-def wrap_hist_plot(hist_outs, hist_save=None, names=None):
+def wrap_hist_plot(hist_outs, hist_save=None, names=None,
+                   to_norm=False):
     """
     Takes multipled histogram files and plots in subplots, keeping
     the limits the same.
@@ -281,7 +316,10 @@ def wrap_hist_plot(hist_outs, hist_save=None, names=None):
     axs = []
     for ind,fname in enumerate(hist_outs):
         axs.append(plt.subplot(nrows,ncols, ind+1))
-        hist_plot(fname,include_norm=False,f=f,to_save=False)
+        if to_norm:
+            hist_plot_norm(fname, f=f, to_save=False)
+        else:
+            hist_plot(fname, include_norm=False, f=f, to_save=False)
         xlim[0] = min(axs[ind].get_xlim()[0], xlim[0])
         ylim[0] = min(axs[ind].get_ylim()[0], ylim[0])
         xlim[1] = max(axs[ind].get_xlim()[1], xlim[1])
@@ -294,6 +332,7 @@ def wrap_hist_plot(hist_outs, hist_save=None, names=None):
 
     [ax.set_xlim(xlim) for ax in axs]
     [ax.set_ylim(ylim) for ax in axs]
+    #[ax.set_facecolor('white') for ax in axs]
     helper_save(hist_save)
 
 
@@ -360,8 +399,8 @@ def heat_plot(heat_file, sort_bins=(-1, 1), num_peaks=1000, \
     else:
         sns.heatmap(heat_df, robust=True, xticklabels=4,
                     yticklabels=False,ax=curr_ax)
-    if not save_f == '':
-        plt.savefig(save_f)
+    helper_save(save_f)
+
     return heat_df
 
 
@@ -571,9 +610,46 @@ def homer_trim_cmd(input_file,seq='AGATCGGAAGAGCACACGTCT'):
     sarge.run(cmd)
     return
 
+
+#######################################
+def wrap_plots(group,func, f_save, names=None, *args):
+
+    xlim = [np.infty, -np.infty]
+    ylim = [np.infty, -np.infty]
+
+    num_samples = len(group)
+    nrows,ncols = helper.determine_rows_cols(num_samples)
+
+    f = plt.figure()
+    axs = []
+
+    for ind, fname in enumerate(group):
+        axs.append(plt.subplot(nrows, ncols, ind + 1))
+
+        func(fname, fname + "_nucl", *args,f=f)
+
+        # heat_plot(fname, save_f=heat_save, f=f, curr_ax=axs[ind],
+        #           num_peaks=num_peaks, is_norm=is_norm)
+        xlim[0] = min(axs[ind].get_xlim()[0], xlim[0])
+        ylim[0] = min(axs[ind].get_ylim()[0], ylim[0])
+        xlim[1] = max(axs[ind].get_xlim()[1], xlim[1])
+        ylim[1] = max(axs[ind].get_ylim()[1], ylim[1])
+        if names is None:
+            curr_label = os.path.basename(fname)
+        else:
+            curr_label = names[ind]
+        axs[ind].set_title(curr_label)
+
+    [ax.set_xlim(xlim) for ax in axs]
+    [ax.set_ylim(ylim) for ax in axs]
+    helper_save(f_save)
+
+    return
+
+
 #######################################
 def homer_nucleotide(input_file, output_file, ref_fa, size=1000,
-                     only_plot=False):
+                     desired_lims=None, only_plot=False, f=None):
     """
     Input
     * input_file: peak file
@@ -592,17 +668,33 @@ def homer_nucleotide(input_file, output_file, ref_fa, size=1000,
         tmp = pd.read_csv(output_file, sep='\t', index_col=0)
     else:  # Alrady have the frequency plots, just want to plot
         tmp = pd.read_csv(input_file, sep='\t', index_col=0)
-    f = plt.figure(dpi=300)
-    ax = f.add_subplot(111)
+    if f is None:
+        f = plt.figure(dpi=300)
+        ax = f.add_subplot(111)
+        to_return = False
+    else:
+        ax = f.gca()
+        to_return = True
     ax.plot(tmp.index.values, tmp['A frequency'])
     ax.plot(tmp.index.values, tmp['C frequency'])
     ax.plot(tmp.index.values, tmp['T frequency'])
     ax.plot(tmp.index.values, tmp['G frequency'])
-    ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1])
+    if desired_lims is None:
+        ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1])
+    else:
+        ax.vlines(0, desired_lims[0], desired_lims[1])
     ax.legend()
     ax.set_xlabel('bp from TSS')
     ax.set_ylabel('Frequency')
-    plt.savefig(output_file + '.png')
+
+    helper_save(output_file)
+
+    if to_return:
+        return f
+    else:
+        return
+    #plt.savefig(output_file + '.png')
+
 
 
 #######################################

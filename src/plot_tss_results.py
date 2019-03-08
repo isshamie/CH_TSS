@@ -12,7 +12,7 @@ from matplotlib_venn import venn2
 
 rcParams['figure.figsize'] = 8, 6
 #mpl.style.use('fivethirtyeight')
-mpl.style.use('ggplot')
+#mpl.style.use('ggplot')
 #mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 
 
@@ -138,7 +138,7 @@ def plot_tss_across_tissues(f_in, tissues, landmark_name,f_save=None,
     for t in no_peak:
         tissues_genes.pop(t, None)
 
-    f,ax = plt.subplots(dpi=300)
+    f, ax = plt.subplots(dpi=300)
     f.patch.set_facecolor("w")
     ax.set_facecolor("w")
     x = range(len(tissues_genes)+1)
@@ -198,7 +198,8 @@ def plot_tss_across_tissues_plus_unique(f_in, tissues, landmark_name,
     names.append('Cumulative fraction')
     y = 1.0*np.array(tissues_genes.values())/(df.shape[0])
     y = np.append(y, [1.0 * np.sum(df['hasGene']) / (df.shape[0])])
-    barlist = plt.bar(x, y, align='center')
+    barlist = plt.bar(x, y, align='center', color="b")
+
 
     ## Unique genes
     if is_unique:
@@ -208,9 +209,13 @@ def plot_tss_across_tissues_plus_unique(f_in, tissues, landmark_name,
             df.shape[0]
         #y = 1.0 * np.array(tissues_genes_unique.values()) / (
         # df.shape[0])
-        y2 = np.append(y2, [1.0 * np.sum(y2) / (df.shape[0])])
+        y2 = np.append(y2, [1.0 * np.sum(y2)])
         barlist2 = plt.bar(x, y2, align='center',color='g')
 
+        np.savetxt(f_save + ".vals", np.array((y, y2)),
+                   delimiter=",")
+    else:
+        np.savetxt(f_save + ".vals", y, delimiter=",")
     ## Plot settings
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
@@ -220,8 +225,6 @@ def plot_tss_across_tissues_plus_unique(f_in, tissues, landmark_name,
     plt.xticks(range(len(tissues_genes)+1), names, rotation=90)
     plt.ylabel('Fraction of ' + landmark_name + ' covered by tissue',{'fontsize': 22})
     plt.title('TSS across tissues',{'fontsize': 22})
-
-
     ax.grid("off")
     ax.yaxis.grid(color="grey")
 
@@ -248,15 +251,52 @@ def find_unique_cho(f_in, tissue_list='Tissues', f_save=""):
     return tissue_genes,cho_genes
 
 
-def helper_save(f_save):
+def helper_save(f_save, remove_bg=True):
     """ Function to save as png and svg if f_save is not None."""
+    if remove_bg:
+        f = plt.gcf()
+        f.patch.set_facecolor("w")
+        axs = f.get_axes()
+        for ax in axs:
+            ax.set_facecolor('white')
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['bottom'].set_visible(False)
+            ax.spines['left'].set_visible(False)
+
     if f_save is not None:
         if '.png' in f_save:
-            plt.savefig(f_save)
+            plt.savefig(f_save, bbox_inches="tight", transparent=True)
             plt.savefig(f_save.split('.png')[0] + '.svg')
         else:
-            plt.savefig(f_save + '.png',bbox_inches='tight')
+            plt.savefig(f_save + '.png',bbox_inches='tight', transparent=True)
             plt.savefig(f_save + '.svg')
+
+
+#######################################################################
+## Take a series and the desired width and use the index of the
+# series as the location on the x-axis and sum them up over w of them
+# e.g. series index is -75,-74...75 and w =10 then -75:-66 will be
+# summed and -65:-56 will be summed...
+def create_bins(x,w=10):
+    instances = x
+    inds = x.index.values
+    grouping = []
+    group_inds = []
+    for i in range(0, len(instances), w):
+        grouping.append(instances[i:min(len(instances), i + w)].sum())
+        group_inds.append(inds[i])
+
+    group_inds.append(inds[-1])
+
+    group_inds_mid = []
+    for ind, val in enumerate(group_inds[:-1]):
+        group_inds_mid.append(
+            (group_inds[ind] + group_inds[ind + 1]) / 2)
+
+    plt.plot(group_inds_mid, grouping)
+
+    return grouping, group_inds_mid
 
 
 ############################################################

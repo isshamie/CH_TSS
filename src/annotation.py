@@ -596,3 +596,69 @@ def wrap_add_max_info(merged_f, expr_peaks_f,out_f=None):
     if out_f is not None:
         merged_df.to_csv(out_f,sep="\t")
     return merged_df
+
+
+##
+# Peak filtering
+##
+def filter_only_with_divergent(df, divergent_threshold=500):
+    """ Filter if there are divergent transcripts"""
+    inds_to_keep = []
+    for ind, val in df[df['isSameStrand']].iterrows():
+        curr = df[
+            (val['Chr'] == df['Chr']) & ~(df['isSameStrand'])]
+        if val['Strand'] == '-':
+            curr = curr[
+                (val['End'] - curr['Start'] < divergent_threshold) & (
+                            val['End'] - curr['Start'] > 0)]
+        else:
+            curr = curr[
+                (val['Start'] - curr['End'] < divergent_threshold) & (
+                            val['Start'] - curr['End'] > 0)]
+
+        # If there are divergent peaks, add this peak
+        if len(curr) > 0:
+            inds_to_keep.append(ind)
+
+    df = df.loc[inds_to_keep]
+    return df
+
+
+##
+# Filtering peaks where the peak index is the name and Distance to
+# TSS is a column.
+##
+def filt_peaks(peaks, distance=(-1000, +100), thresh=0, thresh_col=None,
+               divergent_thr=0, save_f=None):
+    """ If only one distance measure is given, assumes that the absolute
+        value of the 'Distance to TSS' column in peaks has to be
+        greater than the distance.
+    """
+
+    # The first two statements are for looking for a distance greater
+    # than the TSS
+    if type(distance) is int:
+        peaks = peaks[np.abs(peaks['Distance to TSS']) > distance]
+    elif len(distance) == 1:
+        peaks = peaks[np.abs(peaks['Distance to TSS']) > distance[0]]
+
+    # Looks for between the first and second elements gievn in distance
+    else:
+        peaks = peaks[(peaks['Distance to TSS'] > distance[0]) & (
+                peaks['Distance to TSS'] < distance[1])]
+
+    # If there's a score threshold
+    if thresh_col is not None:
+        peaks = peaks[peaks[thresh_col] > thresh]
+
+    # If there's a divergent threshold
+    if divergent_thr != 0:
+        peaks = filter_only_with_divergent(peaks,
+                                           divergent_threshold=divergent_thr)
+
+    # Save the filtered peaks and the params used
+    if save_f is not None:
+        peaks.to_csv(save_f, sep="\t")
+        pickle.dump([distance,thresh,thresh_col,divergent_thr],
+                    open(save_f + ".params.p","wb"))
+    return peaks
