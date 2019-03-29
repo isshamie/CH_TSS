@@ -13,7 +13,7 @@ sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
 import parallel_functions as pf
 import time
 from plot_tss_results import *
-
+import hdbscan
 
 ########################################################################
 # Functions with Bio motifs from BioPython
@@ -346,7 +346,7 @@ def norm_data(df, norm=None, save_f=None):
     elif norm == "Mean-center":
         df = df - np.mean(df)
     elif norm == "Binary":
-        df = df>0
+        df = (df>0).astype(int)
 
     if save_f is not None:
         df.to_csv(save_f,sep="\t")
@@ -398,10 +398,10 @@ def reduce_list(df, dim_red=None, ncomp=10, motif_list=(),
     :return:
     """
     if len(motif_list) > 0:
-        df = df[df.columns.isin(list(motif_list))]
+        df = df.loc[:,df.columns.isin(motif_list)]
 
     inds = df.index
-    if dim_red is not None:
+    if dim_red is not None and ncomp > 0:
         if dim_red == "tsne":
             transformer = TSNE(n_components=ncomp)
             df = transformer.embedding_
@@ -499,11 +499,11 @@ def peak_set(peak_by_motif,anno_df, group_f):
 
     return peak_by_motif,anno_df
 
-
-
-
 ####
 ##
 ####
 def cluster_df(df,clust_alg,save_f=None):
+    clusterer = hdbscan.HDBSCAN()
+    clusterer.fit(df)
+
     return 42

@@ -654,7 +654,8 @@ def filt_peaks(peaks, distance=(-1000, +100), thresh=0, thresh_col=None,
     # If there's a divergent threshold
     if divergent_thr != 0:
         peaks = filter_only_with_divergent(peaks,
-                                           divergent_threshold=divergent_thr)
+                                           divergent_threshold=
+                                           divergent_thr)
 
     # Save the filtered peaks and the params used
     if save_f is not None:

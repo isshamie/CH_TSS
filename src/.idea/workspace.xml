@@ -6,10 +6,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d355afc6-6106-4420-b221-a9581dce7c21" name="Default" comment="Create output files">
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.ipynb_checkpoints/Untitled-checkpoint.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../10_15_Results/1_2_2019_old/Fig3.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../10_15_Results/ATAC_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../10_15_Results/ATAC_analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../10_15_Results/Motif Logos using matplotlib.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../10_15_Results/Motif Logos using matplotlib.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../10_15_Results/Separate peaks based on expression.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../10_15_Results/Separate peaks based on expression.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Create_output.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/Create_output.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Fig3.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/Fig3.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Merge_into_tissues.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/Merge_into_tissues.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Compare_RNA_Seq-checkpoint.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig2-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig2-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig3-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig3-checkpoint.ipynb" afterDir="false" />
@@ -20,6 +24,7 @@
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 3. Motifs Bins-checkpoint.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 4. ATAC-seq Reference vs Experimental-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 4. ATAC-seq Reference vs Experimental-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Compare_RNA_Seq.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Copy_peaks_files.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Copy_peaks_files.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig2.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig3.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig3.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Figure 3D.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Figure 3D.ipynb" afterDir="false" />
@@ -28,14 +33,10 @@
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 3. Motifs Bins MEME.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 3. Motifs Bins MEME.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 3. Motifs Bins.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 4. ATAC-seq Reference vs Experimental.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 4. ATAC-seq Reference vs Experimental.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/src.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/src.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Homer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Homer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/annotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/annotation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/helper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/motif_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/motif_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plot_tss_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_tss_results.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,17 +49,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/motif_analysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="584">
-              <caret line="386" column="4" lean-forward="true" selection-start-line="386" selection-start-column="4" selection-end-line="386" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/annotation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="598">
-              <caret line="642" column="69" lean-forward="true" selection-start-line="642" selection-start-column="69" selection-end-line="642" selection-end-column="69" />
+            <state relative-caret-position="390">
+              <caret line="26" column="35" lean-forward="true" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -74,7 +69,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>gff</find>
       <find>peakFileToPeakFile</find>
       <find>atac</find>
       <find>intron</find>
@@ -98,12 +92,13 @@
       <find>ho</find>
       <find>ax.vlin</find>
       <find>plot_</find>
-      <find>helper_save</find>
       <find>helper</find>
       <find>plot_count</find>
       <find>nucleotide</find>
       <find>distance_to_landmarks</find>
       <find>distance</find>
+      <find>ncomp</find>
+      <find>helper_save</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -119,17 +114,17 @@
         <option value="$PROJECT_DIR$/create_output.py" />
         <option value="$PROJECT_DIR$/helper.py" />
         <option value="$PROJECT_DIR$/plot_tss_results.py" />
-        <option value="$PROJECT_DIR$/Homer.py" />
         <option value="$PROJECT_DIR$/annotation.py" />
+        <option value="$PROJECT_DIR$/Homer.py" />
         <option value="$PROJECT_DIR$/motif_analysis.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1920" />
-    <option name="y" value="58" />
-    <option name="width" value="1181" />
-    <option name="height" value="1080" />
+    <option name="x" value="-1383" />
+    <option name="y" value="84" />
+    <option name="width" value="1441" />
+    <option name="height" value="960" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -269,7 +264,8 @@
       <workItem from="1551394841862" duration="62000" />
       <workItem from="1551394940180" duration="3337000" />
       <workItem from="1551482188618" duration="1701000" />
-      <workItem from="1551836649810" duration="18702000" />
+      <workItem from="1551836649810" duration="20665000" />
+      <workItem from="1552604123719" duration="2815000" />
     </task>
     <task id="LOCAL-00001" summary="Create output files">
       <created>1544492261100</created>
@@ -282,14 +278,14 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23956000" />
+    <option name="totallyTimeSpent" value="28734000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1920" y="58" width="1181" height="1080" extended-state="0" />
+    <frame x="1680" y="42" width="1080" height="960" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2475856" />
-      <window_info id="Structure" order="1" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3044316" />
+      <window_info id="Structure" order="1" weight="0.24969475" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -305,7 +301,7 @@
       <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32903227" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="bottom" id="Docker" order="13" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="File Transfer" order="14" visible="true" weight="0.2236842" />
+      <window_info anchor="bottom" id="File Transfer" order="14" weight="0.22352941" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -399,13 +395,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Homer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="676" column="24" selection-start-line="676" selection-start-column="24" selection-end-line="676" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plot_enrichment_over_bg.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -420,24 +409,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_tss_results.py">
+    <entry file="file://$PROJECT_DIR$/annotation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="659">
-          <caret line="258" column="20" selection-start-line="258" selection-start-column="20" selection-end-line="258" selection-end-column="20" />
+        <state relative-caret-position="570">
+          <caret line="659" column="49" lean-forward="true" selection-start-line="659" selection-start-column="49" selection-end-line="659" selection-end-column="49" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/annotation.py">
+    <entry file="file://$PROJECT_DIR$/plot_tss_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="598">
-          <caret line="642" column="69" lean-forward="true" selection-start-line="642" selection-start-column="69" selection-end-line="642" selection-end-column="69" />
+        <state relative-caret-position="275">
+          <caret line="256" column="21" selection-start-line="256" selection-start-column="21" selection-end-line="256" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Homer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="680" column="61" selection-start-line="680" selection-start-column="61" selection-end-line="680" selection-end-column="61" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/motif_analysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="386" column="4" lean-forward="true" selection-start-line="386" selection-start-column="4" selection-end-line="386" selection-end-column="4" />
+        <state relative-caret-position="390">
+          <caret line="26" column="35" lean-forward="true" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

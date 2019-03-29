@@ -675,10 +675,10 @@ def homer_nucleotide(input_file, output_file, ref_fa, size=1000,
     else:
         ax = f.gca()
         to_return = True
-    ax.plot(tmp.index.values, tmp['A frequency'])
-    ax.plot(tmp.index.values, tmp['C frequency'])
-    ax.plot(tmp.index.values, tmp['T frequency'])
-    ax.plot(tmp.index.values, tmp['G frequency'])
+    ax.plot(tmp.index.values, tmp['A frequency'], linewidth=1)
+    ax.plot(tmp.index.values, tmp['C frequency'], linewidth=1)
+    ax.plot(tmp.index.values, tmp['T frequency'], linewidth=1)
+    ax.plot(tmp.index.values, tmp['G frequency'], linewidth=1)
     if desired_lims is None:
         ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1])
     else:
@@ -694,7 +694,6 @@ def homer_nucleotide(input_file, output_file, ref_fa, size=1000,
     else:
         return
     #plt.savefig(output_file + '.png')
-
 
 
 #######################################
