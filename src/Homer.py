@@ -619,8 +619,10 @@ def wrap_plots(group,func, f_save, names=None, *args):
 
     num_samples = len(group)
     nrows,ncols = helper.determine_rows_cols(num_samples)
+    if len(group) == 3: #Hardcode just 3 columns
+        nrows, ncols = 1, 3
 
-    f = plt.figure()
+    f = plt.figure(dpi=300)
     axs = []
 
     for ind, fname in enumerate(group):
@@ -639,11 +641,12 @@ def wrap_plots(group,func, f_save, names=None, *args):
         else:
             curr_label = names[ind]
         axs[ind].set_title(curr_label)
+        if ind == len(group)-1:
+            axs[ind].legend(bbox_to_anchor=(1.04,1),loc="upper left")
 
     [ax.set_xlim(xlim) for ax in axs]
     [ax.set_ylim(ylim) for ax in axs]
     helper_save(f_save)
-
     return
 
 
@@ -672,18 +675,21 @@ def homer_nucleotide(input_file, output_file, ref_fa, size=1000,
         f = plt.figure(dpi=300)
         ax = f.add_subplot(111)
         to_return = False
+        to_legend = True
     else:
         ax = f.gca()
         to_return = True
-    ax.plot(tmp.index.values, tmp['A frequency'], linewidth=1)
-    ax.plot(tmp.index.values, tmp['C frequency'], linewidth=1)
-    ax.plot(tmp.index.values, tmp['T frequency'], linewidth=1)
-    ax.plot(tmp.index.values, tmp['G frequency'], linewidth=1)
-    if desired_lims is None:
-        ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1])
+        to_legend = False
+    ax.plot(tmp.index.values, tmp['C frequency'], linewidth=2)
+    ax.plot(tmp.index.values, tmp['A frequency'], linewidth=2,alpha=0.8)
+    ax.plot(tmp.index.values, tmp['T frequency'], linewidth=2,alpha=0.6)
+    ax.plot(tmp.index.values, tmp['G frequency'], linewidth=2,alpha=0.4)
+    if desired_lims is None or desired_lims == ():
+        ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1], linewidth=0.5)
     else:
-        ax.vlines(0, desired_lims[0], desired_lims[1])
-    ax.legend()
+        ax.vlines(0, desired_lims[0], desired_lims[1], linewidth=0.5)
+    if to_legend:
+        ax.legend(loc="upper left")
     ax.set_xlabel('bp from TSS')
     ax.set_ylabel('Frequency')
 
@@ -694,7 +700,6 @@ def homer_nucleotide(input_file, output_file, ref_fa, size=1000,
     else:
         return
     #plt.savefig(output_file + '.png')
-
 
 #######################################
 def extract_peak_sequences(bed_file,peak_list,genome,f_save,upstream=1000,downstream=100):

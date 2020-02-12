@@ -9,7 +9,7 @@ from scipy import stats
 from sklearn.manifold import TSNE
 
 sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
-
+sys.path.append("/home/isshamie/software/homebrew/parallel_functions/numpanpar/")
 import parallel_functions as pf
 import time
 from plot_tss_results import *

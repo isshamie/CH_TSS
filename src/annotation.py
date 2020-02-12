@@ -16,8 +16,8 @@ import os
 import Homer
 from cycler import cycler
 sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
+sys.path.append("/home/isshamie/software/homebrew/parallel_functions/numpanpar/")
 import parallel_functions
-
 
 
 def convert_merged_vals_to_expression_matrix(merged_file, peak_folder='.', output_file=None):

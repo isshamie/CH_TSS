@@ -231,6 +231,128 @@ def plot_tss_across_tissues_plus_unique(f_in, tissues, landmark_name,
     helper_save(f_save)
 
 
+
+def tmp_plot_tss_across_tissues_plus_unique(df, tissues, landmark_name,
+                                f_save=None, tissue_list='Tissues',
+                                        is_unique=True,not_in_cho=False, verbose=True):
+    tissues_genes = dict()
+    tissues_genes_unique = dict() # The number of unique genes- i.e # found in only that tissue
+    for t in tissues:
+        tissues_genes[t] = 0
+        tissues_genes_unique[t] = 0
+    for ind, val in df.iterrows():
+        curr_ts = val[tissue_list].split(",")
+        if curr_ts[0] == "":
+            continue
+        for t in curr_ts:
+            tissues_genes[t] += 1
+        if len(curr_ts) == 1:
+            tissues_genes_unique[curr_ts[0]] += 1
+
+    no_peak = []
+    for t in tissues_genes:
+        if tissues_genes[t] == 0:
+            no_peak.append(t)
+
+    for t in no_peak:
+        tissues_genes.pop(t, None)
+
+    if not_in_cho:
+        tissue_genes = set()
+        cho_genes = set()
+        for ind, val in df.iterrows():
+            curr_ts = val[tissue_list].split(",")
+            if curr_ts[0] == "":
+                continue
+            if "CHO" in curr_ts:
+                    cho_genes.add(ind)
+                    curr_ts.remove("CHO")
+            for t in curr_ts:
+                tissue_genes.add(ind)
+                break
+        not_in_cho_val = len(tissue_genes-cho_genes)
+
+
+    f,ax = plt.subplots(dpi=300)
+    f.patch.set_facecolor("w")
+    ax.set_facecolor("w")
+
+    ## Plot
+    x = range(len(tissues_genes)+1)
+    names = list(tissues_genes.keys()) #Add the total number of genes
+    names.append('Total unique genes')
+
+
+
+    y = 1.0*np.array(tissues_genes.values())/(df.shape[0])
+    y = np.append(y, [1.0 * np.sum(df['hasGene']) / (df.shape[0])])
+    if not_in_cho:
+        names.append("Not in CHO")
+        y = np.append(y, 1.0 * not_in_cho_val/df.shape[0])
+        x = range(len(names))
+
+    barlist = plt.bar(x, y, align='center', color="b")
+
+
+    ## Unique genes
+    if is_unique:
+        y2 = np.array([1.0*tissues_genes_unique[k] for k in tissues_genes.keys()])/df.shape[0]
+        #y = 1.0 * np.array(tissues_genes_unique.values()) / (
+        # df.shape[0])
+        y2 = np.append(y2, [1.0 * np.sum(y2)])
+
+        if not_in_cho_val:
+            y2 = np.append(y2,0) #No need to add unique not in cho
+        barlist2 = ax.bar(x, y2, align='center',color='g')
+        print(barlist2)
+        
+    ## Plot settings
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+
+    if not_in_cho:
+        barlist[-2].set_color('purple')
+    
+    barlist[-1].set_color('purple')
+    plt.xticks(range(len(names)), names, rotation=90)
+    plt.ylabel('Fraction of ' + landmark_name + ' covered by tissue',{'fontsize': 22})
+    plt.title('TSS across tissues' ,{'fontsize': 22})
+    #ax.grid("off")
+    ax.yaxis.grid(color="grey")
+
+    ax.tick_params(labelleft=True, labelright=True)
+
+    
+    ax2 = ax.twinx()
+    ax2.yaxis.grid([])
+    ax2.set_ylim(ax.get_ylim())
+    ax2.tick_params(labelleft=False,labelright=True)
+
+    ax2.spines['top'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['bottom'].set_visible(False)
+    ax2.spines['left'].set_visible(False)
+
+    # ax2.scatter([0,1],[10,11], color='g')
+
+    vals = ax.get_yticks()
+    new = []
+    for v in vals:
+        new.append(int(v*df.shape[0]))
+    ax2.set_yticklabels(new)
+
+    helper_save(f_save)
+
+    if verbose:
+        print("Total number", df.shape[0])
+        print(zip(names, np.array(y)*df.shape[0]))
+        print(zip(names, np.array(y)))
+        print(zip(names, np.array(y2)*df.shape[0]))
+        print(zip(names, np.array(y2)))
+    return
+
 ## Creates a Venn Diagram of genes found in CHO vs other Tissues
 def find_unique_cho(f_in, tissue_list='Tissues', f_save=""):
     df = pickle.load(open(f_in, 'rb'))
@@ -265,12 +387,21 @@ def helper_save(f_save, remove_bg=True):
             ax.spines['left'].set_visible(False)
 
     if f_save is not None:
-        if '.png' in f_save:
-            plt.savefig(f_save, bbox_inches="tight", transparent=True)
-            plt.savefig(f_save.split('.png')[0] + '.svg')
-        else:
-            plt.savefig(f_save + '.png',bbox_inches='tight', transparent=True)
-            plt.savefig(f_save + '.svg')
+        #Remove suffixes
+        f_save = f_save.replace('.csv', '')
+        f_save = f_save.replace('.tsv', '')
+        f_save = f_save.replace('.txt', '')
+    f_save = f_save.replace(".png","")
+    
+    plt.savefig(f_save + '.png',bbox_inches='tight', transparent=True)
+    plt.savefig(f_save + '.svg')
+    plt.savefig(f_save + '.eps')
+        #if '.png' in f_save:
+        #    plt.savefig(f_save, bbox_inches="tight", transparent=True)
+        #    plt.savefig(f_save.split('.png')[0] + '.svg')
+        #else:
+        #    plt.savefig(f_save + '.png',bbox_inches='tight', transparent=True)
+        #    plt.savefig(f_save + '.svg')
 
 
 #######################################################################

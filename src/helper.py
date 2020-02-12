@@ -1,6 +1,9 @@
 import yaml
 import sys
 import os
+import time
+import sarge
+
 
 ## First go back up a folder
 import os
@@ -132,3 +135,93 @@ def fwhm(x, y, k=3):
                 "the dataset is flat (e.g. all zeros).")
     else:
         return abs(roots[1] - roots[0])
+
+
+def mdir(d, replace=True, save_old=True):
+    """ Function to make a directory. If the directory exists,
+    it will either do nothing or replace the directory and save the
+    old in a subfolder depending on the parameters
+    Parameters:
+        @d: type: str
+            directory name.
+        @replace: type=bool
+                  default=True
+                  To replace the old file or not
+        @save_old: type=bool
+                   default=True
+                   Only on if replace=True. If true, will save the old
+                   directory inside
+                   'd/old_{index}' where the index will be the old
+                   numbered version.
+
+    Returns:
+        True if the folder was not already present OR was
+        replaced.
+    """
+    if os.path.exists(d):
+        if replace:
+            if save_old:
+                olds = glob.glob(os.path.join(d, "old_*"))
+                curr_index = len(olds)
+                count = 1
+                new_old = "old_%d" % (curr_index + count)
+                new_old = os.path.join(d, new_old)
+
+                # Keep incrementing until a new directory is found.
+                while os.path.exists(new_old):
+                    count += 1
+                    new_old = new_old[:new_old.rfind("_") +1] + str(
+                        count)
+
+                os.mkdir(new_old)
+                print("Directory already there. Moving contents into "
+                      "%s" %
+                      new_old)
+
+                #This command moves everything but the old folder
+                cmd = "mv `ls -1 %s/* | grep -v old_` %s" % (d,
+                                                              new_old)
+                print(cmd)
+                os.system(cmd)
+                time_file(new_old, name="DATE_moved.txt")
+
+            else:
+                cmd = "rm -rf %s/* " % d
+                os.system(cmd)
+        else:
+            print("Directory already there. Keeping as is")
+            return False
+    else:
+        os.makedirs(d)
+    return True
+
+
+def time_file(outdir, name="DATE"):
+    """ Function that generates a simple text file with a time stamp
+    up to hours and minutes.
+        @outdir: directory to save file in
+        @name: file name to save to
+        """
+    t = time.localtime()
+    timestamp = time.strftime('%b-%d-%Y_%H%M', t)
+    with open(os.path.join(outdir, name), 'w') as f:
+        f.write(timestamp)
+    return
+
+
+def append_name(f, prefix="", suffix="", to_rm=(".csv",".tsv")):
+    """ Appends a prefix and suffix to string to the beginning of a
+    filename
+    that may be a full path """
+
+    for i in to_rm:
+        f = f.replace(i, "")
+
+    if not prefix == "":
+        prefix = prefix + "_"
+    if not suffix == "":
+        suffix = "_" + suffix
+
+    f = os.path.join(os.path.dirname(f), prefix + os.path.basename(f)
+                     + suffix)
+    return f
