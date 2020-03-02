@@ -6,37 +6,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d355afc6-6106-4420-b221-a9581dce7c21" name="Default" comment="Create output files">
-      <change beforePath="$PROJECT_DIR$/../.ipynb_checkpoints/Untitled-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../10_15_Results/1_2_2019_old/Fig3.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../10_15_Results/ATAC_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../10_15_Results/ATAC_analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../10_15_Results/Motif Logos using matplotlib.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../10_15_Results/Motif Logos using matplotlib.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../10_15_Results/Separate peaks based on expression.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../10_15_Results/Separate peaks based on expression.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Motifs_Preprocessing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/compare_tss.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/generate_tss_for_guides.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/merging.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../10_15_Results/Distance to Annotated TSS.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../10_15_Results/Distance to Annotated TSS.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/Create_output-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/Create_output-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/Fig3-checkpoint.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/peaks_break_into_files-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/peaks_break_into_files-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/peaks_to_annotation-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/peaks_to_annotation-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/retrieve_tss_peaks-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/.ipynb_checkpoints/retrieve_tss_peaks-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Create_output.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/Create_output.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Fig3.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/Fig3.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Fig2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/Fig2.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Fig3.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Analysis_12_18/Merge_into_tissues.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/Merge_into_tissues.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Compare_RNA_Seq-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig2-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig2-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig3-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Fig3-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Figure 3D-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Figure 3D-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Scrap-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Scrap-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Separate peaks based on expression-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Separate peaks based on expression-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 3. Motifs Bins MEME-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 3. Motifs Bins MEME-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 3. Motifs Bins-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 4. ATAC-seq Reference vs Experimental-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/Supplemental Figure 4. ATAC-seq Reference vs Experimental-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Compare_RNA_Seq.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Copy_peaks_files.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Copy_peaks_files.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig2.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig3.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig3.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Figure 3D.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Figure 3D.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Scrap.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Scrap.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Separate peaks based on expression.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Separate peaks based on expression.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 3. Motifs Bins MEME.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 3. Motifs Bins MEME.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 3. Motifs Bins.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 4. ATAC-seq Reference vs Experimental.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Supplemental Figure 4. ATAC-seq Reference vs Experimental.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/merge_samples.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/merge_samples.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/peaks_break_into_files.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/peaks_break_into_files.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/peaks_to_annotation.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/peaks_to_annotation.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_12_18/retrieve_tss_peaks.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_12_18/retrieve_tss_peaks.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/peaks_break_into_files-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/.ipynb_checkpoints/peaks_break_into_files-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Create_output.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Create_output.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig1b.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/Fig1b.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/peaks_break_into_files.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/peaks_break_into_files.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/peaks_to_annotation.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/peaks_to_annotation.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Analysis_NCBI_PICR/silenced_CHO_genes.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Analysis_NCBI_PICR/silenced_CHO_genes.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Homer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/annotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/annotation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/motif_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/motif_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create_output.py" beforeDir="false" afterPath="$PROJECT_DIR$/create_output.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_tss_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_tss_results.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,13 +46,37 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/motif_analysis.py">
+        <entry file="file://$PROJECT_DIR$/generate_tss_for_guides.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" column="35" lean-forward="true" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="593">
+              <caret line="144" column="22" lean-forward="true" selection-start-line="144" selection-start-column="22" selection-end-line="144" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/create_output.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-351">
+              <caret line="69" column="67" selection-start-line="69" selection-start-column="64" selection-end-line="69" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helper.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-102">
+              <caret line="167" column="31" selection-start-line="167" selection-start-column="31" selection-end-line="167" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Homer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="433">
+              <caret line="491" column="106" selection-start-line="491" selection-start-column="106" selection-end-line="491" selection-end-column="106" />
             </state>
           </provider>
         </entry>
@@ -69,18 +92,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>peakFileToPeakFile</find>
-      <find>atac</find>
-      <find>intron</find>
-      <find>maxS</find>
-      <find>wrap</find>
-      <find>peakFil</find>
-      <find>homer_nu</find>
-      <find>hist</find>
-      <find>helper_</find>
-      <find>unique</find>
       <find>dpi</find>
-      <find>print</find>
       <find>he</find>
       <find>plt</find>
       <find>heat_df</find>
@@ -99,7 +111,21 @@
       <find>distance</find>
       <find>ncomp</find>
       <find>helper_save</find>
+      <find>allow_cd</find>
+      <find>wrap_</find>
+      <find>indir</find>
+      <find>peak_bin</find>
+      <find>f.replace</find>
+      <find>mdir</find>
+      <find>hel</find>
+      <find>print</find>
+      <find>start</find>
+      <find>p0</find>
+      <find>createPeakFileFromGFF</find>
     </findStrings>
+    <replaceStrings>
+      <replace>data_folder</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -111,20 +137,26 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/bed_files_concat.py" />
         <option value="$PROJECT_DIR$/plot_enrichment_over_bg.py" />
-        <option value="$PROJECT_DIR$/create_output.py" />
-        <option value="$PROJECT_DIR$/helper.py" />
-        <option value="$PROJECT_DIR$/plot_tss_results.py" />
-        <option value="$PROJECT_DIR$/annotation.py" />
         <option value="$PROJECT_DIR$/Homer.py" />
         <option value="$PROJECT_DIR$/motif_analysis.py" />
+        <option value="$PROJECT_DIR$/annotation.py" />
+        <option value="$PROJECT_DIR$/params.yaml" />
+        <option value="$PROJECT_DIR$/__init__.py" />
+        <option value="$PROJECT_DIR$/merging.py" />
+        <option value="$PROJECT_DIR$/Motifs_Preprocessing.py" />
+        <option value="$PROJECT_DIR$/compare_tss.py" />
+        <option value="$PROJECT_DIR$/helper.py" />
+        <option value="$PROJECT_DIR$/plot_tss_results.py" />
+        <option value="$PROJECT_DIR$/create_output.py" />
+        <option value="$PROJECT_DIR$/generate_tss_for_guides.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1383" />
-    <option name="y" value="84" />
-    <option name="width" value="1441" />
-    <option name="height" value="960" />
+    <option name="x" value="-1883" />
+    <option name="y" value="466" />
+    <option name="width" value="1680" />
+    <option name="height" value="1027" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -266,6 +298,12 @@
       <workItem from="1551482188618" duration="1701000" />
       <workItem from="1551836649810" duration="20665000" />
       <workItem from="1552604123719" duration="2815000" />
+      <workItem from="1554400583565" duration="8386000" />
+      <workItem from="1554926535604" duration="5998000" />
+      <workItem from="1555349731349" duration="10358000" />
+      <workItem from="1555370543867" duration="653000" />
+      <workItem from="1555439604879" duration="776000" />
+      <workItem from="1561504531689" duration="5184000" />
     </task>
     <task id="LOCAL-00001" summary="Create output files">
       <created>1544492261100</created>
@@ -278,30 +316,39 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28734000" />
+    <option name="totallyTimeSpent" value="60089000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1680" y="42" width="1080" height="960" extended-state="0" />
+    <frame x="-1883" y="466" width="1680" height="1027" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3044316" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16910867" />
       <window_info id="Structure" order="1" weight="0.24969475" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49570692" weight="0.3390863" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.5042931" side_tool="true" weight="0.33655915" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32941177" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32912722" />
-      <window_info anchor="bottom" id="Python Console" order="8" weight="0.3297555" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.09907834" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Python Console" order="8" weight="0.32941177" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.09839572" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.32941177" />
       <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32903227" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="bottom" id="Docker" order="13" show_stripe_button="false" />
-      <window_info anchor="bottom" id="File Transfer" order="14" weight="0.22352941" />
+      <window_info anchor="bottom" id="File Transfer" order="14" weight="0.2224599" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -388,13 +435,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="878">
-          <caret line="123" column="36" selection-start-line="123" selection-start-column="36" selection-end-line="123" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plot_enrichment_over_bg.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -402,41 +442,92 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/create_output.py">
+    <entry file="file://$PROJECT_DIR$/motif_analysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="682">
-          <caret line="373" column="4" lean-forward="true" selection-start-line="373" selection-start-column="4" selection-end-line="374" selection-end-column="38" />
+        <state relative-caret-position="430">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/merging.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1950">
+          <caret line="132" selection-start-line="132" selection-end-line="132" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Motifs_Preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/compare_tss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/annotation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="659" column="49" lean-forward="true" selection-start-line="659" selection-start-column="49" selection-end-line="659" selection-end-column="49" />
+        <state relative-caret-position="4530">
+          <caret line="318" column="43" selection-start-line="318" selection-start-column="43" selection-end-line="318" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plot_tss_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="256" column="21" selection-start-line="256" selection-start-column="21" selection-end-line="256" selection-end-column="21" />
+        <state relative-caret-position="858">
+          <caret line="284" column="38" selection-start-line="284" selection-start-column="38" selection-end-line="284" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-102">
+          <caret line="167" column="31" selection-start-line="167" selection-start-column="31" selection-end-line="167" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/create_output.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-351">
+          <caret line="69" column="67" selection-start-line="69" selection-start-column="64" selection-end-line="69" selection-end-column="67" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Homer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="680" column="61" selection-start-line="680" selection-start-column="61" selection-end-line="680" selection-end-column="61" />
+        <state relative-caret-position="433">
+          <caret line="491" column="106" selection-start-line="491" selection-start-column="106" selection-end-line="491" selection-end-column="106" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/motif_analysis.py">
+    <entry file="file://$PROJECT_DIR$/generate_tss_for_guides.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="35" lean-forward="true" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="593">
+          <caret line="144" column="22" lean-forward="true" selection-start-line="144" selection-start-column="22" selection-end-line="144" selection-end-column="22" />
         </state>
       </provider>
     </entry>

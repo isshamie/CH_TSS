@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib as mpl 
 ##mpl.use('Agg')
 import seaborn as sns
+
 import warnings
 warnings.filterwarnings("ignore", 'This pattern has match groups')
 import helper
@@ -183,7 +184,7 @@ def annotate_filter(anno_file,marks=['promoter','exon','Intergenic']):
 
 
 ######################################## 
-def hist(tag_dir,hist_out,ref_fa,anno,mode='peak',peak='',region=2000,res=10,pc=0,hist_norm = 100):
+def hist(tag_dir,hist_out,ref_fa,anno,mode='peak',peak='',region=2000,res=10,pc=0,hist_norm=100, include_norm=True, include_heat=True, verbose=True):
     '''this function gets tag coverage around tss. Creates histogram, normalized histogram, and also stores the raw coverage for each read in a matrix form
     * tag_dir: tag directory
     * hist_out: Base filename to save to. Will save additional files with different extensions. All are tsv files
@@ -209,29 +210,36 @@ def hist(tag_dir,hist_out,ref_fa,anno,mode='peak',peak='',region=2000,res=10,pc=
     
     cmd = ('annotatePeaks.pl {peak} {ref_fa} {anno} -fragLength 1 -size {size} -hist {bin} -d {dir} -pc {pc} > {out}').format(
                     peak=peak,ref_fa=ref_fa,anno=anno,size=str(region),bin=str(res),dir=tag_dir,pc=str(pc),out=hist_out)
-    print(cmd)
+    if verbose:
+        print(cmd)
     sarge.run(cmd)
     
-    cmd1 = ('annotatePeaks.pl {peak} {ref_fa} {anno} -fragLength 1 -size {size} -hist {bin} -histNorm {hist_norm} -d {dir} -pc {pc} > {out}').format(
-                    peak=peak,ref_fa=ref_fa,anno=anno,size=str(region),bin=str(res),dir=tag_dir,pc=str(pc),hist_norm=str(hist_norm),out=hist_out+'Norm')
-    print(cmd1)
-    sarge.run(cmd1)
+
+    if include_norm:
+        cmd1 = ('annotatePeaks.pl {peak} {ref_fa} {anno} -fragLength 1 -size {size} -hist {bin} -histNorm {hist_norm} -d {dir} -pc {pc} > {out}').format(
+                        peak=peak,ref_fa=ref_fa,anno=anno,size=str(region),bin=str(res),dir=tag_dir,pc=str(pc),hist_norm=str(hist_norm),out=hist_out+'Norm')
+        if verbose:
+            print(cmd1)
+        sarge.run(cmd1)
 
 
-    cmd2 = ('annotatePeaks.pl {peak} {ref_fa} {anno} -fragLength 1 -size {size} -hist {bin} -ghist -d {dir} -pc {pc} -strand + > {out}').format(
-                    peak=peak,ref_fa=ref_fa,anno=anno,size=str(region),bin=str(res),dir=tag_dir,pc=str(pc),out=hist_out + 'MatS')
-    print(cmd2)
-    sarge.run(cmd2) 
+    if include_heat:
+        cmd2 = ('annotatePeaks.pl {peak} {ref_fa} {anno} -fragLength 1 -size {size} -hist {bin} -ghist -d {dir} -pc {pc} -strand + > {out}').format(
+                        peak=peak,ref_fa=ref_fa,anno=anno,size=str(region),bin=str(res),dir=tag_dir,pc=str(pc),out=hist_out + 'MatS')
+        if verbose:
+            print(cmd2)
+        sarge.run(cmd2) 
 
-    cmd3 = ('annotatePeaks.pl {peak} {ref_fa} {anno} -fragLength 1 -size {size} -hist {bin} -ghist -d {dir} -pc {pc} -strand - > {out}').format(
-                    peak=peak,ref_fa=ref_fa,anno=anno,size=str(region),bin=str(res),dir=tag_dir,pc=str(pc),out=hist_out + 'MatAS')
-    print(cmd3)
-    sarge.run(cmd3)
+        cmd3 = ('annotatePeaks.pl {peak} {ref_fa} {anno} -fragLength 1 -size {size} -hist {bin} -ghist -d {dir} -pc {pc} -strand - > {out}').format(
+                        peak=peak,ref_fa=ref_fa,anno=anno,size=str(region),bin=str(res),dir=tag_dir,pc=str(pc),out=hist_out + 'MatAS')
+        if verbose:
+            print(cmd3)
+        sarge.run(cmd3)
 
 
 ########################################    
-def hist_plot(hist_out,include_norm=True, f=None,to_save=True,
-              to_fwhm=True):
+def hist_plot(hist_out,include_norm=True, f=None,to_save=True, 
+              to_fwhm=False, include_negative=True, include_n=False, xlim=(-500,500), label=None, norm_name="Norm"):
     """Visualize histograms created by hist."""
 
     if f is None:
@@ -244,50 +252,60 @@ def hist_plot(hist_out,include_norm=True, f=None,to_save=True,
         print("Full-width at half-maximum: {val} (nts)".format(val=val))
 
     plt.plot(df['Distance from TSS'],df['+ Tags'], label='+ Tags')
-    plt.plot(df['Distance from TSS'],df['- Tags'], label='- Tags')
-    plt.xlim([-500,500])
+    if include_negative:
+        plt.plot(df['Distance from TSS'],df['- Tags'], label='- Tags')
+    if xlim is not None:
+        print(xlim)
+        plt.xlim(xlim)
     plt.xlabel('Distance from TSS')
     plt.ylabel('Reads per bp per TSS')
-    plt.axvline(x=0,c='k')
+    plt.axvline(x=0,c='k', alpha=0.4)
     plt.legend(loc='upper right')
+    if label is not None:
+        plt.title(label)
 
     if to_save:
         plt.savefig(hist_out+'.png')
 
     if include_norm:
-        plt.figure()
         df = pd.read_csv(hist_out+'Norm',sep='\t',header=0,names=['Distance from TSS','Coverage','+ Tags','- Tags'])
         plt.plot(df['Distance from TSS'],df['+ Tags'],label='+ Tags')
-        plt.plot(df['Distance from TSS'],df['- Tags'],label='- Tags')
+        if include_negative:
+            plt.plot(df['Distance from TSS'],df['- Tags'],label='- Tags')
         plt.xlim([-500,500])
         plt.xlabel('Distance from TSS (normalized per read)')
         plt.ylabel('Reads per bp per TSS')
         plt.axvline(x=0,c='k')
         plt.legend(loc='upper right')
+        if label is not None:
+            plt.title(label)
         #plt.savefig(os.path.splitext(hist_out)[0]+'Norm.png')
         if to_save:
             plt.savefig(hist_out+'Norm.png')
 
 
 def hist_plot_norm(hist_out, f=None,to_save=True,
-              to_fwhm=True):
-    df = pd.read_csv(hist_out + 'Norm', sep='\t', header=0,
+              to_fwhm=True, include_negative=True, xlim=(-500, 500), norm_name="Norm"):
+    df = pd.read_csv(hist_out + norm_name, sep='\t', header=0,
                      names=['Distance from TSS', 'Coverage', '+ Tags',
                             '- Tags'])
     if to_fwhm:
         max_val = np.max(df['+ Tags'])
-        val = helper.fwhm(df["Distance from TSS"], df['+ Tags'], k=3)
+        val = helper.fwhm(df["Distance from TSS"], df['+ Tags'], k=3) 
         print('Max value: {max_val}'.format(max_val=max_val))
-        print("Full-width at half-maximum: {val} (nts)".format(val=val))
+        print("Full-width a t half-maximum: {val} (nts)".format(val=val))
 
     if f is None:
         f = plt.figure()
     plt.plot(df['Distance from TSS'], df['+ Tags'], label='+ Tags')
-    plt.plot(df['Distance from TSS'], df['- Tags'], label='- Tags')
-    plt.xlim([-500, 500])
+    if include_negative:
+        plt.plot(df['Distance from TSS'], df['- Tags'], label='- Tags')
+    if xlim is not None:
+        plt.xlim(xlim)
+
     plt.xlabel('Distance from TSS (normalized per read)')
     plt.ylabel('Reads per bp per TSS')
-    plt.axvline(x=0, c='k')
+    plt.axvline(x=0, c='k', alpha=0.4)
     plt.legend(loc='upper right')
     # plt.savefig(os.path.splitext(hist_out)[0]+'Norm.png')
     if to_save:
@@ -296,7 +314,7 @@ def hist_plot_norm(hist_out, f=None,to_save=True,
 
 ########################################
 def wrap_hist_plot(hist_outs, hist_save=None, names=None,
-                   to_norm=False):
+                   to_norm=False, include_negative=True,n=None, xlims=(-500,500), label=None, same_ylim=True):
     """
     Takes multipled histogram files and plots in subplots, keeping
     the limits the same.
@@ -312,27 +330,37 @@ def wrap_hist_plot(hist_outs, hist_save=None, names=None,
 
     num_samples = len(hist_outs)
     nrows,ncols = helper.determine_rows_cols(num_samples)
-    f = plt.figure()
+    f = plt.figure(figsize=(15,15))
     axs = []
     for ind,fname in enumerate(hist_outs):
         axs.append(plt.subplot(nrows,ncols, ind+1))
         if to_norm:
-            hist_plot_norm(fname, f=f, to_save=False)
+            hist_plot_norm(fname, f=f, to_save=False, include_negative=include_negative, xlim=xlims)
         else:
-            hist_plot(fname, include_norm=False, f=f, to_save=False)
+            hist_plot(fname, include_norm=False, f=f, to_save=False, include_negative=include_negative, xlim=xlims)
         xlim[0] = min(axs[ind].get_xlim()[0], xlim[0])
         ylim[0] = min(axs[ind].get_ylim()[0], ylim[0])
         xlim[1] = max(axs[ind].get_xlim()[1], xlim[1])
         ylim[1] = max(axs[ind].get_ylim()[1], ylim[1])
+        
         if names is None:
             curr_label = os.path.basename(fname)
         else:
             curr_label = names[ind]
+        if n is not None:
+            curr_label = curr_label + " n=" + str(n[ind])
         axs[ind].set_title(curr_label)
 
+    if same_ylim:
+        [ax.set_ylim(ylim) for ax in axs]
     [ax.set_xlim(xlim) for ax in axs]
-    [ax.set_ylim(ylim) for ax in axs]
+    
     #[ax.set_facecolor('white') for ax in axs]
+    if label is not None:
+        plt.suptitle(label)
+    plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
+    f.tight_layout()
+
     helper_save(hist_save)
 
 
@@ -453,7 +481,7 @@ def filter_anno_peak(in_peak_file,filter_peak_file):
 ########################################
 def createPeakFileFromGFF(annotation_file, output_file,
                           anno_of_interest='mRNA', is_start=True,
-                          shift=1):
+                          shift=1, ):
     """
     Function to create a peak file based on GFF and specific annotation of interest
     
@@ -766,7 +794,16 @@ def query_gene(peak_files,gene):
 #     in_peak_file = '/data/shangzhong/TSS/fq/f05_annoPeaks/merge.anno'
 #     filter_peak_file = '/data/shangzhong/TSS/fq/f05_annoPeaks/merge_filter.anno'
 #     filter_anno_peak(in_peak_file,filter_peak_file)
-                
+
+
+def peak_to_bed_df(df):
+    df["Start"]  -= 1
+    return df
+
+def bed_to_peak_df(df):
+    df["Start"]  += 1
+    return df
+
 def read_peak_file(peak_f):
     df = pd.read_csv(peak_f,sep='\t',skiprows=36, index_col=0)
     cols = df.columns.values
@@ -775,11 +812,36 @@ def read_peak_file(peak_f):
     return df
 
 
+def peak_to_bed(in_f,out_f):
+    #cmd = "tail -n +2 <(pos2bed.pl {in_f}) > {out}".format(in_f=in_f,out=out_f) #Removes the header information
+    #print(cmd)
+    cmd = "pos2bed.pl {in_f} > {out}.tmp".format(in_f=in_f,out=out_f)
+    print(cmd)
+    os.system(cmd)
+    cmd= "tail -n +2 < {out}.tmp > {out}".format(out=out_f)
+    print(cmd)
+    os.system(cmd)
+    cmd = "rm {out}.tmp".format(out=out_f)
+    os.system(cmd)
+    return 
+
 def read_bed_file(bed_f):
-    df = pd.read_csv(bed_f,sep='\t', header=None)
-    df.columns = ["Chr", "Start","End","ID","Stat","Strand"]
-    df =    df.set_index("ID")
-    df = df[['Chr', 'Start', 'End', 'Strand', 'Stat']]
+    try:
+        df = pd.read_csv(bed_f,sep='\t', header=None)
+    except pd.errors.ParserError:
+        df = pd.read_csv(bed_f,sep='\t', header=None, skiprows=1)
+    columns = df.columns.values.astype(str)
+    columns[:6] = ["Chr", "Start","End","ID","Stat","Strand"]
+    df.columns = columns
+    df =  df.set_index("ID")
+    #df = df[['Chr', 'Start', 'End', 'Strand', 'Stat']]
     return df
 
 
+def write_bed_file(df, bed_f, use_index=True):
+    if use_index:
+        df["ID"] = df.index
+    df = df[['Chr', 'Start', 'End', "ID", 'Stat', 'Strand']]
+
+    df.to_csv(bed_f, sep="\t", header=None, index=None)
+    return 

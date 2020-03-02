@@ -78,7 +78,7 @@ def get_tss_files(data_folder, t, s, tissues_with_RNA, RNA_dir=''):
 def determine_rows_cols(num_samples):
     nrows = 2
     ncols = 2
-    while nrows * ncols <= num_samples:
+    while nrows * ncols < num_samples:
         ncols = ncols + 1
         if nrows * ncols <= num_samples:
             nrows = nrows + 1
@@ -128,11 +128,15 @@ def fwhm(x, y, k=3):
     roots = sproot(s)
     print(roots)
     if len(roots) > 2:
-        raise MultiplePeaks("The dataset appears to have multiple peaks, and "
-                "thus the FWHM can't be determined.")
+        print("Multiple Peaks are found")
+        return -1
+        # raise MultiplePeaks("The dataset appears to have multiple peaks, and "
+        #         "thus the FWHM can't be determined.")
     elif len(roots) < 2:
-        raise NoPeaksFound("No proper peaks were found in the data set; likely "
-                "the dataset is flat (e.g. all zeros).")
+        print("No peaks were found")
+        return -1
+        # raise NoPeaksFound("No proper peaks were found in the data set; likely "
+        #         "the dataset is flat (e.g. all zeros).")
     else:
         return abs(roots[1] - roots[0])
 
