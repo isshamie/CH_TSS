@@ -102,7 +102,7 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
             txn_anno.columns.str.contains("sameStrand")][0]
 
     # Loop through transcripts with peaks
-    for ind, val in (txn_anno[txn_anno[
+    for ind, val in tqdm.tqdm(txn_anno[txn_anno[
         "hasGene"]].iterrows()):
         curr_peaks = val[col_name]
         # Create the IDs
@@ -119,6 +119,7 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
             p_chr, p_start, p_end, p_stat = get_peak_info(p, anno_df,
                                                           is_cho=True,
                                                           is_orig=True)
+
             bed_df.loc[curr_peak] = [p_chr, p_start, p_end,
                                      val["Strand"], p_stat, curr_peak]
 
@@ -145,7 +146,7 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
 
 
 def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
-                        all_atac=None, out_f=None):
+                        all_atac=None, out_f=None, to_center=False):
     """ Wrapper for constructing the experimental TSS and the genes
     that didnt have experimental TSSs"""
     
@@ -160,6 +161,15 @@ def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
 
     print("Constructing TSS observed experimentally")
     bed_df, meta_df = construct_peakID(txn_f, expr_f, anno_f, rank_func)
+    # If to_center, change the Start and end such that the length is only 1 base-pair 
+    #(Since it's a bed file and 0-based indexing is used, the Start is the basepair and End should be one above, but not included.
+    # e.g 0-151 -> 75-76
+    if to_center:
+    	bed_df["Start"] = (np.floor((bed_df["Start"]+bed_df["End"]).astype(int)/2)).astype(int)
+    	bed_df["End"] = (bed_df["Start"] + 1).astype(int)
+    	
+    	bed2_df["Start"] = (np.floor((bed2_df["Start"]+bed2_df["End"]).astype(int)/2)).astype(int)
+    	bed2_df["End"] = (bed2_df["Start"] + 1).astype(int)
 
     if out_f is not None:
         bed_df[["Chr", "Start", "End",  "ID", "Stat",
@@ -258,7 +268,7 @@ def rank_sum_samples(peaks_of_interest, peaks, on_thresh=0):
 #     ordered_list = sorted(vals, key=vals.get, reverse=True)
 #     return ordered_list
 
-def get_peak_info(p, peaks_df, is_cho=True, is_orig=True, to_log=True):
+def get_peak_info(p, peaks_df, is_cho=True, is_orig=True, to_log=True, to_center=False):
     # print("Before")
     # print(peaks_df.loc[p])
     # print(peaks_df.loc[p].dtype)
