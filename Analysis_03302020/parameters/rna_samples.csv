@@ -1,0 +1,12 @@
+File,Experiment,Full,Name,Tissue
+Misc_S10,RNASeq,NL10_Misc_S10_L006_R1_001.fastq.gz,Misc_RNASeq1,MiscOrgans
+Brain7-1_S11,RNASeq,NL11_Brain7-1_S11_L006_R1_001.fastq.gz,Brain_RNASeq1,Brain
+Pancreas_S1,RNASeq,NL1_Pancreas_S1_L006_R1_001.fastq.gz,Pancreas_RNASeq1,Pancreas
+ReproductiveTract_S2,RNASeq,NL2_ReproductiveTract_S2_L006_R1_001.fastq.gz,ReproductiveTract_RNASeq1,FemaleReproductive
+Spleen_S3,RNASeq,NL3_Spleen_S3_L006_R1_001.fastq.gz,Spleen_RNASeq1,Spleen
+Lung_S4,RNASeq,NL4_Lung_S4_L006_R1_001.fastq.gz,Lung_RNASeq1,Lung
+Liver_S5,RNASeq,NL5_Liver_S5_L006_R1_001.fastq.gz,Liver_RNASeq1,Liver
+Heart_S6,RNASeq,NL6_Heart_S6_L006_R1_001.fastq.gz,Heart_RNASeq1,Heart
+Brain2_S7,RNASeq,NL7_Brain2_S7_L006_R1_001.fastq.gz,Brain_RNASeq2,Brain
+Muscle_S8,RNASeq,NL8_Muscle_S8_L006_R1_001.fastq.gz,Muscle_RNASeq1,Muscle
+Kidney_S9,RNASeq,NL9_Kidney_S9_L006_R1_001.fastq.gz,Kidney_RNASeq1,Kidney
