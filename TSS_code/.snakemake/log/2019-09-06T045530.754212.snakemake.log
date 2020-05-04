@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	merge_peaks
+	1
+
+[Fri Sep  6 04:55:31 2019]
+rule merge_peaks:
+    input: /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+    output: data/processed/merged/test.merged
+    jobid: 0
+    wildcards: sample=test
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/TSS/.snakemake/log/2019-09-06T045530.754212.snakemake.log

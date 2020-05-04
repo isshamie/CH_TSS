@@ -1,0 +1,73 @@
+from tss.data.Homer import merge_peaks
+import os
+import glob
+
+#PARAMS = "parameters/{sample}.txt"
+#configfile: "config.yaml"
+
+configfile: "parameters/params.yaml"
+print("config",config)
+#input_files, output_file, dist='given', type_merge='')
+
+raw = config["raw_folder"]
+results = config['results']
+os.chdir(results)
+
+
+rule all:
+    input:
+        expand("data/processed/{anno}/nucleotides/nucleotide.png",
+               "data/processed/{anno}/output/promoter_TSS.bed",
+               "data/processed/{anno}/output/TSS_mRNA.expression.tsv",
+               "data/processed/{anno}/barplot/TSS_mRNA.barplot.png",
+               "data/processed/{anno}/rna_cumulative_plot/tss.png",
+               experiment_name=config["annotation"])
+
+
+#sample=config["samples"]),
+#expand("{raw_f}.bam.bai", raw_f=RAW_SAMPLES),
+
+# Recreate genome start site
+# peaks_break_into_files (has logExpression)
+# peaks_to_annotation.ipynb
+# Merge_into_tissues (2nd half of it only)
+# retrieve_tss_peaks
+# Rerun Figures2
+# Separate peaks based on expression [not done]
+# Rerun create_output
+# Figure1
+# Rerun Figure3
+# Tag Histograms Compare Experimental to RefSeq
+# Nucleotide Frequency
+# Rerun  CDF of TSS with Samples.ipynb
+# Compare RNA_seq
+
+
+rule merge_peaks:
+    input:
+        "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/"
+    output:
+        "data/processed/merged/{sample}.merge"
+    run:
+        #out = os.path.join(config["DATA_PROCESSED_DIR"],output[0])
+        print("out", output[0])
+        print("in", input[0])
+        merge_peaks(glob.glob(input[0]+"*"), output[0], dist='given',
+        type_merge='')
+
+
+
+rule merge_tags:
+   input: config["sample"]
+   output:
+       "data/{sample}.fa"
+   conda:
+       "environment.yaml"
+   shell:
+       "python coevolve/get_fasta.py {input} {output}"
+
+
+# transform peaks
+#rule peaks_to_expression:
+
+\
