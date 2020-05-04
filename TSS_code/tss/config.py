@@ -35,7 +35,7 @@ def set_variables(params):
     GENOME_GTF = params["GENOME_GTF"]
     ## Params
     global TISSUES
-    TISSUES = params["META_FILE"]
+    TISSUES = params["TISSUES"]
     # meta file for names
     global META_FILE
     META_FILE = params["META_FILE"]

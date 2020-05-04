@@ -1,0 +1,198 @@
+import os
+from os.path import join
+from tss.utils.Homer import *
+from tqdm import tqdm
+
+
+def process_genome(ref_fa,annotation, genome_dir, with_descriptives=False):
+    # genome_raw_dir = os.path.join(doc["supplemental"], "genome",
+    #                               "ncbi_anno_103")
+    # ref_fa = doc["ref_fa"]
+    # annotation = doc["annotation"]
+    # ref_fa = os.path.join(genome_raw_dir,
+    #                       'GCF_003668045.1_CriGri-PICR_genomic.fna')
+    # annotation = os.path.join(genome_raw_dir,
+    #                           'alt_CriGri-PICR_top_level.gff3')
+
+    ref_start_f = join(genome_dir, 'start_site_mRNA.tsv')
+    mrna_peak = join(genome_dir, 'mRNA.peak')
+    exon_peak = join(genome_dir, 'exon.peak')
+    cds_peak = join(genome_dir, 'CDS.peak')
+
+    cds_bed = join(genome_dir, 'CDS.bed')
+    mrna_bed = join(genome_dir, 'mRNA.bed')
+    cds_gff = join(genome_dir, 'CDS.gff')
+    mrna_gff = join(genome_dir, 'mRNA.gff')
+
+    all_genes_f = join(genome_dir, "all_genes.tsv")
+    #ref_start_homer_f = join(genome_dir, 'start_site_mRNA_homer.tsv')
+
+    createPeakFileFromGFF(annotation, output_file=mrna_peak,
+        anno_of_interest='mRNA', is_start=True)
+
+    createPeakFileFromGFF(annotation, output_file=exon_peak,
+        anno_of_interest='exon', is_start=True)
+
+    createPeakFileFromGFF(annotation, output_file=cds_peak,
+        anno_of_interest='CDS', is_start=True)
+
+
+    # expand the keys into columns and save
+    mrna_peak_df = pd.read_csv(mrna_peak, sep="\t", index_col=0)
+    for ind in mrna_peak_df.index.values:
+        curr = ind.split(';')
+        for i in curr:
+            curr_split = i.split('=')
+            mrna_peak_df.set_value(ind, curr_split[0], curr_split[1])
+
+    mrna_peak_df.set_index("transcript_id", inplace=True)
+    mrna_peak_df.index.drop_duplicates()  # There is one duplicate transcript
+    mrna_peak_df['Length'] = mrna_peak_df['End'] - mrna_peak_df['Start'] + 1
+    mrna_peak_df.to_csv(mrna_peak, sep="\t") #, index="transcript_id")
+
+    # Same, but for 150bp.
+    ## DEPRACATED 05/04/2020 since there should not be a need for it
+    # mrna_peak_150 = join(genome_dir, 'mRNA_150.tss.peak')
+    # createPeakFileFromGFF(annotation, output_file=mrna_peak_150,
+    #     anno_of_interest='mRNA', is_start=True, shift=75)
+    #
+    # mrna_peak_150_df = pd.read_csv(mrna_peak_150, sep="\t", index_col=0)
+    #
+    # for ind in mrna_peak_150_df.index.values:
+    #     curr = ind.split(';')
+    #     for i in curr:
+    #         curr_split = i.split('=')
+    #         mrna_peak_150_df.set_value(ind, curr_split[0],
+    #                                    curr_split[1])
+    # mrna_peak_150_df.set_index("transcript_id", inplace=True)
+    # mrna_peak_150_df.to_csv(mrna_peak_150, sep="\t",
+    #                         index="transcript_id")
+
+    ## Get the TSS sequences with 150 bp window.
+    ##
+    # cmd = f"pos2bed.pl {mrna_peak_150} > {mrna_peak_150.replace('.peak', '.bed')}"
+    # print(cmd)
+    # os.system(cmd)
+    #cmd = f"homerTools extract {mrna_peak_150.replace('.peak','.bed')} {ref_fa} -fa > {mrna_peak_150.replace('.peak','.fa')}"
+    #print(cmd)
+    #os.system(cmd)
+
+    ### Create CDS and mRNA gff and bed file
+    cmd = "awk '{ if ($3==\"mRNA\") {print}  }' %s > %s" % (annotation, mrna_gff)
+    print(cmd)
+    os.system(cmd)
+
+    cmd = "awk '{ if ($3==\"CDS\") {print}  }' %s > %s" % (annotation, cds_gff)
+    print(cmd)
+    os.system(cmd)
+
+    cmd = "gff2bed < {cds_gff} > {cds_bed}".format(cds_gff=cds_gff,
+                                                   cds_bed=cds_bed)
+    print(cmd)
+    os.system(cmd)
+
+    cmd = "gff2bed < {mrna_gff} > {mrna_bed}".format(mrna_gff=mrna_gff,
+                                                     mrna_bed=mrna_bed)
+    print(cmd)
+    os.system(cmd)
+
+
+
+    ## DEPRACATED 05/04/2020 since can just load the mRNA_peak file and quickly collapse on the duplicates. See below
+    ## Construct start specific file by collapsing the mRNA_gff file
+    # mRNA_anno = pd.read_csv(mrna_gff, sep='\t', header=None,
+    #                         index_col=8)
+    # # Munge data for downstream processing
+    # cols = ['Chr', 'Merge', 'Type', 'Start', 'End', '.', 'Strand', '..']
+    # mRNA_anno.columns = cols
+    # # Drop the unncesseary columns
+    # mRNA_anno.drop(['Merge', '.', '..', 'Type'], axis=1, inplace=True)
+    # mRNA_anno.head()
+
+    # for ind in mRNA_anno.index.values:
+    #     curr = ind.split(';')
+    #     for i in curr:
+    #         curr_split = i.split('=')
+    #         mRNA_anno.set_value(ind, curr_split[0], curr_split[1])
+
+    #mRNA_anno['Length'] = mRNA_anno['End'] - mRNA_anno['Start']+1
+
+    ### Need to create an extra column for tss called 'actual_start'.
+    ### This is to take care of issue of a gene starting at the End when it's on the minus strand
+    # mRNA_anno['actual_start'] = mRNA_anno.apply(
+    #     lambda x: x['Start'] if x['Strand'] == '+' else x['End'],
+    #     axis=1)
+
+
+    annotation_start_site = pd.DataFrame(
+        columns=mrna_peak_df.columns.values)
+    for group, start_site in tqdm(
+            mrna_peak_df.groupby(['actual_start', 'Chr', 'gene'])):
+        if len(start_site) == 1:
+            annotation_start_site = annotation_start_site.append(
+                start_site)
+        else:
+            # Pick the most confident txn and the longest transcript
+            annotation_start_site = annotation_start_site.append(
+                start_site.sort_values(['Length'],
+                                       ascending=[False]).iloc[0])
+    annotation_start_site.sort_values(['Chr', 'Start'], inplace=True)
+
+    annotation_start_site['Start'] = annotation_start_site[
+        'Start'].astype(int)
+    annotation_start_site['End'] = annotation_start_site['End'].astype(
+        int)
+
+    annotation_start_site.to_csv(ref_start_f, sep='\t')
+
+    # Index and then get the chromosomes from genome
+    cmd = "samtools faidx {ref_fa}".format(ref_fa=ref_fa)
+    os.system(cmd)
+    print(cmd)
+    cmd = "cut -f1,2 {ref_fa_ind} > {chrom}".format(
+        ref_fa_ind=ref_fa + ".fai",
+        chrom=join(genome_dir, "chrom.sizes"))
+    print(cmd)
+    os.system(cmd)
+
+    with open(all_genes_f, 'w') as f:
+        genes = list(pd.read_csv(mrna_peak, sep="\t").groupby(
+            "gene").groups.keys())
+        genes.sort()
+        f.write("\n".join(genes))
+
+    if with_descriptives:
+        genome_ann_mrna = pd.read_csv(mrna_peak, sep='\t', index_col=0)
+        genome_ann_exon = pd.read_csv(exon_peak, sep='\t', index_col=0)
+
+        #### Number of unique gene_names
+        print('Number of unique genes: ', len(set(genome_ann_mrna["gene"])))
+        #### Number of unique start sites for mrna
+        ss = set()
+        for ind, val in genome_ann_mrna.iterrows():
+            ss.add(
+                str(val['Start']) + '_' + val['Strand'] + '_' + val['Chr'])
+        print('Number of unique start sites for mrna', len(ss))
+
+        # print('Number of transcripts per gene: ',1.0*len(genome_ann_mrna)/len(unique_genes))
+
+        print('Number of transcripts', len(genome_ann_mrna))
+        print('Number of exons', len(genome_ann_exon))
+    return
+
+
+def expand_anno_id(df, break_char="=",colname=8):
+    df = df.copy()
+    for ind, val in tqdm(df.iterrows()):
+        curr = val[colname].split(';')
+
+        for i in curr:
+
+            v = i.strip().replace('"', "")
+            if len(v) == 0:
+                continue
+            curr_split = v.split(break_char)
+
+            df.at[ind, curr_split[0]] = curr_split[1]
+
+    return df

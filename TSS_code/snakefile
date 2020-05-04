@@ -42,10 +42,17 @@ rule all:
 # Rerun  CDF of TSS with Samples.ipynb
 # Compare RNA_seq
 
+#"/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/"
+
+rule process_genome:
+    input:
+        anno = config["annotation"],
+        is_gff = config["is_gff"]
+    output:
+        mRNA_peak = "data/processed/genome/{anno}/mRNA.peak"
 
 rule merge_peaks:
-    input:
-        "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/"
+    input: config["peaks_dir"]
     output:
         "data/processed/merged/{sample}.merge"
     run:
@@ -54,8 +61,6 @@ rule merge_peaks:
         print("in", input[0])
         merge_peaks(glob.glob(input[0]+"*"), output[0], dist='given',
         type_merge='')
-
-
 
 rule merge_tags:
    input: config["sample"]
@@ -68,6 +73,77 @@ rule merge_tags:
 
 
 # transform peaks
-#rule peaks_to_expression:
+rule peaks_to_expression:
+    input:
+        samples_merge = "data/processed/merged/{sample}.merge",
+        initial_peaks_dir = config["peaks_dir"],
+        meta_samples = config['metaSamples']
+    output:
+        expression_f = "data/processed/all_peaks/peaks_expression.tsv"
 
-\
+# Create expression matrix
+rule peaks_to_annotation:
+    input:
+         samples_merge = "data/processed/merged/{sample}.merge",
+         annotation = "data/processed/{anno}"
+
+    output:
+          "data/processed/peak_small_files/samples.merge.anno"
+
+
+rule gene_centric_tss:
+    input:
+         peaks_anno = "data/processed/peak_small_files/samples.merge.anno",
+         genome =  config["ref_fa"],
+         annotation = config["annotation"]
+    output:
+        "data/processed/gene_centric_tss/gene_df_{bp_l}_{bp_r}"
+    shell:
+
+
+rule split_by_samples:
+
+rule create_output:
+    input:
+        mRNA_peak = "data/processed/genome/{anno}/mRNA.peak",
+        txn_df =  "data/processed/gene_centric_tss/txn_df_{bp_l}_{bp_r}",
+        atac_bed =  config["atac"]
+    output:
+          "data/processed/eTSS/TSS_{bp_l}_{bp_r}.bed",
+          "data/processed/TSS_{bp_l}_{bp_r}.meta",
+          refseq_center =  "data/processed/eTSS_refseq_center/TSS_{bp_l}_{bp_r}.bed",
+
+rule barplot:
+    input:
+        meta_samples = config['metaSamples'],
+        meta_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.meta",
+        bed_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.bed"
+    output:
+          "figures/barplots/eTSS/tissues"
+
+rule nucleotides:
+    input:
+        meta_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.meta",
+        bed_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.bed",
+        refseq_center =  "data/processed/eTSS_refseq_center/TSS_{bp_l}_{bp_r}.bed",
+
+    output:
+        "figures/nucleotides/eTSS_nucleotide.png"
+
+
+rule motifs:
+    input:
+        meta_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.meta",
+        bed_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.bed",
+        refseq_center =  "data/processed/eTSS_refseq_center/TSS_{bp_l}_{bp_r}.bed",
+    output:
+        "figures/motifs/eTSS_inr_tata.png"
+
+
+rule cumulative_rna:
+    input:
+        meta_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.meta",
+        bed_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.bed",
+    output:
+          "figures/cumulativePlot/venn_diagram"
+
