@@ -16,6 +16,7 @@ import os
 from tss.utils import Homer
 import numpanpar as parallel_functions
 from cycler import cycler
+from os.path import join
 
 # sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
 # import parallel_functions
@@ -26,6 +27,7 @@ def convert_merged_vals_to_expression_matrix(merged_file, peak_folder='', output
     Really just removes some of the meta-info associated with the merged peaks."""
 
     peaks_merged = pd.read_csv(merged_file, sep='\t', index_col=0,low_memory=False)
+    print(peaks_merged.shape)
 
     ## Drop duplicates
     dups = peaks_merged[peaks_merged.index.duplicated(keep=False)]
@@ -33,6 +35,7 @@ def convert_merged_vals_to_expression_matrix(merged_file, peak_folder='', output
           'happens bc both +/- strand on exact same bp): ', len(
         dups) / 2)
     peaks_merged = peaks_merged[~peaks_merged.index.isin(dups.index)]
+
 
     # The 8th column and further is where Homer stores the names of the merged files.
     peak_tissue_matrix = pd.DataFrame(
@@ -134,11 +137,19 @@ def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id'
     for i in landmark_cols:
         anno_peaks['Nearest ' + i] = ''
 
+    # print(((anno_peaks['End'] - anno_peaks['Start'])%2 == 0))
+    # print(((anno_peaks['End'] - anno_peaks['Start']) % 2 == 0).sum()/anno_peaks.shape[0])
+    #
+    # assert(((anno_peaks['End']-anno_peaks['Start'])%2==0).all())
+
+
     for ind, val in (anno_peaks.iterrows()):
         filt = landmark_df[val['Chr'] == landmark_df['Chr']]
-        peak_start = (val['Start'] + val['End']) / 2
+        peak_start = int(np.floor((val['Start'] + val['End']) / 2))
         if len(filt) != 0:
             filt2 = np.abs(filt['actual_start'] - peak_start).idxmin()
+
+            #print(filt2)
             anno_peaks.at[ind, 'Nearest TSS'] =  landmark_df.loc[filt2, main_landmark]
 
             for land in landmark_cols:
@@ -147,10 +158,18 @@ def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id'
             #anno_peaks.set_value(ind, 'Nearest gene_id', landmark_df.loc[filt2, 'gene_id'])
 
             ## Get distance to nearest gene. If on - strand, tss 'End' is the beginning
-            if landmark_df.loc[filt2, 'Strand'] == '+':
+            curr_strand_pos = landmark_df.loc[filt2, 'Strand'] == '+'
+            curr_strand_neg = landmark_df.loc[filt2, 'Strand'] == '-'
+            # if type(curr_strand_pos) != bool: #Accounts for duplicate transcript_id, which shouldnt have any
+            #     curr_strand_pos = curr_strand_pos.iloc[0]
+            # if type(curr_strand_neg) != bool:
+            #     curr_strand_neg = curr_strand_neg.iloc[0]
+            # assert(type(curr_strand_pos) == bool)
+            # assert(type(curr_strand_neg) == bool)
+            if curr_strand_pos:
                 anno_peaks.at[ind, 'Distance to TSS'] =  peak_start -\
                                                          landmark_df.loc[filt2, 'actual_start']
-            elif landmark_df.loc[filt2, 'Strand'] == '-':
+            elif curr_strand_neg:
                 anno_peaks.at[ind, 'Distance to TSS'] = \
                     landmark_df.loc[filt2, 'actual_start'] - peak_start
             anno_peaks.at[ind, 'isSameStrand'] =  val['Strand'] == landmark_df.loc[filt2, 'Strand']
@@ -161,13 +180,18 @@ def wrap_distance_to_landmarks(peaks_file, landmark_file,
                                main_landmark = 'transcript_id',
                                landmark_cols=('gene','gene_id'),
                                is_bed=False,
-                               output_f=None,is_parallel=False, num_par=4):
+                               output_f=None,is_parallel=False, num_par=24):
     """ Wrapper for distance_to_landmarks"""
     landmark_df = pd.read_csv(landmark_file, sep="\t", index_col=0)
+
     if is_bed:
         anno_peaks = Homer.read_bed_file(peaks_file)
     else:
         anno_peaks = pd.read_csv(peaks_file,sep="\t",index_col=0)
+
+    #From start_mRNA.tsv
+    if main_landmark not in landmark_df.columns:
+        landmark_df[main_landmark] = landmark_df.index
 
     # Only keep ID, Chr, Start, End, Strand, Stat, Annotation
     to_keep = ['Chr', 'Start', 'End', 'Strand', 'Stat']
@@ -236,7 +260,7 @@ def tissues_gene_expressed(peaks_gene, peaks_tissue_matrix):
 ###
 def create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix, peak_bin=(-1000, 100), anno_col='Nearest TSS',
                            tss_df_col='transcript_id',
-                           f_save=None, allow_intron = False,
+                           allow_intron = False,
                            has_gene_id=False,
                            allow_downstream_exons=True, allow_cds=True):
     gene_list = tss_df[tss_df_col].unique()
@@ -378,7 +402,7 @@ def wrap_create_anno_centric(peaks_file, peaks_expression_file, tss_file,
     df = create_anno_centric_df(peaks_df, tss_df, peak_tissue_matrix,
                            peak_bin=peak_bin, anno_col=anno_col,
                            tss_df_col=tss_df_col,
-                           f_save=f_save, allow_intron=allow_intron)
+                           allow_intron=allow_intron)
 
     if f_save is not None:
         df.to_csv(f_save.replace(".p","") + '.tsv',sep='\t')
@@ -489,7 +513,8 @@ def retrieve_all_peaks_from_anno(anno_f, merged_f, output_f,
 def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
                                     sample_name, sample_f=None,
                                     col_name=None,
-                                    use_sample_peaks=False):
+                                    use_sample_peaks=False,
+                                    peaks_dir=None):
     """Will filter peaks annotated as TSSs and found in the
     sample. Can retrieve the merged peaks or the original samples peaks.
 
@@ -526,8 +551,13 @@ def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
             else:
                 peaks_to_keep.append(ind)
     if use_sample_peaks:
-        sample_df = Homer.read_peak_file(
-            sample_f)  # original peak file
+        # original peak file
+        if peaks_dir is not None:
+            sample_df = Homer.read_peak_file(join(peaks_dir,sample_f))
+        else:
+            sample_df = Homer.read_peak_file(sample_f)
+        assert(sample_df.shape[0] != 0)
+        # Filter to indices to keep
         sample_df_filt = sample_df[sample_df.index.isin(peaks_to_keep)]
     else:
         sample_df_filt = peaks_df_filt.loc[peaks_to_keep]
@@ -536,7 +566,7 @@ def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
     return sample_df_filt
 
 
-def add_max_info(merged_df, expr_peaks, in_results=False):
+def add_max_info(merged_df, expr_peaks, in_results=False, peaks_dir=None):
     """ Add the maximum peak information"""
     merged_df["max_file"] = ""
     merged_df["max_file_peak_name"] = ""
@@ -571,7 +601,10 @@ def add_max_info(merged_df, expr_peaks, in_results=False):
         print(sample_f)
         if in_results:
             sample_f = sample_f.replace("Results/","")
-        sample_df = Homer.read_peak_file(sample_f)
+        if peaks_dir is not None:
+            sample_df = Homer.read_peak_file(join(peaks_dir,sample_f))
+        else:
+            sample_df = Homer.read_peak_file(sample_f)
 
         # Loop through the merged_df in which the max peak was found in sample_f
         for ind, val in df.iterrows():
@@ -598,7 +631,11 @@ def add_max_info(merged_df, expr_peaks, in_results=False):
             continue
         if in_results:
             sample_f = sample_f.replace("Results/","")
-        sample_df = Homer.read_peak_file(sample_f)
+        if peaks_dir is not None:
+            sample_df = Homer.read_peak_file(join(peaks_dir,sample_f))
+        else:
+            sample_df = Homer.read_peak_file(sample_f)
+
 
         # Loop through the merged_df in which the max peak was found in sample_f
         for ind, val in df.iterrows():
@@ -621,12 +658,12 @@ def add_max_info(merged_df, expr_peaks, in_results=False):
     return merged_df
 
 
-def wrap_add_max_info(merged_f, expr_peaks_f,out_f=None, in_results=False):
+def wrap_add_max_info(merged_f, expr_peaks_f,out_f=None, in_results=False,peaks_dir=None):
     #merged_f = "Results/merged/samples.merge"
     merged_df = pd.read_csv(merged_f, sep="\t", index_col=0)
     #peak_f = "Results/merged/samples.merge.peaksexpression.log10"
     expr_peaks = pd.read_csv(expr_peaks_f, index_col=0, sep="\t")
-    merged_df = add_max_info(merged_df, expr_peaks, in_results)
+    merged_df = add_max_info(merged_df, expr_peaks, in_results,peaks_dir=peaks_dir)
     if out_f is not None:
         merged_df.to_csv(out_f,sep="\t")
     return merged_df

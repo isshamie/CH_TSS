@@ -3,6 +3,10 @@ from collections import defaultdict
 import numpy as np
 import os
 import json
+import click
+from os.path import dirname
+import logging
+from tss import pipeline
 
 
 def merge_columns(df, mapping_dict):
@@ -26,7 +30,7 @@ def merge_columns(df, mapping_dict):
 
 def create_tissue_to_peaks(meta_f, peaks_expr_f, tissues_expr_f):
     meta_samples = pd.read_csv(meta_f, sep="\t",index_col=0)
-
+    #print(meta_samples.head())
     peaks_tissue = pd.read_csv(peaks_expr_f, index_col=0, sep="\t")
     tissue_to_peaks = defaultdict(list)
     for val in peaks_tissue.columns.values:
@@ -45,27 +49,47 @@ def create_tissue_to_peaks(meta_f, peaks_expr_f, tissues_expr_f):
     return
 
 
-def run(p):
+def run(p, meta_f):
     # Filenames
     p_stage = p["tissues_collapse"]
-    p_merged_f = p["merged"]["filenames"]
-    meta_f = p["global"]["META_FILE"]
+    p_merged_f = p["merged"]
+
     peak_samples_expression_log10_f = p_merged_f["peak samples expression log10"]
-    tissues_expr_log10_f = p_stage["filenames"]["peak tissues expression log10"]
+    tissues_expr_log10_f = p_stage["peak tissues expression log10"]
 
     peak_samples_expression_f = p_merged_f["peak samples expression"]
-    tissues_expr_f = p_stage["filenames"]["peak tissues expression"]
+    tissues_expr_f = p_stage["peak tissues expression"]
 
+    peak_samples_expression_log2_f = p_merged_f["peak samples expression log2"]
+    tissues_expr_log2_f = p_stage["peak tissues expression log2"]
 
     # Run functions
     create_tissue_to_peaks(meta_f, peak_samples_expression_log10_f, tissues_expr_log10_f)
     create_tissue_to_peaks(meta_f, peak_samples_expression_f, tissues_expr_f)
+    create_tissue_to_peaks(meta_f, peak_samples_expression_log2_f, tissues_expr_log2_f)
 
-
-    peaks_tissue = pd.read_csv(peak_samples_expression_log10_f,
-        index_col=0, sep="\t")
-
-    # Save the parameters
-    with open(os.path.join(p_stage["folder"],'params_used.json'), 'w') as fp:
-        json.dump(p, fp)
     return
+
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.argument('tissues_expr_f',type=click.Path(exists=False))
+@click.argument('meta_f', type=click.Path(exists=True))
+@click.argument('merged_out', type=click.Path(exists=True))
+def main(tissues_expr_f,meta_f, merged_out):
+    tissues_expr_dir = dirname(tissues_expr_f)
+    merged_dir = dirname(merged_out)
+    p = pipeline.create_filenames_dict()
+    print('hey')
+    p = pipeline.create_fullnames(p,'tissues_collapse', tissues_expr_dir)
+    p = pipeline.create_fullnames(p, 'merged', merged_dir)
+
+
+    run(p,meta_f)
+    return
+
+
+if __name__ == '__main__':
+    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    main()

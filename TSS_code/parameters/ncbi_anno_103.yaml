@@ -66,6 +66,9 @@ reference:
   supplemental: '/data/isshamie/TSS/Analysis/supplemental'
   cho_rna_file: '/data/shangzhong/DE/tpm_using_picr.txt'
 
+
+
+
 move_peaks:
   #folder: "raw_peaks/1/"
   folder: "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/"

@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 146 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+Missing input files for rule create_output:
+data/processed/alt/gene_centric_tss/txn_df_tissues.p

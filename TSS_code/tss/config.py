@@ -12,33 +12,33 @@ HOMER_PATH = "/data2/resources/software/homer/v4.11_10242019/bin//"
 ## Get the project directory
 def set_variables(params):
     # Paths
-    global PREFIX
-    PREFIX = params["PREFIX"]
-    global ROOT_DIR
-    ROOT_DIR = params["ROOT_DIR"]
-    global DATA_DIR
-    DATA_DIR = params["DATA_DIR"]
-    global DATA_PROCESSED_DIR
-    DATA_PROCESSED_DIR = params["DATA_PROCESSED_DIR"]
-    global SUPPLEMENTAL_DIR
-    SUPPLEMENTAL_DIR = params["SUPPLEMENTAL_DIR"]
-    global PIPELINE
-    PIPELINE = params["PIPELINE"]
+    # global PREFIX
+    # PREFIX = params["PREFIX"]
+    # global ROOT_DIR
+    # ROOT_DIR = params["ROOT_DIR"]
+    # global DATA_DIR
+    # DATA_DIR = params["DATA_DIR"]
+    # global DATA_PROCESSED_DIR
+    # DATA_PROCESSED_DIR = params["DATA_PROCESSED_DIR"]
+    # global SUPPLEMENTAL_DIR
+    # SUPPLEMENTAL_DIR = params["SUPPLEMENTAL_DIR"]
+    # global PIPELINE
+    # PIPELINE = params["PIPELINE"]
     ## Genome Files
-    global GENOME_DIR
-    GENOME_DIR = params["GENOME_DIR"]
+    # global GENOME_DIR
+    # GENOME_DIR = params["GENOME_DIR"]
     global GENOME_FA
     GENOME_FA = params["GENOME_FA"]
-    global GENOME_GFF3
-    GENOME_GFF3 = params["GENOME_GFF3"]
-    global GENOME_GTF
-    GENOME_GTF = params["GENOME_GTF"]
+    # global GENOME_GFF3
+    # GENOME_GFF3 = params["GENOME_GFF3"]
+    # global GENOME_GTF
+    # GENOME_GTF = params["GENOME_GTF"]
     ## Params
     global TISSUES
     TISSUES = params["TISSUES"]
     # meta file for names
-    global META_FILE
-    META_FILE = params["META_FILE"]
+    # global META_FILE
+    # META_FILE = params["META_FILE"]
     return
 
 

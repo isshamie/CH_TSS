@@ -10,11 +10,21 @@ from sklearn.manifold import TSNE
 
 sys.path.append("/home/isshamie/software/homebrew/parallel_functions/")
 
-import parallel_functions as pf
+# import parallel_functions as pf
+# import time
+# from plot_tss_results import *
+import pickle
+import numpy as np
 import time
-from plot_tss_results import *
+import pandas as pd
+
+import os
+import matplotlib.pyplot as plt
+from mplh.fig_utils import helper_save
 import hdbscan
 
+
+from numpanpar import parallel_df as pardf
 ########################################################################
 # Functions with Bio motifs from BioPython
 ########################################################################
@@ -242,7 +252,7 @@ def create_peak_by_motif_df(all_motifs, f_anno, f_save=None):
 
         print(motif_names[ind])
         #peak_motif_counts = wrap_motifs(anno_peaks,motifs,motif_names[ind])
-        peak_motif_counts = pf.parallel_df(peak_motif_counts,func=wrap_motifs_counts,func_args=[anno_peaks[['Length']],motifs,motif_names[ind]],num_processes=2)
+        peak_motif_counts = pardf(peak_motif_counts,func=wrap_motifs_counts,func_args=[anno_peaks[['Length']],motifs,motif_names[ind]],num_processes=2)
     if f_save is not None:
         peak_motif_counts.to_csv(f_save)
     return peak_motif_counts

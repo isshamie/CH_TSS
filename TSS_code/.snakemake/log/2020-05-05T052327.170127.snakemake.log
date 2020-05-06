@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	create_output
+	2	gene_centric_tss
+	2	merge_peaks
+	2	retrieve_peaks
+	9
+
+[Tue May  5 05:23:27 2020]
+rule merge_peaks:
+    input: data/processed/GCF/genome/start_site_mRNA.tsv
+    output: data/processed/GCF/merged/peaks_with_tss_distances_size1.noCDS.peak, data/processed/GCF/merged/files_used.json, data/processed/GCF/merged/samples.merge.peaksexpression.log2, data/processed/GCF/merged/samples.merge
+    jobid: 9
+    wildcards: anno=GCF
+
+python tss/data/merging.py data/processed/GCF/genome/start_site_mRNA.tsv /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/ /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna data/processed/GCF/merged/peaks_with_tss_distances_size1.noCDS.peak
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 71 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+Missing files after 5 seconds:
+data/processed/GCF/merged/peaks_with_tss_distances_size1.noCDS.peak
+data/processed/GCF/merged/files_used.json
+data/processed/GCF/merged/samples.merge.peaksexpression.log2
+data/processed/GCF/merged/samples.merge
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-05T052327.170127.snakemake.log

@@ -56,6 +56,25 @@ def bed_subset_region(bed_f, f_save=None, region=(-2, +3)):
     return bed
 
 
+def shift_bed(bed_in, bed_out, shift, is_bed):
+    """If not a bed file, assumes its a tsv file with a header"""
+    if is_bed:
+        bed_df = read_bed_file(bed_in)
+    else:
+        peak_df = pd.read_csv(bed_in, sep="\t")
+    bed_df["Start"] -= shift
+    bed_df["End"] += shift
+    if is_bed:
+        write_bed_file(bed_df, bed_out)
+    else:
+        peak_df.to_csv(bed_out, sep="\t", index=False)
+
+    # bed_df = read_bed_file(peak_f)
+    # bed_df["Start"] -= shift
+    # bed_df["End"] += shift
+    # peak_f = join(nucleotide_out,f"TSS1_{shift}bp.exp.bed")
+    # write_bed_file(bed_df,bed_f=peak_f)
+
 def get_tss_files(data_folder, t, s, tissues_with_RNA, RNA_dir=''):
     """
     Function to get a list of tss,input, and rna tag files. Deals

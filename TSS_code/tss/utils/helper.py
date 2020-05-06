@@ -30,6 +30,19 @@ from cycler import cycler
 mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 
 
+
+#################################################
+### Plot helpers
+#################################################
+def determine_rows_cols(num_samples):
+    nrows = 2
+    ncols = 2
+    while nrows * ncols < num_samples:
+        ncols = ncols + 1
+        if nrows * ncols <= num_samples:
+            nrows = nrows + 1
+
+    return nrows,ncols
 #################################################
 def get_tss_files(data_folder, t, s, tissues_with_RNA, RNA_dir=''):
     """

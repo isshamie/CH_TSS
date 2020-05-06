@@ -1,10 +1,12 @@
 import os
+from os.path import dirname
 from os.path import join
 from tss.utils.Homer import *
 from tqdm import tqdm
+import click
+import logging
 
-
-def process_genome(ref_fa,annotation, genome_dir, with_descriptives=False):
+def process_genome(ref_fa, annotation, genome_dir, with_descriptives=False):
     # genome_raw_dir = os.path.join(doc["supplemental"], "genome",
     #                               "ncbi_anno_103")
     # ref_fa = doc["ref_fa"]
@@ -21,6 +23,7 @@ def process_genome(ref_fa,annotation, genome_dir, with_descriptives=False):
 
     cds_bed = join(genome_dir, 'CDS.bed')
     mrna_bed = join(genome_dir, 'mRNA.bed')
+    mrna_peak_bed = join(genome_dir, 'mRNA.peak.bed')
     cds_gff = join(genome_dir, 'CDS.gff')
     mrna_gff = join(genome_dir, 'mRNA.gff')
 
@@ -45,7 +48,7 @@ def process_genome(ref_fa,annotation, genome_dir, with_descriptives=False):
             curr_split = i.split('=')
             mrna_peak_df.set_value(ind, curr_split[0], curr_split[1])
 
-    mrna_peak_df.set_index("transcript_id", inplace=True)
+    mrna_peak_df.set_index("transcript_id", inplace=True,drop=False)
     mrna_peak_df.index.drop_duplicates()  # There is one duplicate transcript
     mrna_peak_df['Length'] = mrna_peak_df['End'] - mrna_peak_df['Start'] + 1
     mrna_peak_df.to_csv(mrna_peak, sep="\t") #, index="transcript_id")
@@ -96,6 +99,9 @@ def process_genome(ref_fa,annotation, genome_dir, with_descriptives=False):
     print(cmd)
     os.system(cmd)
 
+    cmd = f"pos2bed.pl {mrna_peak} > {mrna_peak_bed}"
+    print(cmd)
+    os.system(cmd)
 
 
     ## DEPRACATED 05/04/2020 since can just load the mRNA_peak file and quickly collapse on the duplicates. See below
@@ -143,6 +149,11 @@ def process_genome(ref_fa,annotation, genome_dir, with_descriptives=False):
     annotation_start_site['End'] = annotation_start_site['End'].astype(
         int)
 
+    # Drop any transcript_id duplicates. When I checked with GCF, there was 1
+    print(f"Number of duplicate txn IDs: {(annotation_start_site.index.duplicated()).sum()}")
+    annotation_start_site = annotation_start_site[~(annotation_start_site.index.duplicated())]
+
+    #annotation_start_site["transcript_id"] = annotation_start_site.index
     annotation_start_site.to_csv(ref_start_f, sep='\t')
 
     # Index and then get the chromosomes from genome
@@ -196,3 +207,31 @@ def expand_anno_id(df, break_char="=",colname=8):
             df.at[ind, curr_split[0]] = curr_split[1]
 
     return df
+
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.argument('ref_fa', type=click.Path(exists=True))
+@click.argument('annotation', type=click.Path(exists=True))
+@click.argument('mrna_peak', type=click.Path(exists=False))
+def main(ref_fa, annotation, mrna_peak):
+    genome_dir = dirname(mrna_peak)
+    process_genome(ref_fa, annotation, genome_dir,
+                   with_descriptives=False)
+    return
+
+
+if __name__ == '__main__':
+    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    main()
+
+    # not used in this stub but often useful for finding various files
+
+    # project_dir = Path(__file__).resolve().parents[2]
+    # print(project_dir)
+    #
+    # #load_dotenv(find_dotenv())
+    # main(['/data/isshamie/TSS/TSS/parameters/ncbi_anno_103.yaml'])
+    # #main()
+

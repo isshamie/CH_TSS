@@ -114,15 +114,15 @@ def merge_peaks(input_files, output_file, dist='given', type_merge=''):
 
 
 ########################################
-def annotate_peaks(peak_file, output_file, ref_fa, annotation):
+def annotate_peaks(peak_file, output_file, ref_fa, ref_anno):
     """
     This function annotates peaks in terms of the annotation (e.g. promoter, exon..).
     Also marks closest TSS to each peak as well. 
     """
-    if annotation.endswith('gtf'):
-        anno = '-gtf ' + annotation
+    if ref_anno.endswith('gtf'):
+        anno = '-gtf ' + ref_anno
     else:
-        anno = '-gff ' + annotation
+        anno = '-gff ' + ref_anno
     cmd = 'annotatePeaks.pl {peaks} {genome} {annotation} > {out}'.format(
         peaks=peak_file, genome=ref_fa,
         annotation=anno, out=output_file)

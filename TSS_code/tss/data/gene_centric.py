@@ -5,12 +5,14 @@ from collections import defaultdict
 import os
 import json
 import pickle
+import click
+from os.path import dirname
+from tss import pipeline
 
 
 def add_tissue_info(gene_centric_f, peaks_expr_f, meta_f, df_tissues_f):
     # Add in tissues
     ## invert and create a peaks_to_tissue
-
     peaks_tissue = pd.read_csv(peaks_expr_f, index_col=0, sep="\t")
     meta_samples = pd.read_csv(meta_f, sep="\t", index_col=0)
 
@@ -72,46 +74,26 @@ def wrap_gene_centric(peaks_f, peaks_expression_f, gene_df_f,tss_f,
     return
 
 
-def run(p):
+def run(p, meta_f, peak_bins, allow_intron):
     # Set variable names
     #
-    p_merged_f = p["merged"]["filenames"]
-    p_stage = p["gene_centric"]
-    p_stage_p = p["gene_centric"]["params"]
-    p_stage_f = p["gene_centric"]["filenames"]
+    p_merged_f = p["merged"]
+    p_stage_f = p["gene_centric"]
     p_reference = p["reference"]
-    p_global = p["global"]
 
 
     # Global and reference variables
-    ref_fa = p_reference["GENOME_FA"]
-    annotation = p_reference["GENOME_GFF3"]
-    cds_f = p_reference["CDS_F"]
-    tss_f = p_reference["TSS_F"]
+    tss_f = p_reference["start_site_mRNA"]
+    peaks_f = p_merged_f["no cds peak"]
+    peaks_expression_f = p_merged_f["peak samples expression log2"]
 
-    meta_f = p_global["META_FILE"]
-
-    # Prior Filenames
-    #peaks_f = p_merged_f["merged peak samples"]
-    peaks_f = p_merged_f["no cds tsv"]
-
-    peaks_expression_f = p_merged_f["peak samples expression"]
-    #peaks_with_tss_distances_f = p_merged_f["peak samples distance
-    # to TSS"]
-    #peaks_with_tss_distances_size1_f = p_merged_f["peak samples
-    # distance to TSS size 1nt"]
-    #peaks_with_tss_distances_size1_noCDS_f = p_merged_f["no cds tsv"]
-
-
-    # params
-    peak_bins = p_stage_p["peak_bins"]
-    allow_intron = p_stage_p["allow_intron"]
-
+    print('tss_f', tss_f)
+    print('peaks_f', peaks_f)
+    print('peaks_expression_f', peaks_expression_f)
     # Current filenames
     gene_df_f = p_stage_f["gene centric peaks from samples"]
     txn_df_f = p_stage_f["transcript centric peaks from samples"]
     txn_expression_f = p_stage_f["transcript centric peaks matrix"]
-
 
     # Run analysis
     wrap_gene_centric(peaks_f, peaks_expression_f, gene_df_f, tss_f,
@@ -127,9 +109,38 @@ def run(p):
     add_tissue_info(txn_df_f, peaks_expression_f, meta_f, txn_tissues_f)
 
 
+    return
+
+
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.argument('txn_promoter_f', type=click.Path(exists=False))
+@click.argument('merged_out', type=click.Path(exists=True))
+@click.argument('start_site_mrna', type=click.Path(exists=True))
+@click.argument('meta_f', type=click.Path(exists=True))
+@click.argument('allow_intron', type=click.BOOL)
+@click.argument('peak_bin_l', type=click.INT)
+@click.argument('peak_bin_r', type=click.INT)
+def main(txn_promoter_f, merged_out, start_site_mrna, meta_f, allow_intron, peak_bin_l, peak_bin_r):
+
+    merged_dir = dirname(merged_out)
+    gene_centric_dir = dirname(txn_promoter_f)
+    ref_dir = dirname(start_site_mrna)
+
+    p = pipeline.create_filenames_dict()
+    p = pipeline.create_fullnames(p,'gene_centric', gene_centric_dir)
+    p = pipeline.create_fullnames(p, 'reference', ref_dir)
+    p = pipeline.create_fullnames(p, 'merged', merged_dir)
+
+    run(p, meta_f, (peak_bin_l, peak_bin_r), allow_intron)
+
     # Save the parameters
-    with open(os.path.join(p_stage["folder"],'params_used.json'), 'w') as fp:
+    with open(p["gene_centric"]["files_used"], 'w') as fp:
         json.dump(p, fp)
 
-
     return
+
+#
+if __name__ == "__main__":
+    main()

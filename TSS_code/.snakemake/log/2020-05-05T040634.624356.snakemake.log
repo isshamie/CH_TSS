@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	create_output
+	2	gene_centric_tss
+	2	merge_peaks
+	2	process_genome
+	2	retrieve_peaks
+	11
+
+[Tue May  5 04:06:34 2020]
+rule process_genome:
+    input: /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff, /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+    output: data/processed/GCF/genome/mRNA.peak, data/processed/GCF/genome/start_site_mRNA.tsv
+    jobid: 5
+    wildcards: anno=GCF
+
+python generate_genome.py /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff data/processed/GCF/genome/mRNA.peak
+[Tue May  5 04:06:34 2020]
+Error in rule process_genome:
+    jobid: 5
+    output: data/processed/GCF/genome/mRNA.peak, data/processed/GCF/genome/start_site_mRNA.tsv
+    shell:
+        python generate_genome.py /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff data/processed/GCF/genome/mRNA.peak
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-05T040634.624356.snakemake.log

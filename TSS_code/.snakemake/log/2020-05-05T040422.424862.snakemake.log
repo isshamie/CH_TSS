@@ -1,0 +1,54 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	all
+	2	create_output
+	2	gene_centric_tss
+	2	merge_peaks
+	2	process_genome
+	2	retrieve_peaks
+	11
+
+[Tue May  5 04:04:22 2020]
+rule process_genome:
+    input: /data/isshamie/genome/hamster/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3, /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+    output: data/processed/alt/genome/mRNA.peak, data/processed/alt/genome/start_site_mRNA.tsv
+    jobid: 8
+    wildcards: anno=alt
+
+python generate_genome.py /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna /data/isshamie/genome/hamster/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3 data/processed/alt/genome/mRNA.peak
+
+[Tue May  5 04:04:22 2020]
+rule process_genome:
+    input: /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff, /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+    output: data/processed/GCF/genome/mRNA.peak, data/processed/GCF/genome/start_site_mRNA.tsv
+    jobid: 5
+    wildcards: anno=GCF
+
+python generate_genome.py /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff data/processed/GCF/genome/mRNA.peak
+
+[Tue May  5 04:04:22 2020]
+rule merge_peaks:
+    input: data/processed/alt/genome/start_site_mRNA.tsv, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/, /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+    output: data/processed/alt/merged/peaks_with_tss_distances_size1.noCDS.peak, data/processed/alt/merged/files_used.json, data/processed/alt/merged/samples.merge.peaksexpression.log2, data/processed/alt/merged/samples.merge
+    jobid: 10
+    wildcards: anno=alt
+
+python merging.py data/processed/alt/genome/start_site_mRNA.tsv /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/ /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna data/processed/alt/merged/peaks_with_tss_distances_size1.noCDS.peak
+
+[Tue May  5 04:04:22 2020]
+rule merge_peaks:
+    input: data/processed/GCF/genome/start_site_mRNA.tsv, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/, /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+    output: data/processed/GCF/merged/peaks_with_tss_distances_size1.noCDS.peak, data/processed/GCF/merged/files_used.json, data/processed/GCF/merged/samples.merge.peaksexpression.log2, data/processed/GCF/merged/samples.merge
+    jobid: 9
+    wildcards: anno=GCF
+
+python merging.py data/processed/GCF/genome/start_site_mRNA.tsv /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/ /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna data/processed/GCF/merged/peaks_with_tss_distances_size1.noCDS.peak
+
+[Tue May  5 04:04:22 2020]
+rule gene_centric_tss:
+    input: data/processed/alt/merged/files_used.json, data/processed/alt/genome/start_site_mRNA.tsv, /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv
+    output: data/processed/alt/gene_centric_tss/txn_df.p, data/processed/alt/gene_centric_tss/files_used.json
+    jobid: 7
+    wildcards: anno=alt
+

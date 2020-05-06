@@ -142,30 +142,44 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
 def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
                         all_atac=None, out_f=None):
     """ Wrapper for constructing the experimental TSS and the genes
-    that didnt have experimental TSSs"""
+    that didnt have experimental TSSs. Assumes the input txn_f and tss_f
+    are 1-based index, and this will convert to bed file, which is 0-based index.
+    This does this by doing Start-1 at the end"""
     
     print("Constructing TSS not observed experimentally")
-    bed2_df, meta2_df = construct_nonExperimental_peakID(txn_f, tss_f)
+    peak2_df, meta2_df = construct_nonExperimental_peakID(txn_f, tss_f)
+    bed2_df = peak2_df.copy()
+    bed2_df["Start"] -= 1
     if out_f is not None:
         bed2_df[["Chr", "Start", "End", "ID", "Stat",
                 "Strand"]].to_csv(out_f + ".ref.bed", sep="\t",
                                   header=None,
                                   index=False)
-        meta2_df.to_csv(out_f + ".ref.meta", sep="\t")
+        peak2_df[["Chr", "Start", "End", "ID", "Stat",
+                "Strand"]].to_csv(out_f + ".ref.tsv", sep="\t",
+                                  header=None,
+                                  index=False)
+        meta2_df.to_csv(out_f + ".ref.meta.tsv", sep="\t")
 
     print("Constructing TSS observed experimentally")
-    bed_df, meta_df = construct_peakID(txn_f, expr_f, anno_f, rank_func)
-
+    peak_df, meta_df = construct_peakID(txn_f, expr_f, anno_f, rank_func)
+    bed_df = peak_df.copy()
+    bed_df["Start"] -= 1
     if out_f is not None:
         bed_df[["Chr", "Start", "End",  "ID", "Stat",
                 "Strand"]].to_csv(out_f + ".exp.bed", sep="\t",
                                   header=None,
                                   index=False)
-        meta_df.to_csv(out_f + ".exp.meta", sep="\t")
+        peak_df[["Chr", "Start", "End",  "ID", "Stat",
+                "Strand"]].to_csv(out_f + ".exp.tsv", sep="\t",
+                                  header=None,
+                                  index=False)
+        meta_df.to_csv(out_f + ".exp.meta.tsv", sep="\t")
 
     bed_df = pd.concat((bed_df, bed2_df), axis=0)
     bed_df = bed_df.sort_values(["Chr", "Start", "End", "Strand"])
     bed_df = bed_df[["Chr", "Start", "End",  "ID", "Stat", "Strand"]]
+
     meta_df = pd.concat((meta_df, meta2_df), axis=0)
     meta_df = meta_df.loc[bed_df.index]
 
@@ -179,7 +193,10 @@ def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
         bed_df[["Chr", "Start", "End", "ID", "Stat",
                 "Strand"]].to_csv(out_f + ".bed", sep="\t", header=None,
                                   index=False)
-        meta_df.to_csv(out_f + ".meta", sep="\t")
+        peak_df[["Chr", "Start", "End", "ID", "Stat",
+                "Strand"]].to_csv(out_f + ".tsv", sep="\t", header=None,
+                                  index=False)
+        meta_df.to_csv(out_f + ".meta.tsv", sep="\t")
     return bed_df, meta_df
 
 
@@ -370,7 +387,7 @@ def par_atac_region(all_df, atac_bed=None, all_atac=None,
 
 #######################################################################
 def exp_bed_to_refseq(bed_f, meta_f, refseq_f, save_f="",
-                      is_unique=False, shift=0):
+                      is_unique=False, shift=0,is_bed=True):
     """Goes back to the actual locations of the transcripts in the
     output_bed file and creates a bed file of the original locations
     bed_f: The output bed file
@@ -383,6 +400,7 @@ def exp_bed_to_refseq(bed_f, meta_f, refseq_f, save_f="",
     file for where the original annotation TSSs are. e.g
     "/data/isshamie/genome/picr_final/mRNA_final
     .peak"
+    is_bed: If true, will -1 for the tss, since that is 1-based index.
     """
 
     tss = pd.read_csv(refseq_f, sep="\t", index_col=0)
@@ -397,8 +415,12 @@ def exp_bed_to_refseq(bed_f, meta_f, refseq_f, save_f="",
     out_bed = out_bed.set_index(3)
 
     out_bed[0] = np.array(tss.loc[out_meta["Transcript"], "Chr"])
-    out_bed[1] = np.array(tss.loc[out_meta["Transcript"]]["Start"]-shift)
-    out_bed[2] = np.array(tss.loc[out_meta["Transcript"]]["End"]+shift)
+    out_bed[1] = np.array(tss.loc[out_meta["Transcript"]]["actual_start"]-shift)
+    out_bed[2] = np.array(tss.loc[out_meta["Transcript"]]["actual_start"]+shift)
+
+    if is_bed: #0-based index
+        out_bed[1] -= 1
+
     out_bed[3] = out_bed.index
     out_bed = out_bed[[0, 1, 2, 3, 4, 5]]
 
@@ -408,6 +430,7 @@ def exp_bed_to_refseq(bed_f, meta_f, refseq_f, save_f="",
     if save_f == "":
         save_f = bed_f.strip(".bed") + "_refseq_centered.bed"
     out_bed.to_csv(save_f, sep="\t", header=None, index=False)
+
     return out_bed
 
 
