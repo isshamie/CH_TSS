@@ -8,16 +8,18 @@ import pickle
 import os
 from matplotlib import rcParams
 import pandas as pd
+from os.path import dirname
 import seaborn as sns
 from matplotlib_venn import venn2
 from tss.visualize.fig_utils import helper_save
 #rcParams['figure.figsize'] = 8, 6
 #mpl.style.use('fivethirtyeight')
-mpl.style.use('ggplot')
+#mpl.style.use('ggplot')
 #mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 from mplh.color_utils import get_colors
 from mplh.fig_utils import legend_from_color, helper_save
-
+from collections import defaultdict
+from os.path import join
 
 ############################################################
 ### Plot the peak results
@@ -34,6 +36,7 @@ def plot_peaks_per_landmark(f_in,landmark_name,f_save=None):
     df = pickle.load(open(f_in, 'rb'))
     df_small = df[df['Number of SS'] <= 10]
     df_small = df_small.groupby(['Number of SS']).count()['hasGene']
+    print(df_small.head())
     df_small['>10'] = np.sum(df['Number of SS'] > 10)
     df_small.plot.bar(color='b')
     ax.set_xlabel('Number of peaks per ' + landmark_name)
@@ -161,7 +164,6 @@ def plot_tss_across_tissues(f_in, tissues, landmark_name,f_save=None,
     plt.title('TSS across tissues',{'fontsize': 22})
     ax.grid("off")
     ax.yaxis.grid(color="grey")
-
     helper_save(f_save)
 
 
@@ -232,6 +234,7 @@ def plot_tss_across_tissues_plus_unique(f_in, tissues, landmark_name,
     ax.grid("off")
     ax.yaxis.grid(color="grey")
     helper_save(f_save)
+    return
 
 
 ## Creates a Venn Diagram of genes found in CHO vs other Tissues
@@ -254,14 +257,29 @@ def find_unique_cho(f_in, tissue_list='Tissues', f_save=""):
     return tissue_genes,cho_genes
 
 
+def merge_tissues(tissues, tissues_merge:dict):
+    """Creates a collapsed list of tissues, where tissues_merge contains keys
+    that are found in tissues and the value is the new value to return. This will be a
+    many-to-one dictionary"""
+    tissues_collapse = set()
+    if tissues_merge is None:
+        return tissues
+    for t in tissues:
+        if t not in tissues_merge:
+            tissues_collapse.add(t)
+        else:
+            tissues_collapse.add(tissues_merge[t])
+    #print("tissues_collapse", tissues_collapse)
+    return list(tissues_collapse)
+
 ######
 def plot_tss_across_tissues_plus_seen_in_others(df, tissues, landmark_name,
-                                            f_save=None,
-                                            tissue_list='Tissues',
-                                            not_in_cho=False,
-                                            verbose=True,
-                                            to_plot=False,
-                                            tis_n=(), use_markers=False):
+                                                f_save=None,
+                                                tissue_list='Tissues',
+                                                not_in_cho=False,
+                                                verbose=True,
+                                                to_plot=False,
+                                                tis_n=(), use_markers=False, merge_type=None):
     """Plots barplot for each tissue and how many genes were seen. For each tissue,
     Will also have subbars in there that represents the fraction of the TSS
     that were seen in n tissues or less, where each comes from the tis_n list.
@@ -272,30 +290,61 @@ def plot_tss_across_tissues_plus_seen_in_others(df, tissues, landmark_name,
     where the key will be a value in tis_n, which basically is number of genes seen in
     less than or equal to n tissues that is seen in this tissue. There will also be an overall one as well."""
 
-    tis_n = list(tis_n)
-    tis_n.sort()
+
+
+
 
     tissues_genes = dict()
-
     tissues_genes_unique = dict()  # The number of unique genes- i.e # found in only that tissue
+    tissues_genes_unique_vals = defaultdict(list)
+    # Merge samples dictionary
+    if merge_type == "bmdm":
+        print("Merging bmdm")
+        merge_dict = {"BMDMwt": "BMDM", "BMDM1hKLA": "BMDM"}
+        tissues = merge_tissues(tissues, merge_dict)
+    else:
+        merge_dict = {}
+    tis_n = list(tis_n)
+    tis_n.sort()
+    #if to_merge is not None:
+    #     for t in tissues:
+    #         if t in to_merge:
+    #             tissues_genes[to_merge[t]] = 0
+    #             tissues_genes_unique[to_merge[t]] = dict()
+    #             for n in tis_n:
+    #                 tissues_genes_unique[to_merge[t]][n] = 0
+    #         else:
+    #             tissues_genes[t] = 0
+    #             tissues_genes_unique[t] = dict()
+    #             for n in tis_n:
+    #                 tissues_genes_unique[t][n] = 0
+    # else:
+    #     for t in tissues:
+    #         tissues_genes[t] = 0
+    #         tissues_genes_unique[t] = dict()
+    #         for n in tis_n:
+    #             tissues_genes_unique[t][n] = 0
+
+
     for t in tissues:
         tissues_genes[t] = 0
         tissues_genes_unique[t] = dict()
         for n in tis_n:
             tissues_genes_unique[t][n] = 0
 
+
     cumulative = dict()
     for n in tis_n:
         cumulative[n] = 0
     cumulative['Overall'] = 0
 
-
     # Loop through each gene
     for ind, val in df.iterrows():
         curr_ts = val[tissue_list].split(",")
-        curr_n = len(curr_ts)
         if curr_ts[0] == "":
             continue
+        curr_ts = merge_tissues(curr_ts, merge_dict)
+        curr_n = len(curr_ts)
         for t in curr_ts:
             tissues_genes[t] += 1
             for n in tis_n:
@@ -306,6 +355,9 @@ def plot_tss_across_tissues_plus_seen_in_others(df, tissues, landmark_name,
                 cumulative[n] += 1
         if curr_n > 0:
             cumulative['Overall'] += 1
+        if curr_n == 1:
+            tissues_genes_unique_vals[curr_ts[0]].append(ind)
+
 
     ## Double check if there was a tissue with no peak and remove
     no_peak = []
@@ -315,7 +367,6 @@ def plot_tss_across_tissues_plus_seen_in_others(df, tissues, landmark_name,
     for t in no_peak:
         tissues_genes.pop(t, None)
 
-
     # Calculate the peaks not in CHO
     if not_in_cho:
         tissue_genes = set()
@@ -324,6 +375,7 @@ def plot_tss_across_tissues_plus_seen_in_others(df, tissues, landmark_name,
             curr_ts = val[tissue_list].split(",")
             if curr_ts[0] == "":
                 continue
+            curr_ts = merge_tissues(curr_ts, merge_dict)
             if "CHO" in curr_ts:
                 cho_genes.add(ind)
                 curr_ts.remove("CHO")
@@ -342,9 +394,18 @@ def plot_tss_across_tissues_plus_seen_in_others(df, tissues, landmark_name,
     results_df = pd.concat((results_df, pd.Series(cumulative, name="Cumulative")), axis=1)
     results_df = results_df.iloc[::-1]
 
+    #results_df = results_df[~(results_df.sum()== 0)]
+
     if to_plot:
         plot_bar(results_df,df.shape[0], landmark_name, f_save=f_save,include_frac=True,
                  use_markers=use_markers)
+    if f_save is not None:
+        results_df.to_csv(f_save+".csv")
+        #outdir = dirname(f_save)
+        for t in tissues_genes_unique_vals:
+            with open(f_save.replace('.png','') +  t + ".uniqueGenes.txt", 'w') as f:
+                f.write("\n".join(tissues_genes_unique_vals[t]))
+
     return results_df, df.shape[0]
 
 
@@ -352,7 +413,6 @@ def plot_bar(results_df,num_genes,landmark_name,f_save=None,include_frac=True,us
     color_map, name_map = get_colors('categorical', n_colors=len(results_df), names=results_df.index)
     patterns = ["+" , "-", ".", "*","x", "o", "O","/" ]
     f, ax = plt.subplots(figsize=(12,12))
-
     count = 0
     for ind, val in results_df.iterrows():
         print(ind)

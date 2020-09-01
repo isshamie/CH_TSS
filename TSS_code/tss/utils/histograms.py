@@ -15,11 +15,16 @@ def hist_plot(hist_out,include_norm=True, f=None, to_save=True,
     if f is None:
         f = plt.figure()
     df = pd.read_csv(hist_out,sep='\t',header=0,names=['Distance from TSS','Coverage','+ Tags','- Tags'])
+
     if to_fwhm:
-        max_val = np.max(df['+ Tags'])
-        val = stats.fwhm(df["Distance from TSS"], df['+ Tags'], k=3)
-        print(('Max value: {max_val}'.format(max_val=max_val)))
-        print(("Full-width at half-maximum: {val} (nts)".format(val=val)))
+        try:
+            max_val = np.max(df['+ Tags'])
+            val = stats.fwhm(df["Distance from TSS"], df['+ Tags'], k=3)
+            print(('Max value: {max_val}'.format(max_val=max_val)))
+            print(("Full-width at half-maximum: {val} (nts)".format(val=val)))
+        except :
+            print("multiple peaks found, cannot compute fwhm")
+
 
     plt.plot(df['Distance from TSS'],df['+ Tags'], label='+ Tags')
     plt.plot(df['Distance from TSS'],df['- Tags'], label='- Tags')
@@ -53,11 +58,13 @@ def hist_plot_norm(hist_out, f=None,to_save=True,
                      names=['Distance from TSS', 'Coverage', '+ Tags',
                             '- Tags'])
     if to_fwhm:
-        max_val = np.max(df['+ Tags'])
-        val = stats.fwhm(df["Distance from TSS"], df['+ Tags'], k=3)
-        print(('Max value: {max_val}'.format(max_val=max_val)))
-        print(("Full-width at half-maximum: {val} (nts)".format(val=val)))
-
+        try:
+            max_val = np.max(df['+ Tags'])
+            val = stats.fwhm(df["Distance from TSS"], df['+ Tags'], k=3)
+            print(('Max value: {max_val}'.format(max_val=max_val)))
+            print(("Full-width at half-maximum: {val} (nts)".format(val=val)))
+        except:
+            print("multiple peaks found, cannot compute fwhm")
     if f is None:
         f = plt.figure()
     plt.plot(df['Distance from TSS'], df['+ Tags'], label='+ Tags')

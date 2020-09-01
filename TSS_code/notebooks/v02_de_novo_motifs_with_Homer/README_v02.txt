@@ -1,0 +1,1 @@
+Using the parameter -mset vertebrate, and also using the TSS option for looking for motifs. Also, size is -300,100, meaning it goes from 300 bps upstream to 100 bp downstream.

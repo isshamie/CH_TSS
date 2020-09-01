@@ -92,7 +92,6 @@ def merge_peaks(input_files, output_file, dist='given', type_merge=''):
         peaks = peaks.loc[:, ~(peaks.columns.str.contains('_copy'))]
         peaks['Parent files'] = peaks.columns.values[8]  # Just the file name
 
-
     # Save meta file
     with open(output_file + '.meta', 'w') as f:
         f.write(meta_info)
@@ -251,7 +250,7 @@ def filter_anno_peak(in_peak_file,filter_peak_file):
 ########################################
 def createPeakFileFromGFF(annotation_file, output_file,
                           anno_of_interest='mRNA', is_start=True,
-                          shift=1):
+                          shift=0):
     """
     Function to create a peak file based on GFF and specific annotation of interest
     

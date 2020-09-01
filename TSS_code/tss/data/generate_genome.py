@@ -6,6 +6,7 @@ from tqdm import tqdm
 import click
 import logging
 
+
 def process_genome(ref_fa, annotation, genome_dir, with_descriptives=False):
     # genome_raw_dir = os.path.join(doc["supplemental"], "genome",
     #                               "ncbi_anno_103")

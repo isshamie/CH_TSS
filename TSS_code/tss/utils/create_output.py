@@ -65,16 +65,29 @@ def construct_nonExperimental_peakID(txn_f, tss_f):
         bed_df.loc[curr_peak] = [val["Chr"], val["Start"], val["End"],
                                  val["Strand"], 0, curr_peak]
 
+
         meta_df.at[curr_peak, "Gene"] = val["gene"]
         #meta_df.at[curr_peak, "Gene ID"] = val["geneID"]
         meta_df.at[curr_peak, "Transcript"] = ind
         meta_df.at[curr_peak, "Is Experimental"] = 0
         non_peaks_map[name] = curr_peak
+
+    ## This will make the file 0-based index inclusive
+    bed_df["Start"] = bed_df["Start"] - 1
     return bed_df,meta_df
 
 
 def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
                      col_name=None):
+    """
+    Extracts the relevant peak and meta information. Also converts into bed format.
+    :param txn_anno_f:
+    :param expr_f:
+    :param anno_f:
+    :param rank_func:
+    :param col_name:
+    :return:
+    """
     txn_anno = pickle.load(open(txn_anno_f, "rb"))
     expr_peaks = pd.read_csv(expr_f, sep="\t", index_col=0)
     anno_df = pd.read_csv(anno_f, sep="\t", index_col=0)
@@ -131,10 +144,12 @@ def construct_peakID(txn_anno_f, expr_f, anno_f, rank_func,
 
             # meta_df.at["CHO ATAC Region"] = atac_region(atac_f,
             #                                         bed_df.loc[curr_peak])
+    ## First take the center of the peak:
+    bed_df["Start"] = np.ceil((bed_df["Start"]+bed_df["End"])/2).astype(int)
+    bed_df["End"] = bed_df["Start"]
 
     ## This will make the file 0-based index inclusive
     bed_df["Start"] = bed_df["Start"] - 1
-    bed_df["End"] = bed_df["End"]
 
     return bed_df, meta_df
 
@@ -149,7 +164,7 @@ def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
     print("Constructing TSS not observed experimentally")
     peak2_df, meta2_df = construct_nonExperimental_peakID(txn_f, tss_f)
     bed2_df = peak2_df.copy()
-    bed2_df["Start"] -= 1
+    #bed2_df["Start"] -= 1
     if out_f is not None:
         bed2_df[["Chr", "Start", "End", "ID", "Stat",
                 "Strand"]].to_csv(out_f + ".ref.bed", sep="\t",
@@ -164,7 +179,7 @@ def construct_all_peaks(txn_f, expr_f, anno_f, rank_func, tss_f, atac_f,
     print("Constructing TSS observed experimentally")
     peak_df, meta_df = construct_peakID(txn_f, expr_f, anno_f, rank_func)
     bed_df = peak_df.copy()
-    bed_df["Start"] -= 1
+    #bed_df["Start"] -= 1
     if out_f is not None:
         bed_df[["Chr", "Start", "End",  "ID", "Stat",
                 "Strand"]].to_csv(out_f + ".exp.bed", sep="\t",

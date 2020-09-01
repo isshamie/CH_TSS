@@ -13,6 +13,7 @@ import re
 import inspect
 import tqdm
 import os
+from os.path import basename
 from tss.utils import Homer
 import numpanpar as parallel_functions
 from cycler import cycler
@@ -130,7 +131,7 @@ def combine_merge_with_anno(merge_file,anno_file):
 # Get distances to regions of interest for the peaks
 ###
 def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id',
-                          landmark_cols=('gene','gene_id')):
+                          landmark_cols=('gene','gene_id'), use_prior=False, force_same_strand=False):
     """ Function that adds distance to the nearest landmark from
     the annotation file, regardless if its on the same
         strand or not. It will also note if it is on the same strand by adding that column"""
@@ -142,15 +143,19 @@ def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id'
     #
     # assert(((anno_peaks['End']-anno_peaks['Start'])%2==0).all())
 
-
     for ind, val in (anno_peaks.iterrows()):
         filt = landmark_df[val['Chr'] == landmark_df['Chr']]
         peak_start = int(np.floor((val['Start'] + val['End']) / 2))
+        if force_same_strand:
+            filt = filt[val['Strand'] == filt['Strand']]
         if len(filt) != 0:
             filt2 = np.abs(filt['actual_start'] - peak_start).idxmin()
 
             #print(filt2)
-            anno_peaks.at[ind, 'Nearest TSS'] =  landmark_df.loc[filt2, main_landmark]
+            if use_prior:
+                anno_peaks.at[ind, 'Nearest TSS'] = anno_peaks.loc[ind,"Transcript"]
+            else:
+                anno_peaks.at[ind, 'Nearest TSS'] =  landmark_df.loc[filt2, main_landmark]
 
             for land in landmark_cols:
                 anno_peaks.at[ind, 'Nearest ' + land] = landmark_df.loc[filt2, land]
@@ -180,12 +185,24 @@ def wrap_distance_to_landmarks(peaks_file, landmark_file,
                                main_landmark = 'transcript_id',
                                landmark_cols=('gene','gene_id'),
                                is_bed=False,
-                               output_f=None,is_parallel=False, num_par=24):
+                               output_f=None,is_parallel=False,
+                               num_par=24, meta_f=None, use_prior=False,
+                               force_same_strand=False):
     """ Wrapper for distance_to_landmarks"""
     landmark_df = pd.read_csv(landmark_file, sep="\t", index_col=0)
 
     if is_bed:
         anno_peaks = Homer.read_bed_file(peaks_file)
+        anno_peaks["Start"] += 1
+        if meta_f is not None:
+            print("Mergeing meta")
+            print(anno_peaks.head())
+            #meta_file = join(genome, "eTSS/TSS.exp.meta.tsv")
+            meta_df = pd.read_csv(meta_f, index_col=0, sep='\t')
+            anno_peaks = anno_peaks.merge(
+                meta_df[["Gene", "Transcript"]], left_index=True,
+                right_index=True)
+            print(anno_peaks.head())
     else:
         anno_peaks = pd.read_csv(peaks_file,sep="\t",index_col=0)
 
@@ -195,6 +212,9 @@ def wrap_distance_to_landmarks(peaks_file, landmark_file,
 
     # Only keep ID, Chr, Start, End, Strand, Stat, Annotation
     to_keep = ['Chr', 'Start', 'End', 'Strand', 'Stat']
+    if use_prior:
+        to_keep.append("Transcript")
+        to_keep.append("Gene")
     if 'Annotation' in anno_peaks.columns.values:
         to_keep.append('Annotation')
     anno_peaks = anno_peaks[to_keep]
@@ -204,10 +224,10 @@ def wrap_distance_to_landmarks(peaks_file, landmark_file,
 
     if is_parallel:
         anno_peaks = parallel_functions.parallel_df(anno_peaks,distance_to_landmarks,
-                                                    func_args = (landmark_df, main_landmark, landmark_cols),
+                                                    func_args = (landmark_df, main_landmark, landmark_cols,use_prior, force_same_strand),
                                                     num_processes=num_par)
     else:
-        anno_peaks = distance_to_landmarks(anno_peaks, landmark_df, main_landmark,landmark_cols)
+        anno_peaks = distance_to_landmarks(anno_peaks, landmark_df, main_landmark,landmark_cols,use_prior, force_same_strand)
     if not output_f is None:
         anno_peaks.to_csv(output_f,sep='\t')
     return anno_peaks
@@ -540,14 +560,14 @@ def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
     all_peaks = [item for sublist in list(anno_df[col_name].values) for
                  item in sublist]
     peaks_df_filt = peaks_df[peaks_df.index.isin(all_peaks)]
-
+    peaks_df.columns = list(map(lambda x: basename(x), peaks_df.columns.values))
     # if use_sample_peaks: peaks from original peak file or
     #  else take from the merged file
     peaks_to_keep = []
     for ind, val in peaks_df_filt.iterrows():
-        if sample_name in val["Parent files"].split("|"):
+        if basename(sample_name) in list(map(lambda x: basename(x), val["Parent files"].split("|"))):
             if use_sample_peaks:
-                peaks_to_keep.append(peaks_df_filt.loc[ind, sample_name])
+                peaks_to_keep.append(peaks_df_filt.loc[ind, basename(sample_name)])
             else:
                 peaks_to_keep.append(ind)
     if use_sample_peaks:
