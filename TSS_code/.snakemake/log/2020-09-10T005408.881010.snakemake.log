@@ -1,0 +1,220 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	barplot
+	1	create_output
+	1	gene_centric_tss
+	1	merge_peaks
+	1	nucleotides
+	1	peak_expression_and_location
+	1	process_genome
+	1	retrieve_peaks
+	1	tissues_collapse
+	11
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	process_genome
+Selected jobs (1):
+	process_genome
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 00:54:09 2020]
+rule process_genome:
+    input: /data/isshamie/genome/hamster/syn20999279_picr.gff, /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+    output: data/processed/synapse/genome/mRNA.peak, data/processed/synapse/genome/start_site_mRNA.tsv
+    jobid: 7
+    wildcards: anno=synapse
+
+[Thu Sep 10 01:20:25 2020]
+Finished job 7.
+1 of 11 steps (9%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	merge_peaks
+Selected jobs (1):
+	merge_peaks
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 01:20:25 2020]
+rule merge_peaks:
+    input: data/processed/synapse/genome/start_site_mRNA.tsv, /data/isshamie/genome/hamster/syn20999279_picr.gff
+    output: data/processed/synapse/merged/samples.merge
+    log: data/processed/synapse/merged/merged.log
+    jobid: 9
+    wildcards: anno=synapse
+
+[Thu Sep 10 01:27:25 2020]
+Finished job 9.
+2 of 11 steps (18%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	peak_expression_and_location
+Selected jobs (1):
+	peak_expression_and_location
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 01:27:25 2020]
+rule peak_expression_and_location:
+    input: data/processed/synapse/genome/start_site_mRNA.tsv, /data/isshamie/genome/hamster/syn20999279_picr.gff, data/processed/synapse/merged/samples.merge
+    output: data/processed/synapse/merged/peaks_with_tss_distances_size1.noCDS.peak, data/processed/synapse/merged/files_used.json, data/processed/synapse/merged/samples.merge.peaksexpression.log10
+    log: data/processed/synapse/merged/anno_and_exp.log
+    jobid: 10
+    wildcards: anno=synapse
+
+Warning: the following output files of rule peak_expression_and_location were not present when the DAG was created:
+{'data/processed/synapse/merged/files_used.json'}
+[Thu Sep 10 01:31:30 2020]
+Finished job 10.
+3 of 11 steps (27%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	gene_centric_tss
+	tissues_collapse
+Selected jobs (1):
+	tissues_collapse
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 01:31:30 2020]
+rule tissues_collapse:
+    input: data/processed/synapse/merged/samples.merge.peaksexpression.log10
+    output: data/processed/synapse/tissues_collapse/tissues.merge.peaksexpression.log10
+    jobid: 8
+    wildcards: anno=synapse
+
+[Thu Sep 10 01:31:58 2020]
+Finished job 8.
+4 of 11 steps (36%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	gene_centric_tss
+Selected jobs (1):
+	gene_centric_tss
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 01:31:58 2020]
+rule gene_centric_tss:
+    input: data/processed/synapse/merged/files_used.json, data/processed/synapse/genome/start_site_mRNA.tsv, /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv
+    output: data/processed/synapse/gene_centric_tss/txn_df.p, data/processed/synapse/gene_centric_tss/files_used.json, data/processed/synapse/gene_centric_tss/txn_df_tissues.p
+    log: data/processed/synapse/gene_centric_tss/gene_centric.log
+    jobid: 6
+    wildcards: anno=synapse
+
+[Thu Sep 10 01:56:28 2020]
+Finished job 6.
+5 of 11 steps (45%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	retrieve_peaks
+Selected jobs (1):
+	retrieve_peaks
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 01:56:28 2020]
+rule retrieve_peaks:
+    input: data/processed/synapse/gene_centric_tss/files_used.json, data/processed/synapse/merged/samples.merge, data/processed/synapse/merged/samples.merge.peaksexpression.log10, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+    output: data/processed/synapse/retrieve_peaks/files_used.json
+    jobid: 5
+    wildcards: anno=synapse
+
+[Thu Sep 10 02:09:29 2020]
+Finished job 5.
+6 of 11 steps (55%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	create_output
+Selected jobs (1):
+	create_output
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 02:09:29 2020]
+rule create_output:
+    input: data/processed/synapse/retrieve_peaks/files_used.json, data/processed/synapse/gene_centric_tss/txn_df_tissues.p, data/processed/synapse/genome/mRNA.peak, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/ATAC_merge.bed, data/processed/synapse/tissues_collapse/tissues.merge.peaksexpression.log10
+    output: data/processed/synapse/eTSS/TSS.bed, data/processed/synapse/eTSS/refseq_centered.TSS.bed, data/processed/synapse/eTSS/TSS.exp.bed
+    log: data/processed/synapse/eTSS/eTSS.log
+    jobid: 1
+    wildcards: anno=synapse
+
+[Thu Sep 10 02:58:24 2020]
+Finished job 1.
+7 of 11 steps (64%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	nucleotides
+	barplot
+	barplot
+Selected jobs (1):
+	barplot
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 02:58:24 2020]
+rule barplot:
+    input: data/processed/synapse/eTSS/TSS.exp.bed, data/processed/synapse/gene_centric_tss/files_used.json
+    output: figures/synapse/barplots_eTSS/all/transcript_tissues_expressed.png
+    log: figures/synapse/barplots_eTSS/all/barplots.log
+    jobid: 2
+    wildcards: anno=synapse, merge=all
+
+[Thu Sep 10 02:59:33 2020]
+Finished job 2.
+8 of 11 steps (73%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	nucleotides
+	barplot
+Selected jobs (1):
+	barplot
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 02:59:33 2020]
+rule barplot:
+    input: data/processed/synapse/eTSS/TSS.exp.bed, data/processed/synapse/gene_centric_tss/files_used.json
+    output: figures/synapse/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/synapse/barplots_eTSS/bmdm/barplots.log
+    jobid: 3
+    wildcards: anno=synapse, merge=bmdm
+
+[Thu Sep 10 03:00:38 2020]
+Finished job 3.
+9 of 11 steps (82%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	nucleotides
+Selected jobs (1):
+	nucleotides
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 03:00:38 2020]
+rule nucleotides:
+    input: data/processed/synapse/eTSS/TSS.exp.bed
+    output: figures/synapse/nucleotides/eTSS_nucleotide_compare.png
+    log: figures/synapse/nucleotides/nucleotides.log
+    jobid: 4
+    wildcards: anno=synapse
+
+[Thu Sep 10 03:00:53 2020]
+Finished job 4.
+10 of 11 steps (91%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	all
+Selected jobs (1):
+	all
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Thu Sep 10 03:00:53 2020]
+localrule all:
+    input: data/processed/synapse/eTSS/TSS.bed, figures/synapse/barplots_eTSS/all/transcript_tissues_expressed.png, figures/synapse/barplots_eTSS/bmdm/transcript_tissues_expressed.png, figures/synapse/nucleotides/eTSS_nucleotide_compare.png
+    jobid: 0
+
+[Thu Sep 10 03:00:53 2020]
+Finished job 0.
+11 of 11 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-09-10T005408.881010.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

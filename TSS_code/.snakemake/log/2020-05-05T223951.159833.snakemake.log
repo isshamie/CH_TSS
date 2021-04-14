@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	barplot
+	2	create_output
+	1	gene_centric_tss
+	2	retrieve_peaks
+	8
+
+[Tue May  5 22:39:51 2020]
+rule retrieve_peaks:
+    input: data/processed/GCF/gene_centric_tss/files_used.json, data/processed/GCF/merged/samples.merge, data/processed/GCF/merged/samples.merge.peaksexpression.log2, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+    output: data/processed/GCF/retrieve_peaks/files_used.json
+    log: data/processed/GCF/retrieve_peaks/retrieve_peaks.log
+    jobid: 5
+    wildcards: anno=GCF
+
+python tss/data/retrieve_tss_peaks.py data/processed/GCF/retrieve_peaks/files_used.json data/processed/GCF/gene_centric_tss/files_used.json data/processed/GCF/merged/samples.merge data/processed/GCF/merged/samples.merge.peaksexpression.log2 /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+Terminating processes on user request, this might take some time.
+[Tue May  5 22:39:54 2020]
+Error in rule retrieve_peaks:
+    jobid: 5
+    output: data/processed/GCF/retrieve_peaks/files_used.json
+    log: data/processed/GCF/retrieve_peaks/retrieve_peaks.log (check log file(s) for error message)
+    shell:
+        python tss/data/retrieve_tss_peaks.py data/processed/GCF/retrieve_peaks/files_used.json data/processed/GCF/gene_centric_tss/files_used.json data/processed/GCF/merged/samples.merge data/processed/GCF/merged/samples.merge.peaksexpression.log2 /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+        (exited with non-zero exit code)
+
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-05T223951.159833.snakemake.log

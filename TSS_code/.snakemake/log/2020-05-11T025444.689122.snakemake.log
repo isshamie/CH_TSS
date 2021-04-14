@@ -1,0 +1,71 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	barplot
+	5
+
+[Mon May 11 02:54:44 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed, data/processed/GCF/gene_centric_tss/files_used.json
+    output: figures/GCF/barplots_eTSS/all/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/all/barplots.log
+    jobid: 3
+    wildcards: anno=GCF, merge=all
+
+python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/all/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed data/processed/GCF/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv all &> figures/GCF/barplots_eTSS/all/barplots.log
+[Mon May 11 02:55:27 2020]
+Finished job 3.
+1 of 5 steps (20%) done
+
+[Mon May 11 02:55:27 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed, data/processed/GCF/gene_centric_tss/files_used.json
+    output: figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/bmdm/barplots.log
+    jobid: 4
+    wildcards: anno=GCF, merge=bmdm
+
+python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed data/processed/GCF/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv bmdm &> figures/GCF/barplots_eTSS/bmdm/barplots.log
+[Mon May 11 02:56:09 2020]
+Finished job 4.
+2 of 5 steps (40%) done
+
+[Mon May 11 02:56:09 2020]
+rule barplot:
+    input: data/processed/alt/eTSS/TSS.exp.bed, data/processed/alt/gene_centric_tss/files_used.json
+    output: figures/alt/barplots_eTSS/all/transcript_tissues_expressed.png
+    log: figures/alt/barplots_eTSS/all/barplots.log
+    jobid: 5
+    wildcards: anno=alt, merge=all
+
+python tss/data/tss_barplots.py figures/alt/barplots_eTSS/all/transcript_tissues_expressed.png data/processed/alt/eTSS/TSS.exp.bed data/processed/alt/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv all &> figures/alt/barplots_eTSS/all/barplots.log
+[Mon May 11 02:56:52 2020]
+Finished job 5.
+3 of 5 steps (60%) done
+
+[Mon May 11 02:56:52 2020]
+rule barplot:
+    input: data/processed/alt/eTSS/TSS.exp.bed, data/processed/alt/gene_centric_tss/files_used.json
+    output: figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/alt/barplots_eTSS/bmdm/barplots.log
+    jobid: 6
+    wildcards: anno=alt, merge=bmdm
+
+python tss/data/tss_barplots.py figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png data/processed/alt/eTSS/TSS.exp.bed data/processed/alt/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv bmdm &> figures/alt/barplots_eTSS/bmdm/barplots.log
+[Mon May 11 02:57:34 2020]
+Finished job 6.
+4 of 5 steps (80%) done
+
+[Mon May 11 02:57:34 2020]
+localrule all:
+    input: data/processed/GCF/eTSS/TSS.bed, data/processed/alt/eTSS/TSS.bed, figures/GCF/barplots_eTSS/all/transcript_tissues_expressed.png, figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png, figures/alt/barplots_eTSS/all/transcript_tissues_expressed.png, figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png, figures/GCF/nucleotides/eTSS_nucleotide_compare.png, figures/alt/nucleotides/eTSS_nucleotide_compare.png
+    jobid: 0
+
+[Mon May 11 02:57:34 2020]
+Finished job 0.
+5 of 5 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-11T025444.689122.snakemake.log

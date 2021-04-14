@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	barplot
+	2	create_output
+	1	gene_centric_tss
+	1	retrieve_peaks
+	2	tissues_collapse
+	9
+
+[Tue May  5 23:13:30 2020]
+rule tissues_collapse:
+    input: data/processed/GCF/merged/samples.merge.peaksexpression.log10
+    output: data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10
+    jobid: 8
+    wildcards: anno=GCF
+
+python tss/data/tissues_collapse.py data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10 /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv data/processed/GCF/merged/samples.merge.peaksexpression.log10
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 124 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+Missing files after 5 seconds:
+data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-05T231329.730997.snakemake.log

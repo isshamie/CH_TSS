@@ -1,0 +1,5 @@
+Building DAG of jobs...
+MissingInputException in line 113 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+Missing input files for rule retrieve_peaks:
+data/processed/GCF/merged/samples.merge
+data/processed/GCF/gene_centric/files_used.json

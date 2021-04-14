@@ -1,0 +1,104 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	barplot
+	2	create_output
+	1	gene_centric_tss
+	1	merge_peaks
+	2	nucleotides
+	1	peak_expression_and_location
+	1	process_genome
+	1	retrieve_peaks
+	1	tissues_collapse
+	15
+
+[Fri Aug  7 23:52:59 2020]
+rule process_genome:
+    input: /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff, /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+    output: data/processed/GCF/genome/mRNA.peak, data/processed/GCF/genome/start_site_mRNA.tsv
+    jobid: 11
+    wildcards: anno=GCF
+
+[Sat Aug  8 00:07:21 2020]
+Finished job 11.
+1 of 15 steps (7%) done
+
+[Sat Aug  8 00:07:21 2020]
+rule merge_peaks:
+    input: data/processed/GCF/genome/start_site_mRNA.tsv, /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff
+    output: data/processed/GCF/merged/samples.merge
+    log: data/processed/GCF/merged/merged.log
+    jobid: 17
+    wildcards: anno=GCF
+
+[Sat Aug  8 00:13:00 2020]
+Finished job 17.
+2 of 15 steps (13%) done
+
+[Sat Aug  8 00:13:00 2020]
+rule peak_expression_and_location:
+    input: data/processed/GCF/genome/start_site_mRNA.tsv, /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff, data/processed/GCF/merged/samples.merge
+    output: data/processed/GCF/merged/peaks_with_tss_distances_size1.noCDS.peak, data/processed/GCF/merged/files_used.json, data/processed/GCF/merged/samples.merge.peaksexpression.log10
+    log: data/processed/GCF/merged/anno_and_exp.log
+    jobid: 18
+    wildcards: anno=GCF
+
+[Sat Aug  8 00:16:28 2020]
+Finished job 18.
+3 of 15 steps (20%) done
+
+[Sat Aug  8 00:16:28 2020]
+rule create_output:
+    input: data/processed/alt/retrieve_peaks/files_used.json, data/processed/alt/gene_centric_tss/txn_df_tissues.p, data/processed/alt/genome/mRNA.peak, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/ATAC_merge.bed, data/processed/alt/tissues_collapse/tissues.merge.peaksexpression.log10
+    output: data/processed/alt/eTSS/TSS.bed, data/processed/alt/eTSS/refseq_centered.TSS.bed, data/processed/alt/eTSS/TSS.exp.bed
+    log: data/processed/alt/eTSS/eTSS.log
+    jobid: 2
+    wildcards: anno=alt
+
+[Sat Aug  8 00:42:43 2020]
+Finished job 2.
+4 of 15 steps (27%) done
+
+[Sat Aug  8 00:42:43 2020]
+rule tissues_collapse:
+    input: data/processed/GCF/merged/samples.merge.peaksexpression.log10
+    output: data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10
+    jobid: 12
+    wildcards: anno=GCF
+
+[Sat Aug  8 00:43:08 2020]
+Finished job 12.
+5 of 15 steps (33%) done
+
+[Sat Aug  8 00:43:08 2020]
+rule gene_centric_tss:
+    input: data/processed/GCF/merged/files_used.json, data/processed/GCF/genome/start_site_mRNA.tsv, /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv
+    output: data/processed/GCF/gene_centric_tss/txn_df.p, data/processed/GCF/gene_centric_tss/files_used.json, data/processed/GCF/gene_centric_tss/txn_df_tissues.p
+    log: data/processed/GCF/gene_centric_tss/gene_centric.log
+    jobid: 10
+    wildcards: anno=GCF
+
+[Sat Aug  8 01:00:03 2020]
+Finished job 10.
+6 of 15 steps (40%) done
+
+[Sat Aug  8 01:00:03 2020]
+rule retrieve_peaks:
+    input: data/processed/GCF/gene_centric_tss/files_used.json, data/processed/GCF/merged/samples.merge, data/processed/GCF/merged/samples.merge.peaksexpression.log2, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+    output: data/processed/GCF/retrieve_peaks/files_used.json
+    log: data/processed/GCF/retrieve_peaks/retrieve_peaks.log
+    jobid: 9
+    wildcards: anno=GCF
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 112 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+Missing files after 5 seconds:
+data/processed/GCF/retrieve_peaks/files_used.json
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-08-07T235258.780010.snakemake.log

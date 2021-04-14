@@ -30,7 +30,6 @@ from cycler import cycler
 mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 
 
-
 def merge_columns(df, mapping_dict):
     '''
     Function that merges columns by taking the mean of them.
@@ -49,7 +48,6 @@ def merge_columns(df, mapping_dict):
             new_df.loc[:, i] = new_col
     new_df = new_df.loc[:, ~(new_df.isnull().all())]
     return new_df
-
 
 
 def mdir(d, replace=True, save_old=True):

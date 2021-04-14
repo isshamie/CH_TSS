@@ -1,0 +1,47 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	barplot
+	2	nucleotides
+	5
+
+[Wed May  6 04:28:25 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed, data/processed/GCF/gene_centric_tss/files_used.json
+    output: figures/GCF/barplots_eTSS/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/barplots.log
+    jobid: 3
+    wildcards: anno=GCF
+
+python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed data/processed/GCF/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv &> figures/GCF/barplots_eTSS/barplots.log
+[Wed May  6 04:29:04 2020]
+Finished job 3.
+1 of 5 steps (20%) done
+
+[Wed May  6 04:29:04 2020]
+rule barplot:
+    input: data/processed/alt/eTSS/TSS.exp.bed, data/processed/alt/gene_centric_tss/files_used.json
+    output: figures/alt/barplots_eTSS/transcript_tissues_expressed.png
+    log: figures/alt/barplots_eTSS/barplots.log
+    jobid: 4
+    wildcards: anno=alt
+
+python tss/data/tss_barplots.py figures/alt/barplots_eTSS/transcript_tissues_expressed.png data/processed/alt/eTSS/TSS.exp.bed data/processed/alt/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv &> figures/alt/barplots_eTSS/barplots.log
+[Wed May  6 04:29:43 2020]
+Finished job 4.
+2 of 5 steps (40%) done
+
+[Wed May  6 04:29:43 2020]
+rule nucleotides:
+    input: data/processed/GCF/eTSS/TSS.exp.bed
+    output: figures/GCF/nucleotides/eTSS_nucleotide_compare.png
+    log: figures/GCF/nucleotides/nucleotides.log
+    jobid: 5
+    wildcards: anno=GCF
+
+RuleException in line 180 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+NameError: The name 'ref_fa' is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}

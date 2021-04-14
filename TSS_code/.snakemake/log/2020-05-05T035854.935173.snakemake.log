@@ -1,0 +1,3 @@
+WildcardError in line 36 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+No values given for wildcard 'anno'.
+  File "/data/isshamie/TSS/Analysis/TSS_code/snakefile", line 36, in <module>

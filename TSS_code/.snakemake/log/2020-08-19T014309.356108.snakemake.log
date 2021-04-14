@@ -1,0 +1,52 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	barplot
+	2	create_output
+	2	nucleotides
+	1	retrieve_peaks
+	10
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	retrieve_peaks
+	create_output
+Selected jobs (1):
+	retrieve_peaks
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 01:43:09 2020]
+rule retrieve_peaks:
+    input: data/processed/GCF/gene_centric_tss/files_used.json, data/processed/GCF/merged/samples.merge, data/processed/GCF/merged/samples.merge.peaksexpression.log2, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+    output: data/processed/GCF/retrieve_peaks/files_used.json
+    log: data/processed/GCF/retrieve_peaks/retrieve_peaks.log
+    jobid: 9
+    wildcards: anno=GCF
+
+Terminating processes on user request, this might take some time.
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/executors.py", line 1428, in run_wrapper
+    passed_shadow_dir)
+  File "/data/isshamie/TSS/Analysis/TSS_code/snakefile", line 209, in __rule_retrieve_peaks
+    meta_eTSS = "data/processed/{anno}/eTSS/TSS.meta.tsv",
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/shell.py", line 149, in __new__
+    raise sp.CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command 'set -euo pipefail;  python tss/data/retrieve_tss_peaks.py data/processed/GCF/retrieve_peaks/files_used.json data/processed/GCF/gene_centric_tss/files_used.json data/processed/GCF/merged/samples.merge data/processed/GCF/merged/samples.merge.peaksexpression.log2 /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/ &> data/processed/GCF/retrieve_peaks/retrieve_peaks.log' returned non-zero exit status 1.
+
+[Wed Aug 19 01:44:09 2020]
+Error in rule retrieve_peaks:
+    jobid: 9
+    output: data/processed/GCF/retrieve_peaks/files_used.json
+    log: data/processed/GCF/retrieve_peaks/retrieve_peaks.log (check log file(s) for error message)
+    shell:
+        python tss/data/retrieve_tss_peaks.py data/processed/GCF/retrieve_peaks/files_used.json data/processed/GCF/gene_centric_tss/files_used.json data/processed/GCF/merged/samples.merge data/processed/GCF/merged/samples.merge.peaksexpression.log2 /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/ &> data/processed/GCF/retrieve_peaks/retrieve_peaks.log
+        (exited with non-zero exit code)
+
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-08-19T014309.356108.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

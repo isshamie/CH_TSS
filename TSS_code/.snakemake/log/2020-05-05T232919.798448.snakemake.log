@@ -1,0 +1,59 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	barplot
+	2	create_output
+	1	gene_centric_tss
+	1	retrieve_peaks
+	2	tissues_collapse
+	9
+
+[Tue May  5 23:29:20 2020]
+rule tissues_collapse:
+    input: data/processed/alt/merged/samples.merge.peaksexpression.log10
+    output: data/processed/alt/tissues_collapse/tissues.merge.peaksexpression.log10
+    jobid: 12
+    wildcards: anno=alt
+
+python tss/data/tissues_collapse.py data/processed/alt/tissues_collapse/tissues.merge.peaksexpression.log10 /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv data/processed/alt/merged/samples.merge.peaksexpression.log10
+[Tue May  5 23:29:49 2020]
+Finished job 12.
+1 of 9 steps (11%) done
+
+[Tue May  5 23:29:49 2020]
+rule tissues_collapse:
+    input: data/processed/GCF/merged/samples.merge.peaksexpression.log10
+    output: data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10
+    jobid: 8
+    wildcards: anno=GCF
+
+python tss/data/tissues_collapse.py data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10 /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv data/processed/GCF/merged/samples.merge.peaksexpression.log10
+[Tue May  5 23:30:17 2020]
+Finished job 8.
+2 of 9 steps (22%) done
+
+[Tue May  5 23:30:17 2020]
+rule create_output:
+    input: data/processed/GCF/retrieve_peaks/files_used.json, data/processed/GCF/gene_centric_tss/txn_df.p, data/processed/GCF/genome/mRNA.peak, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/ATAC_merge.bed, data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10
+    output: data/processed/GCF/eTSS/TSS.bed, data/processed/GCF/eTSS/refseq_centered.TSS.bed
+    log: data/processed/GCF/eTSS/eTSS.log
+    jobid: 1
+    wildcards: anno=GCF
+
+python tss/data/wrap_create_eTSS.py data/processed/GCF/eTSS/TSS.bed data/processed/GCF/retrieve_peaks/files_used.json data/processed/GCF/gene_centric_tss/txn_df.p data/processed/GCF/genome/mRNA.peak /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/ATAC_merge.bed data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10  &> data/processed/GCF/eTSS/eTSS.log
+[Tue May  5 23:30:20 2020]
+Error in rule create_output:
+    jobid: 1
+    output: data/processed/GCF/eTSS/TSS.bed, data/processed/GCF/eTSS/refseq_centered.TSS.bed
+    log: data/processed/GCF/eTSS/eTSS.log (check log file(s) for error message)
+    shell:
+        python tss/data/wrap_create_eTSS.py data/processed/GCF/eTSS/TSS.bed data/processed/GCF/retrieve_peaks/files_used.json data/processed/GCF/gene_centric_tss/txn_df.p data/processed/GCF/genome/mRNA.peak /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/ATAC_merge.bed data/processed/GCF/tissues_collapse/tissues.merge.peaksexpression.log10  &> data/processed/GCF/eTSS/eTSS.log
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-05T232919.798448.snakemake.log

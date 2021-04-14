@@ -1,0 +1,132 @@
+## Defaults
+
+## Parameters for the new NCBI PICR annotation (Anno 103), where they
+# created the annotation using the PICR genome
+
+
+## Global
+# Paths
+global:
+  PREFIX: 'ncbi_picr_103'
+  ROOT_DIR: '/data/isshamie/TSS/'
+  DATA_DIR: '/data/isshamie/TSS/NCBI_PICR_103_Processed/'
+  RESULTS: '/data/isshamie/TSS/TSS/data/processed/'
+  SUPPLEMENTAL_DIR: '/data/isshamie/TSS/Analysis/supplemental/'
+
+  PIPELINE: '/data/isshamie/TSS/tss'
+
+  TISSUES:
+    - BMDM1hKL
+    - BMDMwt
+    - Brain
+    - FemaleReproductive
+    - Heart
+    - Intestine
+    - Kidney
+    - Liver
+    - Lung
+    - MiscOrgans
+    - Muscle
+    - Pancreas
+    - Skin
+    - Sp leen
+    - Total
+    - CHO
+
+  # meta file for names
+  META_FILE: '/data/isshamie/TSS/Analysis/params/raw_metaSamples.tsv'
+  clean: True
+
+stages:
+#    - reference
+    - move_peaks
+    - merged
+    - gene_centric
+    - tissues_collapse
+    - sample_peaks_near_tss
+    - output_peaks
+    - atac
+    - histogram
+
+
+reference:
+  ## Genome Files
+  GENOME_DIR: '/data/isshamie/genome'
+  #GENOME_FA: '/data/isshamie/genome/ncbi_anno_103/picr.fa'
+  #GENOME_GFF3: '/data/isshamie/genome/ncbi_anno_103'
+  GENOME_FA: '/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna'
+  GENOME_GFF3: '/data/isshamie/genome/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3'
+  GENOME_GTF: '/data/isshamie/genome/ncbi_anno_103/updated_final_sort
+  .gtf'
+  TSS_F: '/data/isshamie/genome/ncbi_anno_103/start_site_mRNA_final.tsv'
+  CDS_F: '/data/isshamie/genome/ncbi_anno_103/CDS.bed'
+  mRNA_peak_file: '/data/isshamie/genome/ncbi_anno_103/mRNA_final.peak'
+  mRNA_peak_150_file: '/data/isshamie/genome/ncbi_anno_103/mRNA_final_150.peak'
+  motif_folder: '/data/isshamie/TSS/Analysis/supplemental/homer_motifs/'
+  supplemental: '/data/isshamie/TSS/Analysis/supplemental'
+  cho_rna_file: '/data/shangzhong/DE/tpm_using_picr.txt'
+
+
+
+
+move_peaks:
+  #folder: "raw_peaks/1/"
+  folder: "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/"
+  filenames:
+  params:
+
+
+merged:
+  params:
+    dist: 'given'
+
+  folder:
+  filenames:
+
+gene_centric:
+  params:
+    d: 150
+    allow_intron: False
+    peak_bins:
+      - -1000
+      - 1000
+  folder:
+  filenames:
+
+tissues_collapse:
+  params:
+    d:
+  folder:
+  filenames:
+
+sample_peaks_near_tss:
+  params:
+  folder:
+
+output_peaks:
+  folder:
+  filenames:
+  params:
+
+atac:
+  folder:
+  filenames:
+  params:
+
+histogram:
+  folder:
+  filenames:
+  params:
+# Shorthand names
+filenames:
+
+
+#These should get made from running the genome
+#mRNA_peak_file: '/data/isshamie/genome/mRNA_updated_final_sort.peak'
+#tss_annotation:
+#  '/data/isshamie/genome/start_site_mRNA_updated_final_sort.tsv'
+
+
+
+
+

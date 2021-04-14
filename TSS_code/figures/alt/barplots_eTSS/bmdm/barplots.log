@@ -1,0 +1,26 @@
+Generating palette:   0% |                                     | ETA:  --:--:--Generating palette:  20% |#######                               | ETA:  0:00:04Generating palette:  30% |###########                           | ETA:  0:00:05Generating palette:  40% |###############                       | ETA:  0:00:04Generating palette:  50% |###################                   | ETA:  0:00:04Generating palette:  60% |######################                | ETA:  0:00:03Generating palette:  70% |##########################            | ETA:  0:00:02Generating palette:  80% |##############################        | ETA:  0:00:01Generating palette:  90% |##################################    | ETA:  0:00:00Generating palette: 100% |######################################| ETA:  0:00:00Generating palette: 100% |######################################| Time: 0:00:09
+Generating palette:   0% |                                     | ETA:  --:--:--Generating palette:  22% |########                              | ETA:  0:00:03Generating palette:  33% |############                          | ETA:  0:00:03Generating palette:  44% |################                      | ETA:  0:00:03Generating palette:  55% |#####################                 | ETA:  0:00:02Generating palette:  66% |#########################             | ETA:  0:00:02Generating palette:  77% |#############################         | ETA:  0:00:01Generating palette:  88% |#################################     | ETA:  0:00:00Generating palette: 100% |######################################| ETA:  0:00:00Generating palette: 100% |######################################| Time: 0:00:06
+params {'PREFIX': 'ncbi_pice_103', 'ROOT_DIR': '/data/isshamie/TSS/', 'DATA_DIR': '/data/isshamie/TSS/NCBI_PICR_103_Processed/', 'DATA_PROCESSED_DIR': '/data/isshamie/TSS/TSS/data/processed/', 'SUPPLEMENTAL_DIR': '/data/isshamie/TSS/Analysis/supplemental/', 'PIPELINE': '/data/isshamie/TSS/tss', 'GENOME_DIR': '/data/isshamie/genome', 'GENOME_FA': '/data/isshamie/genome/picr.fa', 'GENOME_GFF3': '/data/isshamie/genome/updated_final_sort.gff3', 'GENOME_GTF': '/data/isshamie/genome/updated_final_sort.gtf', 'TISSUES': 'BMDM1hKLA,BMDMwt,Brain,FemaleReproductive,Heart,Intestine,', 'META_FILE': '/data/isshamie/TSS/TSS/parameters/raw_metaSamples.tsv'}
+fig_utils from mplh
+/data2/resources/software/homer/v4.11_10242019/bin//
+tissues ['BMDM1hKLA' 'BMDMwt' 'Brain' 'CHO' 'FemaleReproductive' 'Heart' 'Kidney'
+ 'Liver' 'Lung' 'MiscOrgans' 'Muscle' 'Pancreas' 'Spleen']
+Merging bmdm
+Overall
+13
+11
+9
+7
+5
+3
+1
+number of genes 21387
+Merging bmdm
+Overall
+11
+9
+7
+5
+3
+1
+number of genes 35679

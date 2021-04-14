@@ -3,106 +3,66 @@
 ## Parameters for the new NCBI PICR annotation (Anno 103), where they
 # created the annotation using the PICR genome
 
+results: '/data/isshamie/TSS/Analysis/TSS_code/data/processed/'
+META_SAMPLES: '/data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv'
+peaks_dir: '/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/'
+
+atac_f : "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort"
+all_atac : "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/ATAC_merge.bed"
 
 ## Global
 # Paths
-PREFIX: 'ncbi_picr_103'
-ROOT_DIR: '/data/isshamie/TSS/'
-DATA_DIR: '/data/isshamie/TSS/NCBI_PICR_103_Processed/'
-DATA_PROCESSED_DIR: '/data/isshamie/TSS/Analysis/data_processed/'
-SUPPLEMENTAL_DIR: '/data/isshamie/TSS/Analysis/supplemental/'
+global:
+  PREFIX: 'ncbi_picr_103'
+  ROOT_DIR: '/data/isshamie/TSS/'
+  DATA_DIR: '/data/isshamie/TSS/NCBI_PICR_103_Processed/'
+  RESULTS: '/data/isshamie/TSS/Analysis/TSS_code/data/processed/'
+  SUPPLEMENTAL_DIR: '/data/isshamie/TSS/Analysis/supplemental/'
+
+  PIPELINE: '/data/isshamie/TSS/Analysis/TSS_code/tss'
+
+  TISSUES:
+    - BMDM1hKL
+    - BMDMwt
+    - Brain
+    - FemaleReproductive
+    - Heart
+    - Kidney
+    - Liver
+    - Lung
+    - MiscOrgans
+    - Muscle
+    - Pancreas
+    - Spleen
+    - CHO
+
+    #- Intestine
+#    - Skin
+#    - Total
+  # meta file for names
+  META_FILE: '/data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv'
+  clean: True
 
 
-PIPELINE: '/data/isshamie/TSS/tss'
+MERGE_TISSUES:
+  - all
+  - bmdm
 
-
-## Genome Files
-GENOME_DIR: '/data/isshamie/genome'
-GENOME_FA: '/data/isshamie/genome/picr.fa'
-GENOME_GFF3: '/data/isshamie/genome/updated_final_sort.gff3'
-GENOME_GTF: '/data/isshamie/genome/updated_final_sort.gtf'
-
-
-#These should get made from running the genome
-#mRNA_peak_file: '/data/isshamie/genome/mRNA_updated_final_sort.peak'
-#tss_annotation:
-#  '/data/isshamie/genome/start_site_mRNA_updated_final_sort.tsv'
-
-
-## Params
-TISSUES: BMDM1hKLA,BMDMwt,Brain,FemaleReproductive,Heart,Intestine,
-  Kidney,Liver,Lung,MiscOrgans,Muscle,Pancreas,Skin,Spleen,Total,CHO
-
-# meta file for names
-META_FILE: '/data/isshamie/TSS/Analysis/params/raw_metaSamples.tsv'
-
-
-
-
-merging:
-  input:
-    peaks:
-      description: Peaks folder where all the peaks are located
-      format: Folder of each peak file outputted from Homer, taken from rule wrap_peaks
-
-  parameters:
-    replicates: False
-
-  output: {merging}/samples.merge
-
-  filenames:
-    peaks_expression: {output}.peaksexpression
-      de
-    peaks_anno:
-    peaks_seq: {output}.merge.anno.fa
-
-
-        params["merged peak samples"] = "samples.merge"
-        params["merged peak samples annotation"] = "samples.merge.anno"
-        params["merged peak samples sequences"] = "samples.merge.anno.fa"
-
-        params["merged tags cap"] = "tags.cap.merged"
-        params["merged tags input"] = "tags.input.merged"
-        params["merged tags cap bedgraph"] = "tags.cap.merged.bedgraph"
-        params["merged tags input bedgraph"] = "tags.cap.merged.bedgraph"
-
-        params["peak samples expression"] = "samples.merge.peaksexpression"
-        params["peak samples expression log10"] = "samples.merge.peaksexpression.log10"
-        params["peak samples expression log2"] = "samples.merge.peaksexpression.log2"
-        params["peak samples minimal"] = "samples.merge.minimal"
-        params["peak samples minimal anno"] = \
-            "samples.merge.minimal.anno"
-
-
-        peak samples distance to TSS"] = "peaks_with_tss_distances.tsv"
-        params["peak samples distance to TSS size 1nt"] ="peaks_with_tss_distances_size1.tsv"
-        params["peaks_bed"] = "peaks_with_tss_distances_size1.bed"
-        params["peaks samples distance to TSS size 1nt no CDS"] =  \
-            "peaks_with_tss_distances_size1.noCDS.bed"
-        params["no cds tsv"] = \
-            "peaks_with_tss_distances_size1.noCDS.tsv"
-    elif stage == 'gene_centric':
-        params["gene centric peaks from samples"] = "all_peaks_gene_df"
-        params["gene centric peaks from samples plus tissues"] = \
-            "all_peaks_gene_df_tissues"
-        params["gene centric peaks from samples max"] = "max_all_peaks_gene_df"
-        params["transcript centric peaks from samples"] ="all_peaks_txn_df"
-        params["transcript centric peaks from samples plus tissues"] \
-            = "all_peaks_txn_df_tissues"
-        params["transcript centric peaks matrix"] = "txn_df_matrix"
-        params["transcript centric peaks from samples max"] = "max_all_peaks_txn_df"
-    elif stage == "tissues_collapse":
-        params["peak tissues expression"] = "tissues.merge.peaksexpression"
-        params["peak tissues expression log10"] = "tissues.merge.peaksexpression.log10"
-    elif stage == "output_peaks": #Create Output peaks
-        params["final peaks"] = "TSS"
-
-    elif stage == "tss_results":
-        params["gene fraction unique"] = "gene_df_tissues_frac_unique"
-        params["txn fraction unique"] = "txn_df_tissues_frac_unique"
-
-        params["gene venn"] = "gene_df_tissues_cho_venn"
-        params["txn venn"] = "txn_df_tissues_cho_venn"
+stages:
+#    - reference
+    - move_peaks
+    - merged
+    - gene_centric
+    - tissues_collapse
+    - sample_peaks_near_tss
+    - output_peaks
+    - atac
+    - histogram
 
 
 
+GENOME_FA: '/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna'
+ANNOTATION:
+#  - '/data/isshamie/genome/hamster/syn20999279_picr.gff'
+#  -  "/data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff"
+#  - "/data/isshamie/genome/hamster/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3"

@@ -1,0 +1,569 @@
+
+	Using Custom Genome
+	Peak file = data/processed/GCF/eTSS/TSS.exp.bed
+	Genome = GCF_003668045.1_CriGri-PICR_genomic.fna
+	Organism = unknown
+	Peak Region set to 200
+	-----------------------------------------------------
+	Histogram mode activated (bin size = 1 bp)
+	-----------------------------------------------------
+	Will report dinucleotide frequencies
+	Peak/BED file conversion summary:
+		BED/Header formatted lines: 30760
+		peakfile formatted lines: 0
+		Duplicated Peak IDs: 0
+
+	Peak File Statistics:
+		Total Peaks: 30760
+		Redundant Peak IDs: 0
+		Peaks lacking information: 0 (need at least 5 columns per peak)
+		Peaks with misformatted coordinates: 0 (should be integer)
+		Peaks with misformatted strand: 0 (should be either +/- or 0/1)
+
+	Peak file looks good!
+
+	Resizing peaks...
+	Extracting Sequence...
+	Custom genome sequence file: /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+
+	Extracting sequences from file: /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+	Looking for peak sequences in a single file (/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna)
+	Extracting 86 sequences from NW_020822366.1
+	Extracting 462 sequences from NW_020822370.1
+	Extracting 82 sequences from NW_020822372.1
+	Extracting 82 sequences from NW_020822373.1
+	Extracting 42 sequences from NW_020822374.1
+	Extracting 363 sequences from NW_020822375.1
+	Extracting 76 sequences from NW_020822376.1
+	Extracting 69 sequences from NW_020822377.1
+	Extracting 56 sequences from NW_020822379.1
+	Extracting 239 sequences from NW_020822381.1
+	Extracting 32 sequences from NW_020822382.1
+	Extracting 15 sequences from NW_020822385.1
+	Extracting 98 sequences from NW_020822388.1
+	Extracting 20 sequences from NW_020822390.1
+	Extracting 7 sequences from NW_020822391.1
+	Extracting 89 sequences from NW_020822393.1
+	Extracting 20 sequences from NW_020822394.1
+	Extracting 15 sequences from NW_020822396.1
+	Extracting 231 sequences from NW_020822398.1
+	Extracting 10 sequences from NW_020822399.1
+	Extracting 10 sequences from NW_020822402.1
+	Extracting 213 sequences from NW_020822403.1
+	Extracting 2 sequences from NW_020822404.1
+	Extracting 4 sequences from NW_020822405.1
+	Extracting 466 sequences from NW_020822406.1
+	Extracting 210 sequences from NW_020822407.1
+	Extracting 174 sequences from NW_020822409.1
+	Extracting 234 sequences from NW_020822410.1
+	Extracting 147 sequences from NW_020822412.1
+	Extracting 2 sequences from NW_020822413.1
+	Extracting 667 sequences from NW_020822415.1
+	Extracting 4 sequences from NW_020822416.1
+	Extracting 42 sequences from NW_020822419.1
+	Extracting 334 sequences from NW_020822420.1
+	Extracting 83 sequences from NW_020822421.1
+	Extracting 296 sequences from NW_020822423.1
+	Extracting 119 sequences from NW_020822425.1
+	Extracting 54 sequences from NW_020822426.1
+	Extracting 48 sequences from NW_020822427.1
+	Extracting 183 sequences from NW_020822428.1
+	Extracting 281 sequences from NW_020822429.1
+	Extracting 58 sequences from NW_020822432.1
+	Extracting 87 sequences from NW_020822434.1
+	Extracting 61 sequences from NW_020822435.1
+	Extracting 112 sequences from NW_020822436.1
+	Extracting 430 sequences from NW_020822438.1
+	Extracting 1197 sequences from NW_020822439.1
+	Extracting 64 sequences from NW_020822440.1
+	Extracting 110 sequences from NW_020822442.1
+	Extracting 145 sequences from NW_020822443.1
+	Extracting 46 sequences from NW_020822444.1
+	Extracting 119 sequences from NW_020822446.1
+	Extracting 24 sequences from NW_020822449.1
+	Extracting 175 sequences from NW_020822450.1
+	Extracting 6 sequences from NW_020822451.1
+	Extracting 713 sequences from NW_020822452.1
+	Extracting 1 sequences from NW_020822453.1
+	Extracting 126 sequences from NW_020822454.1
+	Extracting 90 sequences from NW_020822455.1
+	Extracting 114 sequences from NW_020822457.1
+	Extracting 181 sequences from NW_020822458.1
+	Extracting 110 sequences from NW_020822459.1
+	Extracting 186 sequences from NW_020822460.1
+	Extracting 455 sequences from NW_020822461.1
+	Extracting 166 sequences from NW_020822462.1
+	Extracting 156 sequences from NW_020822464.1
+	Extracting 220 sequences from NW_020822465.1
+	Extracting 156 sequences from NW_020822466.1
+	Extracting 66 sequences from NW_020822467.1
+	Extracting 495 sequences from NW_020822468.1
+	Extracting 73 sequences from NW_020822469.1
+	Extracting 363 sequences from NW_020822470.1
+	Extracting 64 sequences from NW_020822471.1
+	Extracting 264 sequences from NW_020822474.1
+	Extracting 18 sequences from NW_020822475.1
+	Extracting 67 sequences from NW_020822476.1
+	Extracting 25 sequences from NW_020822483.1
+	Extracting 45 sequences from NW_020822484.1
+	Extracting 270 sequences from NW_020822486.1
+	Extracting 396 sequences from NW_020822487.1
+	Extracting 21 sequences from NW_020822488.1
+	Extracting 108 sequences from NW_020822490.1
+	Extracting 17 sequences from NW_020822493.1
+	Extracting 337 sequences from NW_020822499.1
+	Extracting 416 sequences from NW_020822501.1
+	Extracting 296 sequences from NW_020822503.1
+	Extracting 181 sequences from NW_020822504.1
+	Extracting 601 sequences from NW_020822505.1
+	Extracting 246 sequences from NW_020822506.1
+	Extracting 302 sequences from NW_020822507.1
+	Extracting 195 sequences from NW_020822508.1
+	Extracting 109 sequences from NW_020822511.1
+	Extracting 66 sequences from NW_020822512.1
+	Extracting 157 sequences from NW_020822513.1
+	Extracting 39 sequences from NW_020822518.1
+	Extracting 382 sequences from NW_020822519.1
+	Extracting 116 sequences from NW_020822520.1
+	Extracting 389 sequences from NW_020822526.1
+	Extracting 8 sequences from NW_020822528.1
+	Extracting 660 sequences from NW_020822529.1
+	Extracting 248 sequences from NW_020822530.1
+	Extracting 275 sequences from NW_020822531.1
+	Extracting 360 sequences from NW_020822532.1
+	Extracting 235 sequences from NW_020822533.1
+	Extracting 81 sequences from NW_020822534.1
+	Extracting 187 sequences from NW_020822535.1
+	Extracting 141 sequences from NW_020822537.1
+	Extracting 180 sequences from NW_020822538.1
+	Extracting 164 sequences from NW_020822539.1
+	Extracting 26 sequences from NW_020822544.1
+	Extracting 44 sequences from NW_020822545.1
+	Extracting 35 sequences from NW_020822550.1
+	Extracting 11 sequences from NW_020822552.1
+	Extracting 34 sequences from NW_020822555.1
+	Extracting 122 sequences from NW_020822557.1
+	Extracting 119 sequences from NW_020822558.1
+	Extracting 25 sequences from NW_020822559.1
+	Extracting 9 sequences from NW_020822563.1
+	Extracting 712 sequences from NW_020822567.1
+	Extracting 361 sequences from NW_020822570.1
+	Extracting 332 sequences from NW_020822577.1
+	Extracting 1 sequences from NW_020822585.1
+	Extracting 353 sequences from NW_020822586.1
+	Extracting 56 sequences from NW_020822591.1
+	Extracting 45 sequences from NW_020822592.1
+	Extracting 15 sequences from NW_020822595.1
+	Extracting 126 sequences from NW_020822596.1
+	Extracting 305 sequences from NW_020822597.1
+	Extracting 217 sequences from NW_020822598.1
+	Extracting 1012 sequences from NW_020822601.1
+	Extracting 266 sequences from NW_020822602.1
+	Extracting 207 sequences from NW_020822603.1
+	Extracting 205 sequences from NW_020822604.1
+	Extracting 103 sequences from NW_020822605.1
+	Extracting 213 sequences from NW_020822606.1
+	Extracting 43 sequences from NW_020822607.1
+	Extracting 318 sequences from NW_020822608.1
+	Extracting 1 sequences from NW_020822609.1
+	Extracting 299 sequences from NW_020822610.1
+	Extracting 430 sequences from NW_020822611.1
+	Extracting 152 sequences from NW_020822614.1
+	Extracting 1078 sequences from NW_020822615.1
+	Extracting 325 sequences from NW_020822616.1
+	Extracting 165 sequences from NW_020822618.1
+	Extracting 98 sequences from NW_020822619.1
+	Extracting 44 sequences from NW_020822620.1
+	Extracting 24 sequences from NW_020822621.1
+	Extracting 57 sequences from NW_020822623.1
+	Extracting 24 sequences from NW_020822626.1
+	Extracting 15 sequences from NW_020822627.1
+	Extracting 21 sequences from NW_020822628.1
+	Extracting 115 sequences from NW_020822629.1
+	Extracting 229 sequences from NW_020822630.1
+	Extracting 140 sequences from NW_020822632.1
+	Extracting 157 sequences from NW_020822634.1
+	Extracting 124 sequences from NW_020822636.1
+	Extracting 108 sequences from NW_020822638.1
+	Extracting 25 sequences from NW_020822641.1
+	Extracting 57 sequences from NW_020822642.1
+	Extracting 251 sequences from NW_020822643.1
+	Extracting 129 sequences from NW_020822644.1
+	Extracting 20 sequences from NW_020822645.1
+	Extracting 61 sequences from NW_020822646.1
+	Extracting 29 sequences from NW_020822647.1
+	Extracting 35 sequences from NW_020822648.1
+	Extracting 46 sequences from NW_020822649.1
+	Extracting 27 sequences from NW_020822650.1
+	Extracting 28 sequences from NW_020822651.1
+	Extracting 53 sequences from NW_020822652.1
+	Extracting 8 sequences from NW_020822653.1
+	Extracting 28 sequences from NW_020822654.1
+	Extracting 4 sequences from NW_020822656.1
+	Extracting 148 sequences from NW_020822657.1
+	Extracting 110 sequences from NW_020822658.1
+	Extracting 76 sequences from NW_020822663.1
+	Extracting 20 sequences from NW_020822664.1
+	Extracting 43 sequences from NW_020822665.1
+	Extracting 41 sequences from NW_020822666.1
+	Extracting 33 sequences from NW_020822668.1
+	Extracting 23 sequences from NW_020822670.1
+	Extracting 28 sequences from NW_020822671.1
+	Extracting 37 sequences from NW_020822672.1
+	Extracting 24 sequences from NW_020822674.1
+	Extracting 41 sequences from NW_020822676.1
+	Extracting 59 sequences from NW_020822680.1
+	Extracting 20 sequences from NW_020822681.1
+	Extracting 9 sequences from NW_020822686.1
+	Extracting 112 sequences from NW_020822687.1
+	Extracting 138 sequences from NW_020822688.1
+	Extracting 1 sequences from NW_020822690.1
+	Extracting 145 sequences from NW_020822698.1
+	Extracting 57 sequences from NW_020822699.1
+	Extracting 63 sequences from NW_020822701.1
+	Extracting 1 sequences from NW_020822702.1
+	Extracting 53 sequences from NW_020822703.1
+	Extracting 1 sequences from NW_020822734.1
+	Extracting 1 sequences from NW_020822867.1
+	Extracting 1 sequences from NW_020822982.1
+	Extracting 3 sequences from NW_020823085.1
+	Extracting 1 sequences from NW_020823094.1
+	Extracting 1 sequences from NW_020823142.1
+	Extracting 4 sequences from NW_020823156.1
+	Extracting 2 sequences from NW_020823167.1
+	Extracting 4 sequences from NW_020823398.1
+	Extracting 17 sequences from NW_020823422.1
+	Extracting 1 sequences from NW_020823442.1
+	Extracting 19 sequences from NW_020823468.1
+	Extracting 3 sequences from NW_020823473.1
+	Extracting 1 sequences from NW_020823474.1
+	Extracting 1 sequences from NW_020823490.1
+	Extracting 11 sequences from NW_020823503.1
+	Extracting 1 sequences from NW_020823510.1
+	Extracting 2 sequences from NW_020823518.1
+	Extracting 4 sequences from NW_020823529.1
+	Extracting 2 sequences from NW_020823533.1
+	Extracting 4 sequences from NW_020823558.1
+	Extracting 1 sequences from NW_020823586.1
+	Extracting 1 sequences from NW_020823587.1
+	Extracting 1 sequences from NW_020823602.1
+	Extracting 7 sequences from NW_020823627.1
+	Extracting 2 sequences from NW_020823629.1
+	Extracting 1 sequences from NW_020823639.1
+	Extracting 1 sequences from NW_020823676.1
+	Extracting 1 sequences from NW_020823792.1
+	Extracting 4 sequences from NW_020823819.1
+	Extracting 1 sequences from NW_020823856.1
+	Extracting 1 sequences from NW_020823876.1
+	Extracting 1 sequences from NW_020823898.1
+	Extracting 1 sequences from NW_020823908.1
+	Extracting 2 sequences from NW_020823928.1
+	Extracting 1 sequences from NW_020823970.1
+	Extracting 1 sequences from NW_020824001.1
+	Extracting 1 sequences from NW_020824030.1
+	Extracting 1 sequences from NW_020824056.1
+	Extracting 2 sequences from NW_020824066.1
+	Extracting 2 sequences from NW_020824120.1
+	Extracting 1 sequences from NW_020824123.1
+	Reading Positions...
+	Calculating CpG/GC Content of Peaks
+
+	Sequences processed:
+		Auto detected maximum sequence length of 201 bp
+		30760 total
+
+	-----------------------
+	Compiling per bp Histograms...
+	Finding Tags in Peaks from each directory...
+
+	Sequences processed:
+		30760 total
+
+
+
+	Using Custom Genome
+	Peak file = data/processed/GCF/eTSS/refseq_centered.TSS.bed
+	Genome = GCF_003668045.1_CriGri-PICR_genomic.fna
+	Organism = unknown
+	Peak Region set to 200
+	-----------------------------------------------------
+	Histogram mode activated (bin size = 1 bp)
+	-----------------------------------------------------
+	Will report dinucleotide frequencies
+	Peak/BED file conversion summary:
+		BED/Header formatted lines: 20627
+		peakfile formatted lines: 0
+		Duplicated Peak IDs: 0
+
+	Peak File Statistics:
+		Total Peaks: 20627
+		Redundant Peak IDs: 0
+		Peaks lacking information: 0 (need at least 5 columns per peak)
+		Peaks with misformatted coordinates: 0 (should be integer)
+		Peaks with misformatted strand: 0 (should be either +/- or 0/1)
+
+	Peak file looks good!
+
+	Resizing peaks...
+	Extracting Sequence...
+	Custom genome sequence file: /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+
+	Extracting sequences from file: /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna
+	Looking for peak sequences in a single file (/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna)
+	Extracting 64 sequences from NW_020822366.1
+	Extracting 298 sequences from NW_020822370.1
+	Extracting 46 sequences from NW_020822372.1
+	Extracting 48 sequences from NW_020822373.1
+	Extracting 28 sequences from NW_020822374.1
+	Extracting 241 sequences from NW_020822375.1
+	Extracting 55 sequences from NW_020822376.1
+	Extracting 47 sequences from NW_020822377.1
+	Extracting 41 sequences from NW_020822379.1
+	Extracting 158 sequences from NW_020822381.1
+	Extracting 24 sequences from NW_020822382.1
+	Extracting 11 sequences from NW_020822385.1
+	Extracting 68 sequences from NW_020822388.1
+	Extracting 13 sequences from NW_020822390.1
+	Extracting 5 sequences from NW_020822391.1
+	Extracting 62 sequences from NW_020822393.1
+	Extracting 17 sequences from NW_020822394.1
+	Extracting 10 sequences from NW_020822396.1
+	Extracting 158 sequences from NW_020822398.1
+	Extracting 8 sequences from NW_020822399.1
+	Extracting 7 sequences from NW_020822402.1
+	Extracting 132 sequences from NW_020822403.1
+	Extracting 1 sequences from NW_020822404.1
+	Extracting 4 sequences from NW_020822405.1
+	Extracting 321 sequences from NW_020822406.1
+	Extracting 145 sequences from NW_020822407.1
+	Extracting 107 sequences from NW_020822409.1
+	Extracting 154 sequences from NW_020822410.1
+	Extracting 99 sequences from NW_020822412.1
+	Extracting 1 sequences from NW_020822413.1
+	Extracting 435 sequences from NW_020822415.1
+	Extracting 3 sequences from NW_020822416.1
+	Extracting 29 sequences from NW_020822419.1
+	Extracting 232 sequences from NW_020822420.1
+	Extracting 54 sequences from NW_020822421.1
+	Extracting 197 sequences from NW_020822423.1
+	Extracting 72 sequences from NW_020822425.1
+	Extracting 31 sequences from NW_020822426.1
+	Extracting 30 sequences from NW_020822427.1
+	Extracting 127 sequences from NW_020822428.1
+	Extracting 183 sequences from NW_020822429.1
+	Extracting 39 sequences from NW_020822432.1
+	Extracting 54 sequences from NW_020822434.1
+	Extracting 42 sequences from NW_020822435.1
+	Extracting 75 sequences from NW_020822436.1
+	Extracting 277 sequences from NW_020822438.1
+	Extracting 824 sequences from NW_020822439.1
+	Extracting 46 sequences from NW_020822440.1
+	Extracting 84 sequences from NW_020822442.1
+	Extracting 101 sequences from NW_020822443.1
+	Extracting 32 sequences from NW_020822444.1
+	Extracting 82 sequences from NW_020822446.1
+	Extracting 16 sequences from NW_020822449.1
+	Extracting 121 sequences from NW_020822450.1
+	Extracting 4 sequences from NW_020822451.1
+	Extracting 466 sequences from NW_020822452.1
+	Extracting 1 sequences from NW_020822453.1
+	Extracting 91 sequences from NW_020822454.1
+	Extracting 61 sequences from NW_020822455.1
+	Extracting 74 sequences from NW_020822457.1
+	Extracting 128 sequences from NW_020822458.1
+	Extracting 74 sequences from NW_020822459.1
+	Extracting 119 sequences from NW_020822460.1
+	Extracting 310 sequences from NW_020822461.1
+	Extracting 105 sequences from NW_020822462.1
+	Extracting 103 sequences from NW_020822464.1
+	Extracting 153 sequences from NW_020822465.1
+	Extracting 101 sequences from NW_020822466.1
+	Extracting 42 sequences from NW_020822467.1
+	Extracting 315 sequences from NW_020822468.1
+	Extracting 50 sequences from NW_020822469.1
+	Extracting 253 sequences from NW_020822470.1
+	Extracting 34 sequences from NW_020822471.1
+	Extracting 166 sequences from NW_020822474.1
+	Extracting 10 sequences from NW_020822475.1
+	Extracting 44 sequences from NW_020822476.1
+	Extracting 17 sequences from NW_020822483.1
+	Extracting 28 sequences from NW_020822484.1
+	Extracting 195 sequences from NW_020822486.1
+	Extracting 282 sequences from NW_020822487.1
+	Extracting 13 sequences from NW_020822488.1
+	Extracting 67 sequences from NW_020822490.1
+	Extracting 10 sequences from NW_020822493.1
+	Extracting 215 sequences from NW_020822499.1
+	Extracting 267 sequences from NW_020822501.1
+	Extracting 202 sequences from NW_020822503.1
+	Extracting 117 sequences from NW_020822504.1
+	Extracting 413 sequences from NW_020822505.1
+	Extracting 163 sequences from NW_020822506.1
+	Extracting 191 sequences from NW_020822507.1
+	Extracting 141 sequences from NW_020822508.1
+	Extracting 64 sequences from NW_020822511.1
+	Extracting 45 sequences from NW_020822512.1
+	Extracting 115 sequences from NW_020822513.1
+	Extracting 31 sequences from NW_020822518.1
+	Extracting 257 sequences from NW_020822519.1
+	Extracting 83 sequences from NW_020822520.1
+	Extracting 261 sequences from NW_020822526.1
+	Extracting 6 sequences from NW_020822528.1
+	Extracting 451 sequences from NW_020822529.1
+	Extracting 178 sequences from NW_020822530.1
+	Extracting 201 sequences from NW_020822531.1
+	Extracting 241 sequences from NW_020822532.1
+	Extracting 156 sequences from NW_020822533.1
+	Extracting 58 sequences from NW_020822534.1
+	Extracting 134 sequences from NW_020822535.1
+	Extracting 96 sequences from NW_020822537.1
+	Extracting 129 sequences from NW_020822538.1
+	Extracting 96 sequences from NW_020822539.1
+	Extracting 17 sequences from NW_020822544.1
+	Extracting 31 sequences from NW_020822545.1
+	Extracting 28 sequences from NW_020822550.1
+	Extracting 9 sequences from NW_020822552.1
+	Extracting 26 sequences from NW_020822555.1
+	Extracting 72 sequences from NW_020822557.1
+	Extracting 82 sequences from NW_020822558.1
+	Extracting 19 sequences from NW_020822559.1
+	Extracting 7 sequences from NW_020822563.1
+	Extracting 475 sequences from NW_020822567.1
+	Extracting 238 sequences from NW_020822570.1
+	Extracting 213 sequences from NW_020822577.1
+	Extracting 1 sequences from NW_020822585.1
+	Extracting 247 sequences from NW_020822586.1
+	Extracting 30 sequences from NW_020822591.1
+	Extracting 31 sequences from NW_020822592.1
+	Extracting 9 sequences from NW_020822595.1
+	Extracting 85 sequences from NW_020822596.1
+	Extracting 195 sequences from NW_020822597.1
+	Extracting 149 sequences from NW_020822598.1
+	Extracting 683 sequences from NW_020822601.1
+	Extracting 188 sequences from NW_020822602.1
+	Extracting 149 sequences from NW_020822603.1
+	Extracting 144 sequences from NW_020822604.1
+	Extracting 64 sequences from NW_020822605.1
+	Extracting 140 sequences from NW_020822606.1
+	Extracting 26 sequences from NW_020822607.1
+	Extracting 208 sequences from NW_020822608.1
+	Extracting 1 sequences from NW_020822609.1
+	Extracting 211 sequences from NW_020822610.1
+	Extracting 264 sequences from NW_020822611.1
+	Extracting 97 sequences from NW_020822614.1
+	Extracting 721 sequences from NW_020822615.1
+	Extracting 211 sequences from NW_020822616.1
+	Extracting 105 sequences from NW_020822618.1
+	Extracting 59 sequences from NW_020822619.1
+	Extracting 31 sequences from NW_020822620.1
+	Extracting 12 sequences from NW_020822621.1
+	Extracting 40 sequences from NW_020822623.1
+	Extracting 17 sequences from NW_020822626.1
+	Extracting 12 sequences from NW_020822627.1
+	Extracting 15 sequences from NW_020822628.1
+	Extracting 74 sequences from NW_020822629.1
+	Extracting 153 sequences from NW_020822630.1
+	Extracting 88 sequences from NW_020822632.1
+	Extracting 96 sequences from NW_020822634.1
+	Extracting 85 sequences from NW_020822636.1
+	Extracting 64 sequences from NW_020822638.1
+	Extracting 15 sequences from NW_020822641.1
+	Extracting 40 sequences from NW_020822642.1
+	Extracting 163 sequences from NW_020822643.1
+	Extracting 89 sequences from NW_020822644.1
+	Extracting 19 sequences from NW_020822645.1
+	Extracting 45 sequences from NW_020822646.1
+	Extracting 24 sequences from NW_020822647.1
+	Extracting 21 sequences from NW_020822648.1
+	Extracting 31 sequences from NW_020822649.1
+	Extracting 19 sequences from NW_020822650.1
+	Extracting 22 sequences from NW_020822651.1
+	Extracting 32 sequences from NW_020822652.1
+	Extracting 7 sequences from NW_020822653.1
+	Extracting 19 sequences from NW_020822654.1
+	Extracting 4 sequences from NW_020822656.1
+	Extracting 100 sequences from NW_020822657.1
+	Extracting 76 sequences from NW_020822658.1
+	Extracting 45 sequences from NW_020822663.1
+	Extracting 15 sequences from NW_020822664.1
+	Extracting 30 sequences from NW_020822665.1
+	Extracting 30 sequences from NW_020822666.1
+	Extracting 21 sequences from NW_020822668.1
+	Extracting 15 sequences from NW_020822670.1
+	Extracting 21 sequences from NW_020822671.1
+	Extracting 25 sequences from NW_020822672.1
+	Extracting 18 sequences from NW_020822674.1
+	Extracting 32 sequences from NW_020822676.1
+	Extracting 40 sequences from NW_020822680.1
+	Extracting 13 sequences from NW_020822681.1
+	Extracting 8 sequences from NW_020822686.1
+	Extracting 74 sequences from NW_020822687.1
+	Extracting 103 sequences from NW_020822688.1
+	Extracting 1 sequences from NW_020822690.1
+	Extracting 87 sequences from NW_020822698.1
+	Extracting 38 sequences from NW_020822699.1
+	Extracting 42 sequences from NW_020822701.1
+	Extracting 1 sequences from NW_020822702.1
+	Extracting 45 sequences from NW_020822703.1
+	Extracting 1 sequences from NW_020822734.1
+	Extracting 1 sequences from NW_020822867.1
+	Extracting 1 sequences from NW_020822982.1
+	Extracting 1 sequences from NW_020823085.1
+	Extracting 1 sequences from NW_020823094.1
+	Extracting 1 sequences from NW_020823142.1
+	Extracting 4 sequences from NW_020823156.1
+	Extracting 1 sequences from NW_020823167.1
+	Extracting 1 sequences from NW_020823398.1
+	Extracting 12 sequences from NW_020823422.1
+	Extracting 1 sequences from NW_020823442.1
+	Extracting 14 sequences from NW_020823468.1
+	Extracting 3 sequences from NW_020823473.1
+	Extracting 1 sequences from NW_020823474.1
+	Extracting 1 sequences from NW_020823490.1
+	Extracting 6 sequences from NW_020823503.1
+	Extracting 1 sequences from NW_020823510.1
+	Extracting 1 sequences from NW_020823518.1
+	Extracting 3 sequences from NW_020823529.1
+	Extracting 2 sequences from NW_020823533.1
+	Extracting 3 sequences from NW_020823558.1
+	Extracting 1 sequences from NW_020823586.1
+	Extracting 1 sequences from NW_020823587.1
+	Extracting 1 sequences from NW_020823602.1
+	Extracting 5 sequences from NW_020823627.1
+	Extracting 2 sequences from NW_020823629.1
+	Extracting 1 sequences from NW_020823639.1
+	Extracting 1 sequences from NW_020823676.1
+	Extracting 1 sequences from NW_020823792.1
+	Extracting 2 sequences from NW_020823819.1
+	Extracting 1 sequences from NW_020823856.1
+	Extracting 1 sequences from NW_020823876.1
+	Extracting 1 sequences from NW_020823898.1
+	Extracting 1 sequences from NW_020823908.1
+	Extracting 2 sequences from NW_020823928.1
+	Extracting 1 sequences from NW_020823970.1
+	Extracting 1 sequences from NW_020824001.1
+	Extracting 1 sequences from NW_020824030.1
+	Extracting 1 sequences from NW_020824056.1
+	Extracting 2 sequences from NW_020824066.1
+	Extracting 1 sequences from NW_020824120.1
+	Extracting 1 sequences from NW_020824123.1
+	Reading Positions...
+	Calculating CpG/GC Content of Peaks
+
+	Sequences processed:
+		Auto detected maximum sequence length of 201 bp
+		20627 total
+
+	-----------------------
+	Compiling per bp Histograms...
+	Finding Tags in Peaks from each directory...
+
+	Sequences processed:
+		20627 total
+
+
+No handles with labels found to put in legend.
+params {'PREFIX': 'ncbi_pice_103', 'ROOT_DIR': '/data/isshamie/TSS/', 'DATA_DIR': '/data/isshamie/TSS/NCBI_PICR_103_Processed/', 'DATA_PROCESSED_DIR': '/data/isshamie/TSS/TSS/data/processed/', 'SUPPLEMENTAL_DIR': '/data/isshamie/TSS/Analysis/supplemental/', 'PIPELINE': '/data/isshamie/TSS/tss', 'GENOME_DIR': '/data/isshamie/genome', 'GENOME_FA': '/data/isshamie/genome/picr.fa', 'GENOME_GFF3': '/data/isshamie/genome/updated_final_sort.gff3', 'GENOME_GTF': '/data/isshamie/genome/updated_final_sort.gtf', 'TISSUES': 'BMDM1hKLA,BMDMwt,Brain,FemaleReproductive,Heart,Intestine,', 'META_FILE': '/data/isshamie/TSS/TSS/parameters/raw_metaSamples.tsv'}
+/data2/resources/software/homer/v4.11_10242019/bin//
+annotatePeaks.pl data/processed/GCF/eTSS/TSS.exp.bed /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna -size 200 -hist 1 -di > data/processed/GCF/eTSS/TSS.exp.bed_nucl
+annotatePeaks.pl data/processed/GCF/eTSS/refseq_centered.TSS.bed /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna -size 200 -hist 1 -di > data/processed/GCF/eTSS/refseq_centered.TSS.bed_nucl

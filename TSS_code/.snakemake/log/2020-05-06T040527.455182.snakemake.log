@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	barplot
+	2	nucleotides
+	5
+
+[Wed May  6 04:05:27 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed
+    output: figures/GCF/barplots_eTSS/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/barplots.log
+    jobid: 3
+    wildcards: anno=GCF
+
+python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv &> figures/GCF/barplots_eTSS/barplots.log
+[Wed May  6 04:05:29 2020]
+Error in rule barplot:
+    jobid: 3
+    output: figures/GCF/barplots_eTSS/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/barplots.log (check log file(s) for error message)
+    shell:
+        python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv &> figures/GCF/barplots_eTSS/barplots.log
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-06T040527.455182.snakemake.log

@@ -1,0 +1,3 @@
+KeyError in line 107 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+'META_FILE'
+  File "/data/isshamie/TSS/Analysis/TSS_code/snakefile", line 107, in <module>

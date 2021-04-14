@@ -1,0 +1,153 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	barplot
+	2	nucleotides
+	7
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (6):
+	barplot
+	barplot
+	nucleotides
+	nucleotides
+	barplot
+	barplot
+Selected jobs (1):
+	barplot
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 04:08:32 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed, data/processed/GCF/gene_centric_tss/files_used.json
+    output: figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/bmdm/barplots.log
+    jobid: 4
+    wildcards: anno=GCF, merge=bmdm
+
+[Wed Aug 19 04:09:04 2020]
+Finished job 4.
+1 of 7 steps (14%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (5):
+	barplot
+	nucleotides
+	nucleotides
+	barplot
+	barplot
+Selected jobs (1):
+	barplot
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 04:09:04 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed, data/processed/GCF/gene_centric_tss/files_used.json
+    output: figures/GCF/barplots_eTSS/all/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/all/barplots.log
+    jobid: 3
+    wildcards: anno=GCF, merge=all
+
+[Wed Aug 19 04:09:37 2020]
+Finished job 3.
+2 of 7 steps (29%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (4):
+	barplot
+	nucleotides
+	nucleotides
+	barplot
+Selected jobs (1):
+	barplot
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 04:09:37 2020]
+rule barplot:
+    input: data/processed/alt/eTSS/TSS.exp.bed, data/processed/alt/gene_centric_tss/files_used.json
+    output: figures/alt/barplots_eTSS/all/transcript_tissues_expressed.png
+    log: figures/alt/barplots_eTSS/all/barplots.log
+    jobid: 5
+    wildcards: anno=alt, merge=all
+
+[Wed Aug 19 04:10:09 2020]
+Finished job 5.
+3 of 7 steps (43%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	nucleotides
+	nucleotides
+	barplot
+Selected jobs (1):
+	barplot
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 04:10:09 2020]
+rule barplot:
+    input: data/processed/alt/eTSS/TSS.exp.bed, data/processed/alt/gene_centric_tss/files_used.json
+    output: figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/alt/barplots_eTSS/bmdm/barplots.log
+    jobid: 6
+    wildcards: anno=alt, merge=bmdm
+
+[Wed Aug 19 04:10:43 2020]
+Finished job 6.
+4 of 7 steps (57%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	nucleotides
+	nucleotides
+Selected jobs (1):
+	nucleotides
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 04:10:43 2020]
+rule nucleotides:
+    input: data/processed/GCF/eTSS/TSS.exp.bed
+    output: figures/GCF/nucleotides/eTSS_nucleotide_compare.png
+    log: figures/GCF/nucleotides/nucleotides.log
+    jobid: 7
+    wildcards: anno=GCF
+
+[Wed Aug 19 04:10:57 2020]
+Finished job 7.
+5 of 7 steps (71%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	nucleotides
+Selected jobs (1):
+	nucleotides
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 04:10:57 2020]
+rule nucleotides:
+    input: data/processed/alt/eTSS/TSS.exp.bed
+    output: figures/alt/nucleotides/eTSS_nucleotide_compare.png
+    log: figures/alt/nucleotides/nucleotides.log
+    jobid: 8
+    wildcards: anno=alt
+
+[Wed Aug 19 04:11:09 2020]
+Finished job 8.
+6 of 7 steps (86%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	all
+Selected jobs (1):
+	all
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Aug 19 04:11:09 2020]
+localrule all:
+    input: data/processed/GCF/eTSS/TSS.bed, data/processed/alt/eTSS/TSS.bed, figures/GCF/barplots_eTSS/all/transcript_tissues_expressed.png, figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png, figures/alt/barplots_eTSS/all/transcript_tissues_expressed.png, figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png, figures/GCF/nucleotides/eTSS_nucleotide_compare.png, figures/alt/nucleotides/eTSS_nucleotide_compare.png
+    jobid: 0
+
+[Wed Aug 19 04:11:09 2020]
+Finished job 0.
+7 of 7 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-08-19T040832.069536.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

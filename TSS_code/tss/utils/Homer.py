@@ -92,7 +92,6 @@ def merge_peaks(input_files, output_file, dist='given', type_merge=''):
         peaks = peaks.loc[:, ~(peaks.columns.str.contains('_copy'))]
         peaks['Parent files'] = peaks.columns.values[8]  # Just the file name
 
-
     # Save meta file
     with open(output_file + '.meta', 'w') as f:
         f.write(meta_info)
@@ -114,15 +113,15 @@ def merge_peaks(input_files, output_file, dist='given', type_merge=''):
 
 
 ########################################
-def annotate_peaks(peak_file, output_file, ref_fa, annotation):
+def annotate_peaks(peak_file, output_file, ref_fa, ref_anno):
     """
     This function annotates peaks in terms of the annotation (e.g. promoter, exon..).
     Also marks closest TSS to each peak as well. 
     """
-    if annotation.endswith('gtf'):
-        anno = '-gtf ' + annotation
+    if ref_anno.endswith('gtf'):
+        anno = '-gtf ' + ref_anno
     else:
-        anno = '-gff ' + annotation
+        anno = '-gff ' + ref_anno
     cmd = 'annotatePeaks.pl {peaks} {genome} {annotation} > {out}'.format(
         peaks=peak_file, genome=ref_fa,
         annotation=anno, out=output_file)
@@ -251,12 +250,12 @@ def filter_anno_peak(in_peak_file,filter_peak_file):
 ########################################
 def createPeakFileFromGFF(annotation_file, output_file,
                           anno_of_interest='mRNA', is_start=True,
-                          shift=1):
+                          shift=0):
     """
     Function to create a peak file based on GFF and specific annotation of interest
     
     Input
-    * annotation_file: gff3 file
+    * annotation_file: gff3 file. Not gtf!
     * output_file: File to save to
     * anno_of_interest: a text term that has to be in the 'Annotation' column of the annotation file
     * is_start: The start site is the center of the peak
@@ -265,6 +264,8 @@ def createPeakFileFromGFF(annotation_file, output_file,
 
     """
     # Read in annotation file
+    if '.gtf' in annotation_file or '.gtf.gz' in annotation_file:
+        print("Only works for gff files, not gtf. Convert using gffread from the command line.")
     genome_ann = pd.read_csv(annotation_file, comment='#', sep='\t',
                              header=None)
     col_names = list(genome_ann.columns.values)
@@ -287,6 +288,10 @@ def createPeakFileFromGFF(annotation_file, output_file,
         # curr['Start'] -= 1
         curr2 = curr.copy()
 
+
+        curr['actual_start'] = curr.apply(
+            lambda x: x['Start'] if x['Strand'] == '+' else x['End'],
+            axis=1)
         ## If the strand is positive, then the end moves to the start, but if its negative, the start moves to the end.
         curr['End'] = curr2.apply(
             lambda x: x['Start'] + shift if x['Strand'] == '+' else x[
@@ -294,12 +299,16 @@ def createPeakFileFromGFF(annotation_file, output_file,
         curr['Start'] = curr2.apply(
             lambda x: x['Start'] - shift if x['Strand'] == '+' else x[
                                                 'End'] - shift, axis=1)
-
-    curr['actual_start'] = curr.apply(
-        lambda x: x['Start'] if x['Strand'] == '+' else x['End'],
-        axis=1)
-
     curr.to_csv(output_file, index=None, sep='\t')
+    return
+
+
+########################################
+#parseGTF.pl with Homer
+def run_parsegtf(annotation, output):
+    cmd = f"parseGTF.pl {annotation} tss > {output}"
+    print(cmd)
+    os.system(cmd)
     return
 
 
