@@ -27,21 +27,26 @@ global:
     - Brain
     - FemaleReproductive
     - Heart
-    - Intestine
     - Kidney
     - Liver
     - Lung
     - MiscOrgans
     - Muscle
     - Pancreas
-    - Skin
-    - Sp leen
-    - Total
+    - Spleen
     - CHO
 
+    #- Intestine
+#    - Skin
+#    - Total
   # meta file for names
   META_FILE: '/data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv'
   clean: True
+
+
+MERGE_TISSUES:
+  - all
+  - bmdm
 
 stages:
 #    - reference
@@ -58,5 +63,6 @@ stages:
 
 GENOME_FA: '/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna'
 ANNOTATION:
-  -  "/data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff"
-  - "/data/isshamie/genome/hamster/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3"
+#  - '/data/isshamie/genome/hamster/syn20999279_picr.gff'
+#  -  "/data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff"
+#  - "/data/isshamie/genome/hamster/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3"

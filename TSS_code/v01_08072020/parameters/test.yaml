@@ -1,0 +1,46 @@
+## Defaults
+
+## Parameters for the new NCBI PICR annotation (Anno 103), where they
+# created the annotation using the PICR genome
+
+
+## Global
+# Paths
+PREFIX: 'ncbi_pice_103'
+ROOT_DIR: '/data/isshamie/TSS/'
+DATA_DIR: '/data/isshamie/TSS/NCBI_PICR_103_Processed/'
+DATA_PROCESSED_DIR: '/data/isshamie/TSS/Analysis/data_processed/'
+SUPPLEMENTAL_DIR: '/data/isshamie/TSS/Analysis/supplemental/'
+
+
+PIPELINE: '/data/isshamie/TSS/tss'
+
+
+## Genome Files
+GENOME_DIR: '/data/isshamie/genome'
+GENOME_FA: '/data/isshamie/genome/picr.fa'
+GENOME_GFF3: '/data/isshamie/genome/updated_final_sort.gff3'
+GENOME_GTF: '/data/isshamie/genome/updated_final_sort.gtf'
+
+
+#These should get made from running the genome
+#mRNA_peak_file: '/data/isshamie/genome/mRNA_updated_final_sort.peak'
+#tss_annotation:
+#  '/data/isshamie/genome/start_site_mRNA_updated_final_sort.tsv'
+
+
+## Params
+TISSUES: BMDM1hKLA,BMDMwt,Brain,FemaleReproductive,Heart,Intestine,
+  Kidney,Liver,Lung,MiscOrgans,Muscle,Pancreas,Skin,Spleen,Total,CHO
+
+# meta file for names
+META_FILE: '/data/isshamie/TSS/Analysis/params/raw_metaSamples.tsv'
+
+
+
+
+
+
+
+
+

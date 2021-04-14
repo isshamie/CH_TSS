@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	barplot
+	5
+
+[Mon May 11 02:42:00 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed, data/processed/GCF/gene_centric_tss/files_used.json
+    output: figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/bmdm/barplots.log
+    jobid: 4
+    wildcards: anno=GCF, merge=bmdm
+
+python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed data/processed/GCF/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv bmdm &> figures/GCF/barplots_eTSS/bmdm/barplots.log
+[Mon May 11 02:42:03 2020]
+Error in rule barplot:
+    jobid: 4
+    output: figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/bmdm/barplots.log (check log file(s) for error message)
+    shell:
+        python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed data/processed/GCF/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv bmdm &> figures/GCF/barplots_eTSS/bmdm/barplots.log
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-11T024159.906004.snakemake.log

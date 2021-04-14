@@ -55,7 +55,7 @@ reference:
   #GENOME_FA: '/data/isshamie/genome/ncbi_anno_103/picr.fa'
   #GENOME_GFF3: '/data/isshamie/genome/ncbi_anno_103'
   GENOME_FA: '/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna'
-  GENOME_GFF3: '/data/isshamie/genome/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3'
+  #GENOME_GFF3: '/data/isshamie/genome/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3'
   GENOME_GTF: '/data/isshamie/genome/ncbi_anno_103/updated_final_sort
   .gtf'
   TSS_F: '/data/isshamie/genome/ncbi_anno_103/start_site_mRNA_final.tsv'

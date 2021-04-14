@@ -1,0 +1,45 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	barplot
+	3
+
+[Mon May 11 01:25:07 2020]
+rule barplot:
+    input: data/processed/GCF/eTSS/TSS.exp.bed, data/processed/GCF/gene_centric_tss/files_used.json
+    output: figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/GCF/barplots_eTSS/bmdm/barplots.log
+    jobid: 4
+    wildcards: anno=GCF, merge=bmdm
+
+python tss/data/tss_barplots.py figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png data/processed/GCF/eTSS/TSS.exp.bed data/processed/GCF/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv bmdm &> figures/GCF/barplots_eTSS/bmdm/barplots.log
+[Mon May 11 01:25:50 2020]
+Finished job 4.
+1 of 3 steps (33%) done
+
+[Mon May 11 01:25:50 2020]
+rule barplot:
+    input: data/processed/alt/eTSS/TSS.exp.bed, data/processed/alt/gene_centric_tss/files_used.json
+    output: figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png
+    log: figures/alt/barplots_eTSS/bmdm/barplots.log
+    jobid: 6
+    wildcards: anno=alt, merge=bmdm
+
+python tss/data/tss_barplots.py figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png data/processed/alt/eTSS/TSS.exp.bed data/processed/alt/gene_centric_tss/files_used.json /data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv bmdm &> figures/alt/barplots_eTSS/bmdm/barplots.log
+[Mon May 11 01:26:32 2020]
+Finished job 6.
+2 of 3 steps (67%) done
+
+[Mon May 11 01:26:32 2020]
+localrule all:
+    input: data/processed/GCF/eTSS/TSS.bed, data/processed/alt/eTSS/TSS.bed, figures/GCF/barplots_eTSS/all/transcript_tissues_expressed.png, figures/GCF/barplots_eTSS/bmdm/transcript_tissues_expressed.png, figures/alt/barplots_eTSS/all/transcript_tissues_expressed.png, figures/alt/barplots_eTSS/bmdm/transcript_tissues_expressed.png, figures/GCF/nucleotides/eTSS_nucleotide_compare.png, figures/alt/nucleotides/eTSS_nucleotide_compare.png
+    jobid: 0
+
+[Mon May 11 01:26:32 2020]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-05-11T012507.462617.snakemake.log

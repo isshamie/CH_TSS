@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 113 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+Missing input files for rule retrieve_peaks:
+data/processed/synapse/merged/samples.merge.peaksexpression.log2

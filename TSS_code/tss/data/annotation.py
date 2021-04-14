@@ -128,13 +128,13 @@ def combine_merge_with_anno(merge_file,anno_file):
 
 
 ###
-# Get distances to regions of interest for the peaks
+# Get distances to regions of interest for the peaks, along
 ###
 def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id',
                           landmark_cols=('gene','gene_id'), use_prior=False, force_same_strand=False):
     """ Function that adds distance to the nearest landmark from
-    the annotation file, regardless if its on the same
-        strand or not. It will also note if it is on the same strand by adding that column"""
+    the annotation file, regardless if its on the same strand or not.
+    It will also note if it is on the same strand by adding that column"""
     for i in landmark_cols:
         anno_peaks['Nearest ' + i] = ''
 

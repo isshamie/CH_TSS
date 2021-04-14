@@ -1,0 +1,6 @@
+,RefSeq,eTSS,Median absolute Distance,Number of TSS > 150nt,Number of TSS <= 10nt
+Total observed pc eTSSs,,30760,158,5257,16252
+RefSeq pc promoter TSS(s),35679,20627,54,1972,9453
+RefSeq pc gene TSS(s),21488,15308,40,1114,6401
+Total observed ncRNA eTSSs,,6314,193,3498,555
+RefSeq ncRNA gene TSS(s),8144,3986,89,1589,554

@@ -1,0 +1,65 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	barplot
+	2	create_output
+	2	nucleotides
+	1	retrieve_peaks
+	10
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	create_output
+	retrieve_peaks
+Selected jobs (1):
+	retrieve_peaks
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Sun Aug  9 23:10:46 2020]
+rule retrieve_peaks:
+    input: data/processed/GCF/gene_centric_tss/files_used.json, data/processed/GCF/merged/samples.merge, data/processed/GCF/merged/samples.merge.peaksexpression.log2, /data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/
+    output: data/processed/GCF/retrieve_peaks/files_used.json
+    log: data/processed/GCF/retrieve_peaks/retrieve_peaks.log
+    jobid: 9
+    wildcards: anno=GCF
+
+Waiting at most 5 seconds for missing files.
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/dag.py", line 386, in check_and_touch_output
+    ignore_pipe=True)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/io.py", line 523, in wait_for_files
+    latency_wait, "\n".join(get_missing())))
+OSError: Missing files after 5 seconds:
+data/processed/GCF/retrieve_peaks/files_used.json
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/scheduler.py", line 315, in _proceed
+    self.get_executor(job).handle_job_success(job)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/executors.py", line 374, in handle_job_success
+    super().handle_job_success(job)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/executors.py", line 151, in handle_job_success
+    assume_shared_fs=self.assume_shared_fs)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/jobs.py", line 882, in postprocess
+    ignore_missing_output=ignore_missing_output)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/dag.py", line 390, in check_and_touch_output
+    "wait time with --latency-wait.", rule=job.rule)
+snakemake.exceptions.MissingOutputException: Missing files after 5 seconds:
+data/processed/GCF/retrieve_peaks/files_used.json
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+
+MissingOutputException in line 112 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
+Missing files after 5 seconds:
+data/processed/GCF/retrieve_peaks/files_used.json
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/.snakemake/log/2020-08-09T231046.550226.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks
