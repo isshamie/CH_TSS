@@ -1,0 +1,35 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	combine_merge_and_anno
+	2	create_refType
+	2	distance
+	1	generate_genome
+	8
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	combine_merge_and_anno
+	generate_genome
+	combine_merge_and_anno
+Selected jobs (1):
+	combine_merge_and_anno
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 01:30:45 2021]
+rule combine_merge_and_anno:
+    input: data/peaksInfo/peaks.merge.tss.minimal, data/GCF/anno/peaks.merge.tss.anno
+    output: data/GCF/anno/peaks.merge.tss.minimal.anno
+    jobid: 14
+    wildcards: genome=GCF
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T013044.692980.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

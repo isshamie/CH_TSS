@@ -1,0 +1,64 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	create_totalTSS
+	3
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	create_totalTSS
+	create_totalTSS
+Selected jobs (1):
+	create_totalTSS
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 04:32:56 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/GCF/refType/peaks.refType.geneBody.tsv
+    output: data/GCF/allTSS/thresh1/peaksSankey.csv, data/GCF/allTSS/thresh1/peaksSankey.png
+    jobid: 8
+    wildcards: genome=GCF, thresh=1
+
+[Wed Apr 21 04:33:59 2021]
+Finished job 8.
+1 of 3 steps (33%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	create_totalTSS
+Selected jobs (1):
+	create_totalTSS
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 04:33:59 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/synapse/refType/peaks.refType.geneBody.tsv
+    output: data/synapse/allTSS/thresh1/peaksSankey.csv, data/synapse/allTSS/thresh1/peaksSankey.png
+    jobid: 7
+    wildcards: genome=synapse, thresh=1
+
+[Wed Apr 21 04:35:02 2021]
+Finished job 7.
+2 of 3 steps (67%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	all
+Selected jobs (1):
+	all
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 04:35:02 2021]
+localrule all:
+    input: data/synapse/genome/introns.bed, data/GCF/genome/introns.bed, data/peaksInfo/peaks_scoring.thresh1.tsv, data/synapse/refType/peaks.refType.tsv, data/GCF/refType/peaks.refType.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/synapse/allTSS/thresh1/peaksSankey.csv, data/GCF/allTSS/thresh1/peaksSankey.csv
+    jobid: 0
+
+[Wed Apr 21 04:35:02 2021]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T043255.059776.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

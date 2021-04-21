@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 90 of /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk:
+Missing input files for rule peak_scoring:
+data/synapse/expression/samples.expr.tsv

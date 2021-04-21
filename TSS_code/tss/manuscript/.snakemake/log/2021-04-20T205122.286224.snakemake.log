@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	peak_scoring
+	3
+
+[Tue Apr 20 20:51:23 2021]
+rule peak_scoring:
+    output: data/GCF/expression/peaks_scoring.thresh1.tsv
+    jobid: 4
+    wildcards: genome=GCF, thresh=1
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T205122.286224.snakemake.log

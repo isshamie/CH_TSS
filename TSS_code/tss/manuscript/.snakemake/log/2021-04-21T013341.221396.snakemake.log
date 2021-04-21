@@ -1,0 +1,99 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	combine_merge_and_anno
+	2	create_refType
+	2	distance
+	1	generate_genome
+	8
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	generate_genome
+	combine_merge_and_anno
+	combine_merge_and_anno
+Selected jobs (1):
+	combine_merge_and_anno
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 01:33:41 2021]
+rule combine_merge_and_anno:
+    input: data/peaksInfo/peaks.merge.tss.minimal, data/GCF/anno/peaks.merge.tss.anno
+    output: data/GCF/anno/peaks.merge.tss.minimal.anno
+    jobid: 14
+    wildcards: genome=GCF
+
+[Wed Apr 21 01:33:55 2021]
+Finished job 14.
+1 of 8 steps (12%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	generate_genome
+	combine_merge_and_anno
+	distance
+Selected jobs (1):
+	combine_merge_and_anno
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 01:33:55 2021]
+rule combine_merge_and_anno:
+    input: data/peaksInfo/peaks.merge.tss.minimal, data/synapse/anno/peaks.merge.tss.anno
+    output: data/synapse/anno/peaks.merge.tss.minimal.anno
+    jobid: 12
+    wildcards: genome=synapse
+
+[Wed Apr 21 01:34:07 2021]
+Finished job 12.
+2 of 8 steps (25%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	generate_genome
+	distance
+Selected jobs (1):
+	distance
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 01:34:07 2021]
+rule distance:
+    input: data/GCF/anno/peaks.merge.tss.minimal.anno, data/GCF/genome/refTSS.tsv
+    output: data/GCF/anno/peaks.distance.tsv
+    jobid: 9
+    wildcards: genome=GCF
+
+Terminating processes on user request, this might take some time.
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/scheduler.py", line 225, in schedule
+    self._open_jobs.acquire()
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/threading.py", line 427, in acquire
+    self._cond.wait(timeout)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/threading.py", line 296, in wait
+    waiter.acquire()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/__init__.py", line 547, in snakemake
+    export_cwl=export_cwl)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/workflow.py", line 674, in execute
+    success = scheduler.schedule()
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/scheduler.py", line 281, in schedule
+    self._executor.cancel()
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/executors.py", line 353, in cancel
+    self.pool.shutdown()
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/concurrent/futures/thread.py", line 204, in shutdown
+    t.join()
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/threading.py", line 1032, in join
+    self._wait_for_tstate_lock()
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/threading.py", line 1048, in _wait_for_tstate_lock
+    elif lock.acquire(block, timeout):
+KeyboardInterrupt
+
+Cancelling snakemake on user request.
+unlocking
+removing lock
+removing lock
+removed all locks

@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	combine_merge_and_anno
+	2	distance
+	1	homeranno
+	6
+
+[Tue Apr 20 09:43:48 2021]
+rule homeranno:
+    input: data/peaksInfo/peaks.merge.tss
+    output: data/synapse/anno/peaks.merge.tss.anno
+    jobid: 8
+    wildcards: genome=synapse
+
+[Tue Apr 20 09:49:49 2021]
+Finished job 8.
+1 of 6 steps (17%) done
+
+[Tue Apr 20 09:49:49 2021]
+rule combine_merge_and_anno:
+    input: data/peaksInfo/peaks.merge.tss.minimal, data/synapse/anno/peaks.merge.tss.anno
+    output: data/synapse/anno/peaks.merge.tss.minimal.anno
+    jobid: 3
+    wildcards: genome=synapse
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T094347.949555.snakemake.log

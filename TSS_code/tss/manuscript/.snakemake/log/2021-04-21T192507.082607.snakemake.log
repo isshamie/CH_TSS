@@ -1,0 +1,196 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	8	refPromoters_captured
+	8	refPromoters_tissues_captured
+	17
+
+[Wed Apr 21 19:25:08 2021]
+rule refPromoters_tissues_captured:
+    input: data/GCF/allTSS/allTSS_thresh0_numSamp1.tsv, data/peaksInfo/tissuesMerge.thresh0.peaksexpression
+    output: data/GCF/allTSS/F1_tissuesCaptured_thresh0_numSamp1.png
+    jobid: 32
+    wildcards: genome=GCF, thresh=0, numSamp=1
+
+[Wed Apr 21 19:25:11 2021]
+Finished job 32.
+1 of 17 steps (6%) done
+
+[Wed Apr 21 19:25:11 2021]
+rule refPromoters_tissues_captured:
+    input: data/GCF/allTSS/allTSS_thresh1_numSamp1.tsv, data/peaksInfo/tissuesMerge.thresh1.peaksexpression
+    output: data/GCF/allTSS/F1_tissuesCaptured_thresh1_numSamp1.png
+    jobid: 30
+    wildcards: genome=GCF, thresh=1, numSamp=1
+
+[Wed Apr 21 19:25:14 2021]
+Finished job 30.
+2 of 17 steps (12%) done
+
+[Wed Apr 21 19:25:14 2021]
+rule refPromoters_tissues_captured:
+    input: data/synapse/allTSS/allTSS_thresh0_numSamp1.tsv, data/peaksInfo/tissuesMerge.thresh0.peaksexpression
+    output: data/synapse/allTSS/F1_tissuesCaptured_thresh0_numSamp1.png
+    jobid: 28
+    wildcards: genome=synapse, thresh=0, numSamp=1
+
+[Wed Apr 21 19:25:17 2021]
+Finished job 28.
+3 of 17 steps (18%) done
+
+[Wed Apr 21 19:25:17 2021]
+rule refPromoters_tissues_captured:
+    input: data/synapse/allTSS/allTSS_thresh1_numSamp1.tsv, data/peaksInfo/tissuesMerge.thresh1.peaksexpression
+    output: data/synapse/allTSS/F1_tissuesCaptured_thresh1_numSamp1.png
+    jobid: 26
+    wildcards: genome=synapse, thresh=1, numSamp=1
+
+[Wed Apr 21 19:25:20 2021]
+Finished job 26.
+4 of 17 steps (24%) done
+
+[Wed Apr 21 19:25:20 2021]
+rule refPromoters_tissues_captured:
+    input: data/GCF/allTSS/allTSS_thresh0_numSamp2.tsv, data/peaksInfo/tissuesMerge.thresh0.peaksexpression
+    output: data/GCF/allTSS/F1_tissuesCaptured_thresh0_numSamp2.png
+    jobid: 31
+    wildcards: genome=GCF, thresh=0, numSamp=2
+
+[Wed Apr 21 19:25:23 2021]
+Finished job 31.
+5 of 17 steps (29%) done
+
+[Wed Apr 21 19:25:23 2021]
+rule refPromoters_tissues_captured:
+    input: data/synapse/allTSS/allTSS_thresh0_numSamp2.tsv, data/peaksInfo/tissuesMerge.thresh0.peaksexpression
+    output: data/synapse/allTSS/F1_tissuesCaptured_thresh0_numSamp2.png
+    jobid: 27
+    wildcards: genome=synapse, thresh=0, numSamp=2
+
+[Wed Apr 21 19:25:26 2021]
+Finished job 27.
+6 of 17 steps (35%) done
+
+[Wed Apr 21 19:25:26 2021]
+rule refPromoters_tissues_captured:
+    input: data/GCF/allTSS/allTSS_thresh1_numSamp2.tsv, data/peaksInfo/tissuesMerge.thresh1.peaksexpression
+    output: data/GCF/allTSS/F1_tissuesCaptured_thresh1_numSamp2.png
+    jobid: 29
+    wildcards: genome=GCF, thresh=1, numSamp=2
+
+[Wed Apr 21 19:25:29 2021]
+Finished job 29.
+7 of 17 steps (41%) done
+
+[Wed Apr 21 19:25:29 2021]
+rule refPromoters_tissues_captured:
+    input: data/synapse/allTSS/allTSS_thresh1_numSamp2.tsv, data/peaksInfo/tissuesMerge.thresh1.peaksexpression
+    output: data/synapse/allTSS/F1_tissuesCaptured_thresh1_numSamp2.png
+    jobid: 25
+    wildcards: genome=synapse, thresh=1, numSamp=2
+
+[Wed Apr 21 19:25:32 2021]
+Finished job 25.
+8 of 17 steps (47%) done
+
+[Wed Apr 21 19:25:32 2021]
+rule refPromoters_captured:
+    input: data/GCF/allTSS/allTSS_thresh0_numSamp1.tsv, data/GCF/genome/refTSS.tsv
+    output: data/GCF/allTSS/SF4_pc_refPromoters_thresh0_numSamp1.png, data/GCF/allTSS/SF4_ncrna_refPromoters_thresh0_numSamp1.png
+    jobid: 24
+    wildcards: genome=GCF, thresh=0, numSamp=1
+
+[Wed Apr 21 19:25:36 2021]
+Finished job 24.
+9 of 17 steps (53%) done
+
+[Wed Apr 21 19:25:36 2021]
+rule refPromoters_captured:
+    input: data/GCF/allTSS/allTSS_thresh1_numSamp1.tsv, data/GCF/genome/refTSS.tsv
+    output: data/GCF/allTSS/SF4_pc_refPromoters_thresh1_numSamp1.png, data/GCF/allTSS/SF4_ncrna_refPromoters_thresh1_numSamp1.png
+    jobid: 22
+    wildcards: genome=GCF, thresh=1, numSamp=1
+
+[Wed Apr 21 19:25:40 2021]
+Finished job 22.
+10 of 17 steps (59%) done
+
+[Wed Apr 21 19:25:40 2021]
+rule refPromoters_captured:
+    input: data/GCF/allTSS/allTSS_thresh0_numSamp2.tsv, data/GCF/genome/refTSS.tsv
+    output: data/GCF/allTSS/SF4_pc_refPromoters_thresh0_numSamp2.png, data/GCF/allTSS/SF4_ncrna_refPromoters_thresh0_numSamp2.png
+    jobid: 23
+    wildcards: genome=GCF, thresh=0, numSamp=2
+
+[Wed Apr 21 19:25:43 2021]
+Finished job 23.
+11 of 17 steps (65%) done
+
+[Wed Apr 21 19:25:43 2021]
+rule refPromoters_captured:
+    input: data/GCF/allTSS/allTSS_thresh1_numSamp2.tsv, data/GCF/genome/refTSS.tsv
+    output: data/GCF/allTSS/SF4_pc_refPromoters_thresh1_numSamp2.png, data/GCF/allTSS/SF4_ncrna_refPromoters_thresh1_numSamp2.png
+    jobid: 21
+    wildcards: genome=GCF, thresh=1, numSamp=2
+
+[Wed Apr 21 19:25:47 2021]
+Finished job 21.
+12 of 17 steps (71%) done
+
+[Wed Apr 21 19:25:47 2021]
+rule refPromoters_captured:
+    input: data/synapse/allTSS/allTSS_thresh0_numSamp1.tsv, data/synapse/genome/refTSS.tsv
+    output: data/synapse/allTSS/SF4_pc_refPromoters_thresh0_numSamp1.png, data/synapse/allTSS/SF4_ncrna_refPromoters_thresh0_numSamp1.png
+    jobid: 20
+    wildcards: genome=synapse, thresh=0, numSamp=1
+
+[Wed Apr 21 19:25:51 2021]
+Finished job 20.
+13 of 17 steps (76%) done
+
+[Wed Apr 21 19:25:51 2021]
+rule refPromoters_captured:
+    input: data/synapse/allTSS/allTSS_thresh1_numSamp1.tsv, data/synapse/genome/refTSS.tsv
+    output: data/synapse/allTSS/SF4_pc_refPromoters_thresh1_numSamp1.png, data/synapse/allTSS/SF4_ncrna_refPromoters_thresh1_numSamp1.png
+    jobid: 18
+    wildcards: genome=synapse, thresh=1, numSamp=1
+
+[Wed Apr 21 19:25:55 2021]
+Finished job 18.
+14 of 17 steps (82%) done
+
+[Wed Apr 21 19:25:55 2021]
+rule refPromoters_captured:
+    input: data/synapse/allTSS/allTSS_thresh0_numSamp2.tsv, data/synapse/genome/refTSS.tsv
+    output: data/synapse/allTSS/SF4_pc_refPromoters_thresh0_numSamp2.png, data/synapse/allTSS/SF4_ncrna_refPromoters_thresh0_numSamp2.png
+    jobid: 19
+    wildcards: genome=synapse, thresh=0, numSamp=2
+
+[Wed Apr 21 19:25:59 2021]
+Finished job 19.
+15 of 17 steps (88%) done
+
+[Wed Apr 21 19:25:59 2021]
+rule refPromoters_captured:
+    input: data/synapse/allTSS/allTSS_thresh1_numSamp2.tsv, data/synapse/genome/refTSS.tsv
+    output: data/synapse/allTSS/SF4_pc_refPromoters_thresh1_numSamp2.png, data/synapse/allTSS/SF4_ncrna_refPromoters_thresh1_numSamp2.png
+    jobid: 17
+    wildcards: genome=synapse, thresh=1, numSamp=2
+
+[Wed Apr 21 19:26:03 2021]
+Finished job 17.
+16 of 17 steps (94%) done
+
+[Wed Apr 21 19:26:03 2021]
+localrule all:
+    input: data/synapse/genome/introns.bed, data/GCF/genome/introns.bed, data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/peaks_scoring.thresh0.tsv, data/synapse/refType/peaks.refType.tsv, data/GCF/refType/peaks.refType.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh0.tsv, data/synapse/allTSS/thresh1_numSamp2_peaksSankey.png, data/synapse/allTSS/thresh1_numSamp1_peaksSankey.png, data/synapse/allTSS/thresh0_numSamp2_peaksSankey.png, data/synapse/allTSS/thresh0_numSamp1_peaksSankey.png, data/GCF/allTSS/thresh1_numSamp2_peaksSankey.png, data/GCF/allTSS/thresh1_numSamp1_peaksSankey.png, data/GCF/allTSS/thresh0_numSamp2_peaksSankey.png, data/GCF/allTSS/thresh0_numSamp1_peaksSankey.png, data/synapse/allTSS/SF4_pc_refPromoters_thresh1_numSamp2.png, data/synapse/allTSS/SF4_pc_refPromoters_thresh1_numSamp1.png, data/synapse/allTSS/SF4_pc_refPromoters_thresh0_numSamp2.png, data/synapse/allTSS/SF4_pc_refPromoters_thresh0_numSamp1.png, data/GCF/allTSS/SF4_pc_refPromoters_thresh1_numSamp2.png, data/GCF/allTSS/SF4_pc_refPromoters_thresh1_numSamp1.png, data/GCF/allTSS/SF4_pc_refPromoters_thresh0_numSamp2.png, data/GCF/allTSS/SF4_pc_refPromoters_thresh0_numSamp1.png, data/synapse/allTSS/F1_tissuesCaptured_thresh1_numSamp2.png, data/synapse/allTSS/F1_tissuesCaptured_thresh1_numSamp1.png, data/synapse/allTSS/F1_tissuesCaptured_thresh0_numSamp2.png, data/synapse/allTSS/F1_tissuesCaptured_thresh0_numSamp1.png, data/GCF/allTSS/F1_tissuesCaptured_thresh1_numSamp2.png, data/GCF/allTSS/F1_tissuesCaptured_thresh1_numSamp1.png, data/GCF/allTSS/F1_tissuesCaptured_thresh0_numSamp2.png, data/GCF/allTSS/F1_tissuesCaptured_thresh0_numSamp1.png
+    jobid: 0
+
+[Wed Apr 21 19:26:03 2021]
+Finished job 0.
+17 of 17 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T192507.082607.snakemake.log

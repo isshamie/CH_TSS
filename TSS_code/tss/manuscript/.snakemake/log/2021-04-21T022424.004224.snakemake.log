@@ -1,0 +1,99 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	create_refType
+	1	distance
+	1	generate_genome
+	5
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	create_refType
+	generate_genome
+Selected jobs (1):
+	create_refType
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:24:24 2021]
+rule create_refType:
+    input: data/GCF/anno/peaks.distance.tsv, data/GCF/genome/refTSS.tsv, data/GCF/anno/peaks.merge.tss.minimal.anno
+    output: data/GCF/refType/peaks.refType.tsv
+    jobid: 5
+    wildcards: genome=GCF
+
+[Wed Apr 21 02:24:59 2021]
+Finished job 5.
+1 of 5 steps (20%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	generate_genome
+Selected jobs (1):
+	generate_genome
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:24:59 2021]
+rule generate_genome:
+    output: data/synapse/genome/refTSS.tsv
+    jobid: 7
+    wildcards: genome=synapse
+
+[Wed Apr 21 02:25:28 2021]
+Finished job 7.
+2 of 5 steps (40%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	distance
+Selected jobs (1):
+	distance
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:25:28 2021]
+rule distance:
+    input: data/synapse/anno/peaks.merge.tss.minimal.anno, data/synapse/genome/refTSS.tsv
+    output: data/synapse/anno/peaks.distance.tsv
+    jobid: 6
+    wildcards: genome=synapse
+
+[Wed Apr 21 02:30:25 2021]
+Finished job 6.
+3 of 5 steps (60%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	create_refType
+Selected jobs (1):
+	create_refType
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:30:25 2021]
+rule create_refType:
+    input: data/synapse/anno/peaks.distance.tsv, data/synapse/genome/refTSS.tsv, data/synapse/anno/peaks.merge.tss.minimal.anno
+    output: data/synapse/refType/peaks.refType.tsv
+    jobid: 4
+    wildcards: genome=synapse
+
+[Wed Apr 21 02:30:34 2021]
+Finished job 4.
+4 of 5 steps (80%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (1):
+	all
+Selected jobs (1):
+	all
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:30:34 2021]
+localrule all:
+    input: data/synapse/genome/introns.bed, data/GCF/genome/introns.bed, data/peaksInfo/peaks_scoring.thresh1.tsv, data/synapse/refType/peaks.refType.tsv, data/GCF/refType/peaks.refType.tsv
+    jobid: 0
+
+[Wed Apr 21 02:30:34 2021]
+Finished job 0.
+5 of 5 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T022424.004224.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

@@ -1,0 +1,21 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	8	refPromoters_captured
+	8	refPromoters_tissues_captured
+	17
+
+[Wed Apr 21 19:22:45 2021]
+rule refPromoters_tissues_captured:
+    input: data/GCF/allTSS/allTSS_thresh0_numSamp1.tsv, data/peaksInfo/tissuesMerge.thresh0.peaksexpression
+    output: data/GCF/allTSS/F1_tissuesCaptured_thresh0_numSamp1.png
+    jobid: 32
+    wildcards: genome=GCF, thresh=0, numSamp=1
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T192244.085258.snakemake.log

@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	8	create_totalTSS
+	2	peak_scoring
+	2	tissue_merging
+	13
+
+[Wed Apr 21 07:17:15 2021]
+rule peak_scoring:
+    output: data/peaksInfo/peaks_scoring.thresh0.tsv
+    jobid: 4
+    wildcards: thresh=0
+
+[Wed Apr 21 07:17:20 2021]
+Finished job 4.
+1 of 13 steps (8%) done
+
+[Wed Apr 21 07:17:20 2021]
+rule tissue_merging:
+    output: data/peaksInfo/tissuesMerge.thresh1.peaksexpression, data/peaksInfo/tissues_scoring.thresh1.tsv
+    jobid: 7
+    wildcards: thresh=1
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T071713.999975.snakemake.log

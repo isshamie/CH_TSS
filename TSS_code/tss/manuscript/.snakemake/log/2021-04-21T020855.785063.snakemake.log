@@ -1,0 +1,49 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	create_refType
+	1	distance
+	1	generate_genome
+	5
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	create_refType
+	generate_genome
+Selected jobs (1):
+	create_refType
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:08:56 2021]
+rule create_refType:
+    input: data/GCF/anno/peaks.distance.tsv, data/GCF/genome/refTSS.tsv, data/GCF/anno/peaks.merge.tss.anno
+    output: data/GCF/refType/peaks.refType.tsv
+    jobid: 5
+    wildcards: genome=GCF
+
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/executors.py", line 1428, in run_wrapper
+    passed_shadow_dir)
+  File "/data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk", line 296, in __rule_create_refType
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/shell.py", line 149, in __new__
+    raise sp.CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command 'set -euo pipefail;  python peak_refType.py data/GCF/anno/peaks.distance.tsv data/GCF/genome/refTSS.tsv data/GCF/anno/peaks.merge.tss.anno data/GCF/refType/peaks.refType.tsv 10000 -1000,1000 mRNA snoRNA,snRNA,miRNA,lnc_RNA' returned non-zero exit status 2.
+
+[Wed Apr 21 02:08:57 2021]
+Error in rule create_refType:
+    jobid: 5
+    output: data/GCF/refType/peaks.refType.tsv
+    shell:
+        python peak_refType.py data/GCF/anno/peaks.distance.tsv data/GCF/genome/refTSS.tsv data/GCF/anno/peaks.merge.tss.anno data/GCF/refType/peaks.refType.tsv 10000 -1000,1000 mRNA snoRNA,snRNA,miRNA,lnc_RNA
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T020855.785063.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

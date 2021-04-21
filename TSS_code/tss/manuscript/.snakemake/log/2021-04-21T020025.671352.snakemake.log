@@ -1,0 +1,106 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	combine_merge_and_anno
+	2	create_refType
+	2	distance
+	1	generate_genome
+	8
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	combine_merge_and_anno
+	combine_merge_and_anno
+	generate_genome
+Selected jobs (1):
+	combine_merge_and_anno
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:00:26 2021]
+rule combine_merge_and_anno:
+    input: data/peaksInfo/peaks.merge.tss.minimal, data/GCF/anno/peaks.merge.tss.anno
+    output: data/GCF/anno/peaks.merge.tss.minimal.anno
+    jobid: 14
+    wildcards: genome=GCF
+
+[Wed Apr 21 02:00:35 2021]
+Finished job 14.
+1 of 8 steps (12%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	combine_merge_and_anno
+	distance
+	generate_genome
+Selected jobs (1):
+	combine_merge_and_anno
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:00:35 2021]
+rule combine_merge_and_anno:
+    input: data/peaksInfo/peaks.merge.tss.minimal, data/synapse/anno/peaks.merge.tss.anno
+    output: data/synapse/anno/peaks.merge.tss.minimal.anno
+    jobid: 12
+    wildcards: genome=synapse
+
+[Wed Apr 21 02:00:42 2021]
+Finished job 12.
+2 of 8 steps (25%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	distance
+	generate_genome
+Selected jobs (1):
+	distance
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:00:42 2021]
+rule distance:
+    input: data/GCF/anno/peaks.merge.tss.minimal.anno, data/GCF/genome/refTSS.tsv
+    output: data/GCF/anno/peaks.distance.tsv
+    jobid: 9
+    wildcards: genome=GCF
+
+[Wed Apr 21 02:06:25 2021]
+Finished job 9.
+3 of 8 steps (38%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	create_refType
+	generate_genome
+Selected jobs (1):
+	create_refType
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 02:06:25 2021]
+rule create_refType:
+    input: data/GCF/anno/peaks.distance.tsv, data/GCF/genome/refTSS.tsv, data/GCF/anno/peaks.merge.tss.anno
+    output: data/GCF/refType/peaks.refType.tsv
+    jobid: 5
+    wildcards: genome=GCF
+
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/executors.py", line 1428, in run_wrapper
+    passed_shadow_dir)
+  File "/data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk", line 296, in __rule_create_refType
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/shell.py", line 149, in __new__
+    raise sp.CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command 'set -euo pipefail;  python peak_refType.py data/GCF/anno/peaks.distance.tsv data/GCF/genome/refTSS.tsv data/GCF/anno/peaks.merge.tss.anno data/GCF/refType/peaks.refType.tsv 10000 -1000,1000 mRNA snoRNA,snRNA,miRNA,lnc_RNA' returned non-zero exit status 2.
+
+[Wed Apr 21 02:06:27 2021]
+Error in rule create_refType:
+    jobid: 5
+    output: data/GCF/refType/peaks.refType.tsv
+    shell:
+        python peak_refType.py data/GCF/anno/peaks.distance.tsv data/GCF/genome/refTSS.tsv data/GCF/anno/peaks.merge.tss.anno data/GCF/refType/peaks.refType.tsv 10000 -1000,1000 mRNA snoRNA,snRNA,miRNA,lnc_RNA
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T020025.671352.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

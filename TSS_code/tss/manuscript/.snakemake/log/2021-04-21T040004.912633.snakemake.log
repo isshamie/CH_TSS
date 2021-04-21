@@ -1,0 +1,16 @@
+Building DAG of jobs...
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/__init__.py", line 547, in snakemake
+    export_cwl=export_cwl)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/workflow.py", line 421, in execute
+    dag.init()
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/dag.py", line 126, in init
+    job = self.update(self.file2jobs(file), file=file, progress=progress)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/dag.py", line 1266, in file2jobs
+    raise MissingRuleException(targetfile)
+snakemake.exceptions.MissingRuleException: No rule to produce filter_out_cds,filter_out_intron (if you use input functions make sure that they don't raise unexpected exceptions).
+
+MissingRuleException:
+No rule to produce filter_out_cds,filter_out_intron (if you use input functions make sure that they don't raise unexpected exceptions).
+unlocking
+removed all locks

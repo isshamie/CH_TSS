@@ -1,0 +1,17 @@
+Building DAG of jobs...
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/__init__.py", line 547, in snakemake
+    export_cwl=export_cwl)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/workflow.py", line 514, in execute
+    auto_report(dag, report)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/report/__init__.py", line 437, in auto_report
+    raise WorkflowError("Report file does not end with .html")
+snakemake.exceptions.WorkflowError: Report file does not end with .html
+
+WorkflowError:
+Report file does not end with .html
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/report/__init__.py", line 437, in auto_report
+unlocking
+removing lock
+removing lock
+removed all locks

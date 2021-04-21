@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	2	addGeneBody
+	1	all
+	2	create_totalTSS
+	1	filter_out_intron
+	6
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (2):
+	filter_out_intron
+	addGeneBody
+Selected jobs (1):
+	addGeneBody
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 03:57:56 2021]
+rule addGeneBody:
+    input: data/GCF/filters_genoebody/peaks.nocds.index, data/GCF/filters_genoebody/peaks.nointron.index, data/GCF/refType/peaks.refType.tsv
+    output: data/GCF/refType/peaks.refType.geneBody.tsv
+    jobid: 16
+    wildcards: genome=GCF
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T035755.160758.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

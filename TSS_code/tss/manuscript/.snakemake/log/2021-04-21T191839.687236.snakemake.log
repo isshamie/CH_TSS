@@ -1,0 +1,19 @@
+Building DAG of jobs...
+MissingInputException in line 45 of /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk:
+Missing input files for rule all:
+data/GCF/allTSS/SF4_pc_refPromoters_thresh0_numSamp2.png
+data/synapse/allTSS/SF4_pc_refPromoters_thresh1_numSamp1.png
+data/GCF/allTSS/SF4_pc_refPromoters_thresh0_numSamp1.png
+data/synapse/allTSS/SF4_pc_refPromoters_thresh1_numSamp2.png
+data/synapse/allTSS/F1_tissuesCaptured_thresh1_numSamp2.png
+data/GCF/allTSS/SF4_pc_refPromoters_thresh1_numSamp1.png
+data/GCF/allTSS/SF4_pc_refPromoters_thresh1_numSamp2.png
+data/synapse/allTSS/F1_tissuesCaptured_thresh0_numSamp2.png
+data/GCF/allTSS/F1_tissuesCaptured_thresh1_numSamp2.png
+data/GCF/allTSS/F1_tissuesCaptured_thresh0_numSamp1.png
+data/synapse/allTSS/F1_tissuesCaptured_thresh0_numSamp1.png
+data/synapse/allTSS/SF4_pc_refPromoters_thresh0_numSamp1.png
+data/synapse/allTSS/F1_tissuesCaptured_thresh1_numSamp1.png
+data/GCF/allTSS/F1_tissuesCaptured_thresh0_numSamp2.png
+data/GCF/allTSS/F1_tissuesCaptured_thresh1_numSamp1.png
+data/synapse/allTSS/SF4_pc_refPromoters_thresh0_numSamp2.png

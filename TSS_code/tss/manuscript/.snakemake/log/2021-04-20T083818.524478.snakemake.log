@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	combine_merge_and_anno
+	2	distance
+	2	generate_genome
+	2	homeranno
+	1	preprocess
+	10
+
+[Tue Apr 20 08:38:18 2021]
+rule generate_genome:
+    output: data/GCF/genome/refTSS.tsv
+    jobid: 6
+    wildcards: genome=GCF
+
+[Tue Apr 20 08:38:20 2021]
+Error in rule generate_genome:
+    jobid: 6
+    output: data/GCF/genome/refTSS.tsv
+    shell:
+        python peak_distance.py create_genome data/GCF/genome/refTSS.tsv /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff mRNA snoRNA,snRNA,miRNA,lnc_RNA
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T083818.524478.snakemake.log

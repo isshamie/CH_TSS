@@ -1,0 +1,39 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	peak_scoring
+	3
+
+[Tue Apr 20 20:52:52 2021]
+rule peak_scoring:
+    output: data/synapse/expression/peaks_scoring.thresh1.tsv
+    jobid: 3
+    wildcards: genome=synapse, thresh=1
+
+[Tue Apr 20 20:53:18 2021]
+Finished job 3.
+1 of 3 steps (33%) done
+
+[Tue Apr 20 20:53:18 2021]
+rule peak_scoring:
+    output: data/GCF/expression/peaks_scoring.thresh1.tsv
+    jobid: 4
+    wildcards: genome=GCF, thresh=1
+
+[Tue Apr 20 20:53:28 2021]
+Finished job 4.
+2 of 3 steps (67%) done
+
+[Tue Apr 20 20:53:28 2021]
+localrule all:
+    input: data/synapse/genome/introns.bed, data/GCF/genome/introns.bed, data/synapse/expression/peaks_scoring.thresh1.tsv, data/GCF/expression/peaks_scoring.thresh1.tsv
+    jobid: 0
+
+[Tue Apr 20 20:53:28 2021]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T205251.749559.snakemake.log

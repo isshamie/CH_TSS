@@ -1,0 +1,5 @@
+Building DAG of jobs...
+InputFunctionException in line 82 of /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk:
+AttributeError: 'Wildcards' object has no attribute 'anno'
+Wildcards:
+genome=synapse

@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	distance
+	3
+
+[Tue Apr 20 16:40:57 2021]
+rule distance:
+    input: data/GCF/anno/peaks.merge.tss.minimal.anno, data/GCF/genome/refTSS.tsv
+    output: data/GCF/anno/peaks.distance.tsv
+    jobid: 2
+    wildcards: genome=GCF
+
+[Tue Apr 20 16:42:34 2021]
+Error in rule distance:
+    jobid: 2
+    output: data/GCF/anno/peaks.distance.tsv
+    shell:
+        python peak_distance.py distance data/GCF/anno/peaks.merge.tss.minimal.anno data/GCF/genome/refTSS.tsv data/GCF/anno/peaks.distance.tsv
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T164056.939849.snakemake.log

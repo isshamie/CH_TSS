@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	combine_merge_and_anno
+	2	distance
+	2	generate_genome
+	2	homeranno
+	1	preprocess
+	10
+
+[Tue Apr 20 08:46:16 2021]
+rule generate_genome:
+    output: data/GCF/genome/refTSS.tsv
+    jobid: 6
+    wildcards: genome=GCF
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 81 of /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk:
+Missing files after 5 seconds:
+data/GCF/genome/refTSS.tsv
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T084616.192291.snakemake.log

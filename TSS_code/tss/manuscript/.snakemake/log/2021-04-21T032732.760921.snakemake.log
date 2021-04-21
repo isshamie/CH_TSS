@@ -1,0 +1,18 @@
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/__init__.py", line 404, in snakemake
+    print_compilation=print_compilation)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/workflow.py", line 743, in include
+    exec(compile(code, snakefile, "exec"), self.globals)
+  File "/data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk", line 194, in <module>
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/workflow.py", line 817, in decorate
+    rule.set_output(*ruleinfo.output[0], **ruleinfo.output[1])
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/rules.py", line 305, in set_output
+    self.register_wildcards(item.get_wildcard_names())
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/rules.py", line 278, in register_wildcards
+    "same file.".format(self.name))
+  File "<string>", line None
+SyntaxError: Not all output, log and benchmark files of rule tissue_merging contain the same wildcards. This is crucial though, in order to avoid that two or more jobs write to the same file.
+
+SyntaxError:
+Not all output, log and benchmark files of rule tissue_merging contain the same wildcards. This is crucial though, in order to avoid that two or more jobs write to the same file.
+  File "/data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk", line 149, in <module>

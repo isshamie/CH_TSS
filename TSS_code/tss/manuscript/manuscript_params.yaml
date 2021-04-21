@@ -1,0 +1,67 @@
+## Defaults
+
+## Parameters for the new NCBI PICR annotation (Anno 103), where they
+# created the annotation using the PICR genome
+OUTDIR: '/data/isshamie/TSS/Analysis/TSS_code/data/processed/manuscript'
+genome_fasta: '/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna'
+
+annotation:
+  synapse: '/data/isshamie/genome/hamster/syn20999279_picr.gff'
+  GCF: "/data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff"
+#  -  "/data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff"
+#  - "/data/isshamie/genome/hamster/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3"
+
+gene_key:
+  synapse: 'gene_id'
+  GCF: 'gene'
+
+
+ncrna_keys:
+  synapse:
+    - lncRNA
+  GCF:
+    - snoRNA
+    - snRNA
+    - miRNA
+    - lnc_RNA
+
+
+MERGE_TISSUES:
+  - all
+  - bmdm
+
+atac_f : "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort"
+all_atac : "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/ATAC_merge.bed"
+META_SAMPLES: '/data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv'
+peaks_dir: '/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/'
+cpm_thresh:
+  - 1
+  - 0
+
+numsamples_thresh:
+  - 2
+  - 1
+
+
+#other keys in synape
+  #- CDS
+  #- exon
+  #- gene
+  #- mRNA
+#other keys in gcf
+#    -  tRNA
+#    -  cDNA_match
+#    -  CDS
+#    -  C_gene_segment
+#    -  exon
+#    -  gene
+#    -  guide_RNA
+#    -  match
+#    -  mRNA
+#    -  primary_transcript
+#    -  pseudogene
+#    -  region
+#    -  rRNA
+#    -  transcript
+
+#    -  V_gene_segment

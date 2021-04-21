@@ -1,0 +1,128 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	8	create_totalTSS
+	2	peak_scoring
+	11
+
+[Wed Apr 21 16:24:48 2021]
+rule peak_scoring:
+    output: data/peaksInfo/peaks_scoring.thresh1.tsv
+    jobid: 3
+    wildcards: thresh=1
+
+[Wed Apr 21 16:24:53 2021]
+Finished job 3.
+1 of 11 steps (9%) done
+
+[Wed Apr 21 16:24:53 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/GCF/refType/peaks.refType.geneBody.tsv
+    output: data/GCF/allTSS/thresh1_numSamp2_peaksSankey.csv, data/GCF/allTSS/thresh1_numSamp2_peaksSankey.png
+    jobid: 13
+    wildcards: genome=GCF, thresh=1, numSamp=2
+
+[Wed Apr 21 16:25:50 2021]
+Finished job 13.
+2 of 11 steps (18%) done
+
+[Wed Apr 21 16:25:50 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/GCF/refType/peaks.refType.geneBody.tsv
+    output: data/GCF/allTSS/thresh1_numSamp1_peaksSankey.csv, data/GCF/allTSS/thresh1_numSamp1_peaksSankey.png
+    jobid: 14
+    wildcards: genome=GCF, thresh=1, numSamp=1
+
+[Wed Apr 21 16:26:48 2021]
+Finished job 14.
+3 of 11 steps (27%) done
+
+[Wed Apr 21 16:26:48 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/synapse/refType/peaks.refType.geneBody.tsv
+    output: data/synapse/allTSS/thresh1_numSamp2_peaksSankey.csv, data/synapse/allTSS/thresh1_numSamp2_peaksSankey.png
+    jobid: 9
+    wildcards: genome=synapse, thresh=1, numSamp=2
+
+[Wed Apr 21 16:27:45 2021]
+Finished job 9.
+4 of 11 steps (36%) done
+
+[Wed Apr 21 16:27:45 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/synapse/refType/peaks.refType.geneBody.tsv
+    output: data/synapse/allTSS/thresh1_numSamp1_peaksSankey.csv, data/synapse/allTSS/thresh1_numSamp1_peaksSankey.png
+    jobid: 10
+    wildcards: genome=synapse, thresh=1, numSamp=1
+
+[Wed Apr 21 16:28:43 2021]
+Finished job 10.
+5 of 11 steps (45%) done
+
+[Wed Apr 21 16:28:43 2021]
+rule peak_scoring:
+    output: data/peaksInfo/peaks_scoring.thresh0.tsv
+    jobid: 4
+    wildcards: thresh=0
+
+[Wed Apr 21 16:28:47 2021]
+Finished job 4.
+6 of 11 steps (55%) done
+
+[Wed Apr 21 16:28:47 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh0.tsv, data/peaksInfo/tissues_scoring.thresh0.tsv, data/GCF/refType/peaks.refType.geneBody.tsv
+    output: data/GCF/allTSS/thresh0_numSamp1_peaksSankey.csv, data/GCF/allTSS/thresh0_numSamp1_peaksSankey.png
+    jobid: 16
+    wildcards: genome=GCF, thresh=0, numSamp=1
+
+[Wed Apr 21 16:29:42 2021]
+Finished job 16.
+7 of 11 steps (64%) done
+
+[Wed Apr 21 16:29:42 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh0.tsv, data/peaksInfo/tissues_scoring.thresh0.tsv, data/GCF/refType/peaks.refType.geneBody.tsv
+    output: data/GCF/allTSS/thresh0_numSamp2_peaksSankey.csv, data/GCF/allTSS/thresh0_numSamp2_peaksSankey.png
+    jobid: 15
+    wildcards: genome=GCF, thresh=0, numSamp=2
+
+[Wed Apr 21 16:30:36 2021]
+Finished job 15.
+8 of 11 steps (73%) done
+
+[Wed Apr 21 16:30:36 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh0.tsv, data/peaksInfo/tissues_scoring.thresh0.tsv, data/synapse/refType/peaks.refType.geneBody.tsv
+    output: data/synapse/allTSS/thresh0_numSamp1_peaksSankey.csv, data/synapse/allTSS/thresh0_numSamp1_peaksSankey.png
+    jobid: 12
+    wildcards: genome=synapse, thresh=0, numSamp=1
+
+[Wed Apr 21 16:31:30 2021]
+Finished job 12.
+9 of 11 steps (82%) done
+
+[Wed Apr 21 16:31:30 2021]
+rule create_totalTSS:
+    input: data/peaksInfo/peaks_scoring.thresh0.tsv, data/peaksInfo/tissues_scoring.thresh0.tsv, data/synapse/refType/peaks.refType.geneBody.tsv
+    output: data/synapse/allTSS/thresh0_numSamp2_peaksSankey.csv, data/synapse/allTSS/thresh0_numSamp2_peaksSankey.png
+    jobid: 11
+    wildcards: genome=synapse, thresh=0, numSamp=2
+
+[Wed Apr 21 16:32:24 2021]
+Finished job 11.
+10 of 11 steps (91%) done
+
+[Wed Apr 21 16:32:24 2021]
+localrule all:
+    input: data/synapse/genome/introns.bed, data/GCF/genome/introns.bed, data/peaksInfo/peaks_scoring.thresh1.tsv, data/peaksInfo/peaks_scoring.thresh0.tsv, data/synapse/refType/peaks.refType.tsv, data/GCF/refType/peaks.refType.tsv, data/peaksInfo/tissues_scoring.thresh1.tsv, data/peaksInfo/tissues_scoring.thresh0.tsv, data/synapse/allTSS/thresh1_numSamp2_peaksSankey.png, data/synapse/allTSS/thresh1_numSamp1_peaksSankey.png, data/synapse/allTSS/thresh0_numSamp2_peaksSankey.png, data/synapse/allTSS/thresh0_numSamp1_peaksSankey.png, data/GCF/allTSS/thresh1_numSamp2_peaksSankey.png, data/GCF/allTSS/thresh1_numSamp1_peaksSankey.png, data/GCF/allTSS/thresh0_numSamp2_peaksSankey.png, data/GCF/allTSS/thresh0_numSamp1_peaksSankey.png
+    jobid: 0
+
+[Wed Apr 21 16:32:24 2021]
+Finished job 0.
+11 of 11 steps (100%) done
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T162447.440068.snakemake.log

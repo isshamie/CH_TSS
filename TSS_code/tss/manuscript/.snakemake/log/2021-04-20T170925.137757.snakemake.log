@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	distance
+	2	generate_genome
+	5
+
+[Tue Apr 20 17:11:01 2021]
+rule generate_genome:
+    output: data/synapse/genome/refTSS.tsv
+    jobid: 5
+    wildcards: genome=synapse
+
+[Tue Apr 20 17:11:08 2021]
+Error in rule generate_genome:
+    jobid: 5
+    output: data/synapse/genome/refTSS.tsv
+    shell:
+        python peak_distance.py genome data/synapse/genome/refTSS.tsv /data/isshamie/genome/hamster/syn20999279_picr.gff mRNA lncRNA
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T170925.137757.snakemake.log

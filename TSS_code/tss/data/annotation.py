@@ -138,11 +138,6 @@ def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id'
     for i in landmark_cols:
         anno_peaks['Nearest ' + i] = ''
 
-    # print(((anno_peaks['End'] - anno_peaks['Start'])%2 == 0))
-    # print(((anno_peaks['End'] - anno_peaks['Start']) % 2 == 0).sum()/anno_peaks.shape[0])
-    #
-    # assert(((anno_peaks['End']-anno_peaks['Start'])%2==0).all())
-
     for ind, val in (anno_peaks.iterrows()):
         filt = landmark_df[val['Chr'] == landmark_df['Chr']]
         peak_start = int(np.floor((val['Start'] + val['End']) / 2))
@@ -159,18 +154,11 @@ def distance_to_landmarks(anno_peaks, landmark_df, main_landmark='transcript_id'
 
             for land in landmark_cols:
                 anno_peaks.at[ind, 'Nearest ' + land] = landmark_df.loc[filt2, land]
-            #anno_peaks.set_value(ind, 'Nearest gene', landmark_df.loc[filt2, 'gene'])
-            #anno_peaks.set_value(ind, 'Nearest gene_id', landmark_df.loc[filt2, 'gene_id'])
 
             ## Get distance to nearest gene. If on - strand, tss 'End' is the beginning
             curr_strand_pos = landmark_df.loc[filt2, 'Strand'] == '+'
             curr_strand_neg = landmark_df.loc[filt2, 'Strand'] == '-'
-            # if type(curr_strand_pos) != bool: #Accounts for duplicate transcript_id, which shouldnt have any
-            #     curr_strand_pos = curr_strand_pos.iloc[0]
-            # if type(curr_strand_neg) != bool:
-            #     curr_strand_neg = curr_strand_neg.iloc[0]
-            # assert(type(curr_strand_pos) == bool)
-            # assert(type(curr_strand_neg) == bool)
+
             if curr_strand_pos:
                 anno_peaks.at[ind, 'Distance to TSS'] =  peak_start -\
                                                          landmark_df.loc[filt2, 'actual_start']
@@ -561,8 +549,7 @@ def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
                  item in sublist]
     peaks_df_filt = peaks_df[peaks_df.index.isin(all_peaks)]
     peaks_df.columns = list(map(lambda x: basename(x), peaks_df.columns.values))
-    # if use_sample_peaks: peaks from original peak file or
-    #  else take from the merged file
+
     peaks_to_keep = []
     for ind, val in peaks_df_filt.iterrows():
         if basename(sample_name) in list(map(lambda x: basename(x), val["Parent files"].split("|"))):
@@ -570,6 +557,8 @@ def retrieve_sample_peaks_from_anno(anno_f, merged_f, output_f,
                 peaks_to_keep.append(peaks_df_filt.loc[ind, basename(sample_name)])
             else:
                 peaks_to_keep.append(ind)
+
+    # peaks from original peak file or the merged file
     if use_sample_peaks:
         # original peak file
         if peaks_dir is not None:

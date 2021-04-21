@@ -1,0 +1,53 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	combine_merge_and_anno
+	2	distance
+	1	generate_genome
+	2	homeranno
+	1	preprocess
+	9
+
+[Tue Apr 20 09:41:11 2021]
+rule generate_genome:
+    output: data/synapse/genome/refTSS.tsv
+    jobid: 5
+    wildcards: genome=synapse
+
+[Tue Apr 20 09:41:45 2021]
+Finished job 5.
+1 of 9 steps (11%) done
+
+[Tue Apr 20 09:41:45 2021]
+rule preprocess:
+    output: data/peaksInfo/peaks.merge.tss, data/peaksInfo/peaks.merge.tss.minimal
+    jobid: 7
+
+[Tue Apr 20 09:42:02 2021]
+Finished job 7.
+2 of 9 steps (22%) done
+
+[Tue Apr 20 09:42:02 2021]
+rule homeranno:
+    input: data/peaksInfo/peaks.merge.tss
+    output: data/GCF/anno/peaks.merge.tss.anno
+    jobid: 9
+    wildcards: genome=GCF
+
+[Tue Apr 20 09:42:02 2021]
+Error in rule homeranno:
+    jobid: 9
+    output: data/GCF/anno/peaks.merge.tss.anno
+    shell:
+        annotatePeaks.pl data/peaksInfo/peaks.merge.tss /data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna -gff /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff > data/GCF/anno/peaks.merge.tss.anno
+        (exited with non-zero exit code)
+
+Removing output files of failed job homeranno since they might be corrupted:
+data/GCF/anno/peaks.merge.tss.anno
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T094110.760710.snakemake.log

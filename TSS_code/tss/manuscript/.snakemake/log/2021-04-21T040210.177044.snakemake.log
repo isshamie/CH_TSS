@@ -1,0 +1,74 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	2	addGeneBody
+	1	all
+	2	create_totalTSS
+	2	filter_out_cds
+	2	filter_out_intron
+	9
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (4):
+	filter_out_cds
+	filter_out_cds
+	filter_out_intron
+	filter_out_intron
+Selected jobs (1):
+	filter_out_intron
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 04:02:11 2021]
+rule filter_out_intron:
+    input: data/GCF/anno/peaks.merge.tss.minimal.anno, data/GCF/genome/introns.bed
+    output: data/GCF/filters_genoebody/peaks.nointron.index
+    jobid: 23
+    wildcards: genome=GCF
+
+[Wed Apr 21 04:02:18 2021]
+Finished job 23.
+1 of 9 steps (11%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	filter_out_cds
+	filter_out_cds
+	filter_out_intron
+Selected jobs (1):
+	filter_out_cds
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 04:02:18 2021]
+rule filter_out_cds:
+    input: data/GCF/anno/peaks.merge.tss.minimal.anno
+    output: data/GCF/filters_genoebody/peaks.nocds.index
+    jobid: 22
+    wildcards: genome=GCF
+
+[Wed Apr 21 04:02:27 2021]
+Finished job 22.
+2 of 9 steps (22%) done
+Resources before job selection: {'_cores': 1, '_nodes': 9223372036854775807}
+Ready jobs (3):
+	filter_out_cds
+	addGeneBody
+	filter_out_intron
+Selected jobs (1):
+	addGeneBody
+Resources after job selection: {'_cores': 0, '_nodes': 9223372036854775806}
+
+[Wed Apr 21 04:02:27 2021]
+rule addGeneBody:
+    input: data/GCF/filters_genoebody/peaks.nocds.index, data/GCF/filters_genoebody/peaks.nointron.index, data/GCF/refType/peaks.refType.tsv
+    output: data/GCF/refType/peaks.refType.geneBody.tsv
+    jobid: 16
+    wildcards: genome=GCF
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-21T040210.177044.snakemake.log
+unlocking
+removing lock
+removing lock
+removed all locks

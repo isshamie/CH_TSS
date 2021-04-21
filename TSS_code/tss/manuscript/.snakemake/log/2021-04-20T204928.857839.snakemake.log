@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	get_introns
+	2	peak_scoring
+	4
+
+[Tue Apr 20 20:49:29 2021]
+rule get_introns:
+    input: /data/isshamie/genome/hamster/syn20999279_picr.gff
+    output: data/synapse/genome/introns.bed
+    jobid: 1
+    wildcards: genome=synapse
+
+Terminating processes on user request, this might take some time.
+[Tue Apr 20 20:49:31 2021]
+Error in rule get_introns:
+    jobid: 1
+    output: data/synapse/genome/introns.bed
+
+RuleException:
+CalledProcessError in line 140 of /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk:
+Command 'set -euo pipefail;  Rscript --vanilla /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/scripts/tmpb8aunsgp.getIntrons.R' returned non-zero exit status 1.
+  File "/data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk", line 140, in __rule_get_introns
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/concurrent/futures/thread.py", line 57, in run
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T204928.857839.snakemake.log

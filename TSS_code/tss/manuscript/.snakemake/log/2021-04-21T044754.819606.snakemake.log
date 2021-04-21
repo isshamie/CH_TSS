@@ -1,0 +1,40 @@
+Building DAG of jobs...
+Creating report...
+Missing metadata for file data/synapse/genome/introns.bed
+Missing metadata for file data/GCF/genome/introns.bed
+Adding peaksSankey.png (0.057 MB).
+Adding peaksSankey.png (0.056 MB).
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/report/__init__.py", line 224, in code
+    lexer = get_lexer_by_name(language)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/pygments/lexers/__init__.py", line 103, in get_lexer_by_name
+    raise ClassNotFound('no lexer for alias %r found' % _alias)
+pygments.util.ClassNotFound: no lexer for alias None found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/__init__.py", line 547, in snakemake
+    export_cwl=export_cwl)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/workflow.py", line 514, in execute
+    auto_report(dag, report)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/report/__init__.py", line 577, in auto_report
+    pygments_css=HtmlFormatter(style="trac").get_style_defs('.source')))
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/jinja2/asyncsupport.py", line 76, in render
+    return original_render(self, *args, **kwargs)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/jinja2/environment.py", line 1008, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/jinja2/environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/jinja2/_compat.py", line 37, in reraise
+    raise value.with_traceback(tb)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/report/report.html", line 474, in top-level template code
+    {{ rule.code()|safe }}
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/report/__init__.py", line 226, in code
+    except pygments.utils.ClassNotFound:
+NameError: name 'pygments' is not defined
+
+unlocking
+removing lock
+removing lock
+removed all locks

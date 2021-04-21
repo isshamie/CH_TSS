@@ -1,0 +1,33 @@
+Full Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 661, in block_content
+    rulename=self.rulename).consume():
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 121, in subautomaton
+    return self.subautomata[automaton](
+KeyError: 'ncrna_keys'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/__init__.py", line 404, in snakemake
+    print_compilation=print_compilation)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/workflow.py", line 732, in include
+    rulecount=self._rulecount)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 788, in parse
+    for t, orig_token in automaton.consume():
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 106, in consume
+    for t, orig in self.state(token):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 732, in python
+    for t in self.subautomaton(token.string).consume():
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 106, in consume
+    for t, orig in self.state(token):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 180, in block
+    for t in self.block_content(token):
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 665, in block_content
+    "rule definition".format(token.string), token)
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/snakemake/parser.py", line 118, in error
+    (self.snakefile.path, lineno(token), None, None))
+  File "/data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk", line 267
+SyntaxError: Unexpected keyword ncrna_keys in rule definition
+
+SyntaxError in line 267 of /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk:
+Unexpected keyword ncrna_keys in rule definition (run.smk, line 267)

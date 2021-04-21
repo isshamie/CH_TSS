@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	get_introns
+	3
+
+[Tue Apr 20 19:40:41 2021]
+rule get_introns:
+    input: /data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff
+    output: data/GCF/introns.bed
+    jobid: 2
+    wildcards: genome=GCF
+
+[Tue Apr 20 19:40:41 2021]
+Error in rule get_introns:
+    jobid: 2
+    output: data/GCF/introns.bed
+
+RuleException:
+NameError in line 121 of /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk:
+The name 'snakemake' is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}
+  File "/data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/run.smk", line 121, in __rule_get_introns
+  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/concurrent/futures/thread.py", line 57, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/isshamie/TSS/Analysis/TSS_code/tss/manuscript/.snakemake/log/2021-04-20T194041.034770.snakemake.log
