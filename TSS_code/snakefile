@@ -1,3 +1,14 @@
+"""
+Snakefile to take multi-sample TSS-seq experiments, a genome reference
+& genome annotations, and create an updated genome reference using
+the experimental data.
+
+The parameter file is in parameters/params.yaml. You will need to change
+the paths of the relatiive fields.
+
+Run this file in the main folder.
+
+"""
 import os
 import glob
 from tss.pipeline import create_filenames_dict
@@ -5,32 +16,26 @@ from tss.pipeline import create_filenames_dict
 #PARAMS = "parameters/{sample}.txt"
 #configfile: "config.yaml"
 
+####################
+#### Parameters ####
+####################
 configfile: "parameters/params.yaml"
-print("config",config)
-results = config['results']
-#os.chdir(results)
-
-print(config["peaks_dir"])
-filenames = create_filenames_dict()
-print(config["META_SAMPLES"])
-
 annotation = {'synapse': '/data/isshamie/genome/hamster/syn20999279_picr.gff'}
   #   'GCF': "/data/isshamie/genome/hamster/ncbi_anno_103/GCF_003668045.1_CriGri-PICR/GCF_003668045.1_CriGri-PICR_genomic.gff",
   # "alt":"/data/isshamie/genome/hamster/ncbi_anno_103/alt_CriGri-PICR_top_level.gff3"}
 
 
+results = config['results']
 
-peak_bins = (-1000, 1000)
-# rule all:
-#     input:
-#         expand("data/processed/{anno}/nucleotides/nucleotide.png",
-#                "data/processed/{anno}/output/promoter_TSS.bed",
-#                "data/processed/{anno}/output/TSS_mRNA.expression.tsv",
-#                "data/processed/{anno}/barplot/TSS_mRNA.barplot.png",
-#       '         "data/processed/{anno}/rna_cumulative_plot/tss.png",
-#                experiment_name=config["annotation"])
+print(config["peaks_dir"])
+filenames = create_filenames_dict()
+print(config["META_SAMPLES"])
+
+
 
 rule all:
+    """ Target files to make. The TSS.bed is the updated reference file. 
+    """
     input:
         expand("data/processed/{anno}/eTSS/TSS.bed", anno=annotation.keys()),
         expand("figures/{anno}/barplots_eTSS/{merge}/transcript_tissues_expressed.png", anno=list(annotation.keys()), merge=config["MERGE_TISSUES"]),
@@ -42,6 +47,8 @@ def get_input(wildcards):
 
 
 rule process_genome:
+    """ Take the genome and preprocess it by breaking it into TSSs.
+    """
     input:
         anno =  get_input,
         genome =  config["GENOME_FA"]
@@ -54,6 +61,8 @@ rule process_genome:
 
 
 rule merge_peaks:
+    """ Merge peaks across samples
+    """
     input:
         start_mRNA = "data/processed/{anno}/genome/start_site_mRNA.tsv",
         ref_anno = get_input
@@ -67,6 +76,7 @@ rule merge_peaks:
 
 
 rule peak_expression_and_location:
+    """ Get the TSS expression and regions"""
     input:
         start_mRNA = "data/processed/{anno}/genome/start_site_mRNA.tsv",
         ref_anno = get_input,
@@ -84,6 +94,7 @@ rule peak_expression_and_location:
 
 
 rule gene_centric_tss:
+    """ Get annotation based on prior gene annotation"""
     input:
         merged_out = "data/processed/{anno}/merged/files_used.json",
         start_mRNA = "data/processed/{anno}/genome/start_site_mRNA.tsv",
@@ -101,6 +112,7 @@ rule gene_centric_tss:
 
 
 rule tissues_collapse:
+    """ Merge TSSs in samples within the same tissue"""
     input:
         merged_out = "data/processed/{anno}/merged/samples.merge.peaksexpression.log10",
     params:
@@ -111,6 +123,8 @@ rule tissues_collapse:
 
 
 rule retrieve_peaks:
+    """ Get the peaks from the individual files that correspond to the merged ones
+    """
     input:
         gene_centric = "data/processed/{anno}/gene_centric_tss/files_used.json",
         merged_f = "data/processed/{anno}/merged/samples.merge",
@@ -118,11 +132,12 @@ rule retrieve_peaks:
         peaks_dir = config["peaks_dir"],
     output: "data/processed/{anno}/retrieve_peaks/files_used.json"
     shell: "python tss/data/retrieve_tss_peaks.py {output} {input}"
-    #log: 'data/processed/{anno}/retrieve_peaks/retrieve_peaks.log'
 
 
 
 rule create_output:
+    """ Create the experimental TSS file.
+    """
     input:
         gene_retrieve_peaks = "data/processed/{anno}/retrieve_peaks/files_used.json",
         gene_centric_out_f = "data/processed/{anno}/gene_centric_tss/txn_df_tissues.p",
@@ -139,36 +154,10 @@ rule create_output:
         "python tss/data/wrap_create_eTSS.py {output.tss_bed} {input}  &> {log}"
 
 
-# rule merge_tags:
-#    input: config["sample"]
-#    output:
-#        "data/{sample}.fa"
-#    conda:
-#        "environment.yaml"
-#    shell:
-#        "python coevolve/get_fasta.py {input} {output}"
-
-
-# transform peaks
-# rule peaks_to_expression:
-#     input:
-#         samples_merge = "data/processed/merged/{sample}.merge",
-#         initial_peaks_dir = config["peaks_dir"],
-#         meta_samples = config['metaSamples']
-#     output:
-#         expression_f = "data/processed/all_peaks/peaks_expression.tsv"
-#
-# # Create expression matrix
-# rule peaks_to_annotation:
-#     input:
-#          samples_merge = "data/processed/merged/{sample}.merge",
-#          annotation = "data/processed/{anno}"
-#
-#     output:
-#           "data/processed/peak_small_files/samples.merge.anno"
-#
-
 rule barplot:
+    """ Create visualization of genes and transcripts found in 
+        aggregate and across each tissue separately.
+    """
     input:
         bed_eTSS =  "data/processed/{anno}/eTSS/TSS.exp.bed",
         gene_centric_out = "data/processed/{anno}/gene_centric_tss/files_used.json"
@@ -180,6 +169,8 @@ rule barplot:
 
 
 rule nucleotides:
+    """ Create nucleotide plot over the detected TSSs
+    """
     input:
         bed_eTSS =  "data/processed/{anno}/eTSS/TSS.exp.bed"
     output:
@@ -189,35 +180,12 @@ rule nucleotides:
 
 
 rule distance_to_anno:
+    """ Determine the distance of the new annotation to the old across
+    promoters and genes. 
+    """
     input:
         "data/processed/{anno}/eTSS/TSS.bed",
          "data/processed/{anno}/genome/start_site_mRNA.tsv"
     output: "figures/{anno}/distance_to_anno/distance_to_tss.png"
     log: "figures/{anno}/distance_to_anno/distance_to_anno.log"
     shell: "python tss/data/distance_to_anno.py {input} {output} &> {log}"
-
-# rule histograms:
-#     input:
-#         tag_dir =
-#     output:
-#         histograms_dir =
-#     log: "data/processed/{anno}/histograms/compare_tags_eTSS"
-#     shell: "python tss/data/tags_on_annotation {input} {output} &> {log}"
-#
-
-rule motifs:
-    input:
-        meta_eTSS = "data/processed/{anno}/eTSS/TSS.meta.tsv",
-        bed_eTSS = "data/processed/{anno}/eTSS/TSS.bed",
-        refseq_center = "data/processed/{anno}/eTSS/refseq_centered.TSS.bed"
-    output:
-        "figures/motifs/eTSS_inr_tata.png"
-
-
-rule cumulative_rna:
-    input:
-        meta_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.meta",
-        bed_eTSS =  "data/processed/eTSS/TSS_{bp_l}_{bp_r}.bed",
-    output:
-          "figures/cumulativePlot/venn_diagram"
-

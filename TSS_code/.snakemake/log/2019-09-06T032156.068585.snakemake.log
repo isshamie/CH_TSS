@@ -1,5 +1,0 @@
-ModuleNotFoundError in line 1 of /data/isshamie/TSS/TSS/Snakefile:
-No module named 'pandas'
-  File "/data/isshamie/TSS/TSS/Snakefile", line 1, in <module>
-  File "/data/isshamie/TSS/TSS/tss/data/merging.py", line 1, in <module>
-  File "/data/isshamie/TSS/TSS/tss/data/Homer.py", line 3, in <module>

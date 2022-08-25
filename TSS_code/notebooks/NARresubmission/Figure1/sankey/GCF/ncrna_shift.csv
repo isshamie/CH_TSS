@@ -1,3 +1,0 @@
-,NCBI annotation,Total,Mean Distance,Median Distance,Mode Distance,Standard Deviation Distance,Mean absolute Distance,Median absolute Distance,Mode absolute Distance,Standard Deviation absolute Distance,Number of TSS in concordance,Number of TSS <= 10nt,Number of TSS <= 150nt,Number of TSS > 150nt,Number of TSS > 10nt
-ncRNA,,6314,-223.09154260373774,-142.5,0.0,339.7762439599252,293.4716503009186,193.0,0.0,281.233217829056,110,555,2816,3498,5759
-NCBI ncRNA,8144.0,3986.0,-146.90516808830907,-33.0,0.0,293.93463394093135,209.46412443552433,89.0,0.0,253.18664659792552,110.0,554.0,2397.0,1589.0,3432.0

@@ -1,4 +1,2 @@
-
-            [console_scripts]
-            gene_centric=tss.data.gene_centric:main
-        
+[console_scripts]
+gene_centric = tss.data.gene_centric:main

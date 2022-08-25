@@ -1,9 +1,0 @@
-AssertionError in line 3 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
-Attempted to use an uninstantiated parameter type (<class 'click.types.Tuple'>).
-  File "/data/isshamie/TSS/Analysis/TSS_code/snakefile", line 3, in <module>
-  File "/data/isshamie/TSS/Analysis/TSS_code/tss/pipeline.py", line 7, in <module>
-  File "/data/isshamie/TSS/Analysis/TSS_code/tss/data/gene_centric.py", line 120, in <module>
-  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/click/decorators.py", line 151, in decorator
-  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/click/core.py", line 1808, in __init__
-  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/click/core.py", line 1340, in __init__
-  File "/home/isshamie/software/anaconda2/envs/TSS/lib/python3.7/site-packages/click/types.py", line 631, in convert_type

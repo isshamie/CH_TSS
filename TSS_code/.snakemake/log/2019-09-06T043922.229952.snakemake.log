@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 13 of /data/isshamie/TSS/TSS/snakefile:
-Missing input files for rule merge_peaks:
-/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/*

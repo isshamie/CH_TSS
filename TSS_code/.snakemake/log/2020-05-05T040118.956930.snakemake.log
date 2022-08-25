@@ -1,3 +1,0 @@
-KeyError in line 174 of /data/isshamie/TSS/Analysis/TSS_code/snakefile:
-'metaSamples'
-  File "/data/isshamie/TSS/Analysis/TSS_code/snakefile", line 174, in <module>

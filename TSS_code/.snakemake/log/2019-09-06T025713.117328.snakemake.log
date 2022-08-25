@@ -1,3 +1,0 @@
-ModuleNotFoundError in line 1 of /data/isshamie/TSS/TSS/Snakefile:
-No module named 'Homer'
-  File "/data/isshamie/TSS/TSS/Snakefile", line 1, in <module>

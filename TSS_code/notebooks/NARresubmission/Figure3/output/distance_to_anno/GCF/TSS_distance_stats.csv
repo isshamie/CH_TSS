@@ -1,5 +1,0 @@
-,NCBI annotation,Total,Mean Distance,Median Distance,Mode Distance,Standard Deviation Distance,Mean absolute Distance,Median absolute Distance,Mode absolute Distance,Standard Deviation absolute Distance,Number of TSS in concordance,Number of TSS <= 10nt,Number of TSS <= 150nt,Number of TSS > 150nt
-Total observed mRNA TSS,,30760,-89.29665149544863,4.0,17.0,396.55314123700794,283.87467490247076,158.0,2.0,290.9354820956951,116,16252,25503,5257
-Protein coding TSS,35679,20627,-26.558394337518784,16.0,17.0,253.1480519778847,146.83880350996267,54.0,2.0,207.91260258519094,116,9453,18655,1972
-Gene,21488,15308,3.353932584269663,19.0,17.0,193.33013216978264,100.6012542461458,40.0,2.0,165.1277581530973,115,6401,14194,1114
-mRNA,46750,,,,,,,,,,,,,

@@ -4,7 +4,6 @@
 # created the annotation using the PICR genome
 
 results: '/data/isshamie/TSS/Analysis/TSS_code/data/processed/'
-META_SAMPLES: '/data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv'
 peaks_dir: '/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/f04_peaks/'
 
 atac_f : "/data/isshamie/TSS/Analysis/Analysis_NCBI_PICR/Results/ATAC_results/CHO/ATAC_ppr.naive_overlap.narrowPeak.sort"
@@ -36,29 +35,15 @@ global:
     - Spleen
     - CHO
 
-    #- Intestine
-#    - Skin
-#    - Total
   # meta file for names
-  META_FILE: '/data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv'
-  clean: True
+  META_FILE: '/data/isshamie/TSS/TSS_Code/parameters/samples.tsv' #legacy name
+  META_SAMPLES: '/data/isshamie/TSS/Analysis/Analysis_03302020/parameters/samples.tsv'
+
 
 
 MERGE_TISSUES:
   - all
   - bmdm
-
-stages:
-#    - reference
-    - move_peaks
-    - merged
-    - gene_centric
-    - tissues_collapse
-    - sample_peaks_near_tss
-    - output_peaks
-    - atac
-    - histogram
-
 
 
 GENOME_FA: '/data/isshamie/genome/ncbi_anno_103/GCF_003668045.1_CriGri-PICR_genomic.fna'
